@@ -320,6 +320,12 @@ footer a{color:var(--accent-2);text-decoration:none}
 <script>
 (function(){
 'use strict';
+
+/* ============================================================
+   QUNVERO BG REMOVER — FIXED VERSION
+   Major fix: percentile-based mask normalization + debug logs
+   ============================================================ */
+
 const MODEL_URL='https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model_quantized.onnx';
 const SIZE=1024, MAX_MB=20, ACCEPTED=['image/jpeg','image/png','image/webp'];
 
@@ -340,17 +346,18 @@ function toast(msg,type){
   el.innerHTML=(icons[type]||icons.info)+'<span>'+msg+'</span>';
   el.className='toast show '+type;
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+  toastTimer=setTimeout(function(){el.classList.remove('show')},3200);
 }
 
 function showLoading(t,m,s){loadingTitle.textContent=t;loadingMsg.textContent=m;loadingSub.textContent=s||'';progressBar.style.width='0%';loading.classList.add('active')}
 function setProgress(p,s){progressBar.style.width=Math.max(0,Math.min(100,p))+'%';if(s)loadingSub.textContent=s}
 function hideLoading(){loading.classList.remove('active')}
 
+/* ---------- MODEL LOAD ---------- */
 async function loadModel(){
   if(S.session)return S.session;
   if(S.modelLoading)return S.modelLoading;
-  S.modelLoading=(async()=>{
+  S.modelLoading=(async function(){
     try{
       ort.env.wasm.wasmPaths='https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/';
       ort.env.wasm.numThreads=Math.min(4,navigator.hardwareConcurrency||2);
@@ -362,24 +369,26 @@ async function loadModel(){
       const reader=resp.body.getReader();
       const chunks=[];let received=0;
       while(true){
-        const {done,value}=await reader.read();
-        if(done)break;
-        chunks.push(value);received+=value.length;
+        const r=await reader.read();
+        if(r.done)break;
+        chunks.push(r.value);received+=r.value.length;
         const pct=5+(received/total)*75;
         setProgress(pct,'Downloading… '+(received/1048576).toFixed(1)+' / '+(total/1048576).toFixed(1)+' MB');
       }
       const buffer=new Uint8Array(received);let offset=0;
-      for(const c of chunks){buffer.set(c,offset);offset+=c.length}
+      for(let i=0;i<chunks.length;i++){buffer.set(chunks[i],offset);offset+=chunks[i].length}
       setProgress(82,'Initializing…');
-      await new Promise(r=>setTimeout(r,30));
+      await new Promise(function(r){setTimeout(r,30)});
       const session=await ort.InferenceSession.create(buffer,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
       S.session=session;setProgress(100,'Ready');
+      console.log('[Qunvero] Model loaded. Inputs:',session.inputNames,'Outputs:',session.outputNames);
       return session;
     }catch(e){S.modelLoading=null;throw e}
   })();
   return S.modelLoading;
 }
 
+/* ---------- PREPROCESS ---------- */
 function preprocess(src){
   const c=document.createElement('canvas');c.width=SIZE;c.height=SIZE;
   const ctx=c.getContext('2d');ctx.imageSmoothingQuality='high';
@@ -392,45 +401,72 @@ function preprocess(src){
   const data=ctx.getImageData(0,0,SIZE,SIZE).data;
   const f=new Float32Array(SIZE*SIZE*3);
   for(let i=0,j=0;i<data.length;i+=4,j+=3){f[j]=data[i]/255;f[j+1]=data[i+1]/255;f[j+2]=data[i+2]/255}
-  return {tensor:new ort.Tensor('float32',f,[1,3,SIZE,SIZE]),layout:{dx,dy,dw,dh,size:SIZE}};
+  return {tensor:new ort.Tensor('float32',f,[1,3,SIZE,SIZE]),layout:{dx:dx,dy:dy,dw:dw,dh:dh,size:SIZE}};
 }
 
+/* ---------- POSTPROCESS — FIXED ---------- */
 async function postprocess(output,layout,tw,th){
   const out=output.data,size=layout.size;
-  let mn=Infinity,mx=-Infinity;
-  for(let i=0;i<out.length;i++){if(out[i]<mn)mn=out[i];if(out[i]>mx)mx=out[i]}
-  const range=mx-mn||1;
+
+  // Debug: check raw output stats
+  let mn=Infinity,mx=-Infinity,sum=0;
+  for(let i=0;i<out.length;i++){
+    if(out[i]<mn)mn=out[i];
+    if(out[i]>mx)mx=out[i];
+    sum+=out[i];
+  }
+  const avg=sum/out.length;
+  const range=mx-mn;
+  console.log('[Qunvero] Mask output stats — min:',mn.toFixed(4),'max:',mx.toFixed(4),'avg:',avg.toFixed(4),'range:',range.toFixed(4));
+
+  // Percentile-based normalization (robust)
+  const sorted=Float32Array.from(out).sort();
+  const p2=sorted[Math.floor(sorted.length*0.02)];
+  const p98=sorted[Math.floor(sorted.length*0.98)];
+  const pRange=(p98-p2)||range||1;
+  console.log('[Qunvero] Percentiles — p2:',p2.toFixed(4),'p98:',p98.toFixed(4),'range:',pRange.toFixed(4));
+
   const mc=document.createElement('canvas');mc.width=size;mc.height=size;
   const mctx=mc.getContext('2d');
   const md=mctx.createImageData(size,size);
+
+  // Build mask with percentile normalization
   for(let i=0;i<size*size;i++){
-    let v=(out[i]-mn)/range;
-    v=1/(1+Math.exp(-(v-0.5)*12));
+    let v=(out[i]-p2)/pRange;
+    v=Math.max(0,Math.min(1,v));
+    // Sigmoid sharpen
+    v=1/(1+Math.exp(-(v-0.5)*15));
     const a=Math.round(v*255);
     md.data[i*4]=255;md.data[i*4+1]=255;md.data[i*4+2]=255;md.data[i*4+3]=a;
   }
   mctx.putImageData(md,0,0);
+
+  // Crop the centered region
   const cr=document.createElement('canvas');cr.width=layout.dw;cr.height=layout.dh;
   cr.getContext('2d').drawImage(mc,layout.dx,layout.dy,layout.dw,layout.dh,0,0,layout.dw,layout.dh);
+
+  // Resize to target
   const full=document.createElement('canvas');full.width=tw;full.height=th;
   const fctx=full.getContext('2d');fctx.imageSmoothingQuality='high';
   fctx.drawImage(cr,0,0,tw,th);
   return full;
 }
 
+/* ---------- REFINE MASK ---------- */
 function refineMask(mask,params){
-  const {smooth,feather,hair}=params;
+  const smooth=params.smooth,feather=params.feather,hair=params.hair;
   if(!smooth&&!feather&&!hair)return mask;
   const w=mask.width,h=mask.height;
   const ctx=mask.getContext('2d');
   const img=ctx.getImageData(0,0,w,h),d=img.data;
+
   if(smooth>0){
     for(let p=0;p<smooth;p++){
       const copy=new Uint8ClampedArray(d.length);copy.set(d);
       for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
-        const i=(y*w+x)*4+3;let sum=0;
-        for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)sum+=copy[i+(dy*w+dx)*4];
-        d[i]=sum/9;
+        const i=(y*w+x)*4+3;let s=0;
+        for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)s+=copy[i+(dy*w+dx)*4];
+        d[i]=s/9;
       }
     }
   }
@@ -440,9 +476,9 @@ function refineMask(mask,params){
     for(let y=r;y<h-r;y++)for(let x=r;x<w-r;x++){
       const i=(y*w+x)*4+3,a=copy[i];
       if(a>40&&a<215){
-        let sum=0,count=0;
-        for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){sum+=copy[i+(dy*w+dx)*4];count++}
-        d[i]=sum/count;
+        let s=0,count=0;
+        for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){s+=copy[i+(dy*w+dx)*4];count++}
+        d[i]=s/count;
       }
     }
   }
@@ -457,6 +493,7 @@ function refineMask(mask,params){
   return mask;
 }
 
+/* ---------- APPLY MASK ---------- */
 function applyMask(bitmap,mask){
   const w=bitmap.width,h=bitmap.height;
   const out=document.createElement('canvas');out.width=w;out.height=h;
@@ -470,6 +507,7 @@ function applyMask(bitmap,mask){
   return out;
 }
 
+/* ---------- COMPOSE ---------- */
 function composeFinal(cutout,bg,bgImg){
   const w=cutout.width,h=cutout.height;
   const out=document.createElement('canvas');out.width=w;out.height=h;
@@ -484,58 +522,76 @@ function composeFinal(cutout,bg,bgImg){
   return out;
 }
 
+/* ---------- PROCESS PIPELINE ---------- */
 async function processImage(bitmap){
   if(S.busy)return;
   S.busy=true;
   try{
+    console.log('[Qunvero] Processing image:',bitmap.width,'x',bitmap.height);
     const session=await loadModel();
     showLoading('Removing background…','Analyzing image with AI','Preparing…');
     setProgress(10,'Preparing…');
-    await new Promise(r=>setTimeout(r,30));
+    await new Promise(function(r){setTimeout(r,30)});
+
     const src=document.createElement('canvas');src.width=bitmap.width;src.height=bitmap.height;
     src.getContext('2d').drawImage(bitmap,0,0);
+
     setProgress(20,'Resizing for AI…');
-    const {tensor,layout}=preprocess(src);
+    const pp=preprocess(src);
+
     setProgress(40,'Running AI model…');
-    await new Promise(r=>setTimeout(r,20));
+    await new Promise(function(r){setTimeout(r,20)});
+
     const inputName=session.inputNames[0];
-    const results=await session.run({[inputName]:tensor});
+    const feeds={};feeds[inputName]=pp.tensor;
+    const results=await session.run(feeds);
+
     setProgress(75,'Generating mask…');
-    const output=results[session.outputNames[0]];
-    const raw=await postprocess(output,layout,bitmap.width,bitmap.height);
+    const outputName=session.outputNames[0];
+    const output=results[outputName];
+    console.log('[Qunvero] Model output dims:',output.dims,'data length:',output.data.length);
+
+    const raw=await postprocess(output,pp.layout,bitmap.width,bitmap.height);
     S.rawMask=raw;
+
     setProgress(85,'Refining edges…');
     const mask=refineMask(cloneCanvas(raw),S.edgeParams);
     S.maskCanvas=mask;
+
     setProgress(92,'Compositing…');
     S.cutoutCanvas=applyMask(bitmap,mask);
     renderResult();
     pushHistory();
+
     setProgress(100,'Done');
-    await new Promise(r=>setTimeout(r,250));
+    await new Promise(function(r){setTimeout(r,250)});
     hideLoading();
     toast('Background removed successfully','success');
   }catch(err){
-    console.error(err);
+    console.error('[Qunvero] Processing error:',err);
     hideLoading();
     toast('Processing failed: '+(err.message||'unknown'),'error');
   }finally{S.busy=false}
 }
 
+/* ---------- RENDER — FIXED (dataURL, no blob) ---------- */
 function renderResult(){
   if(!S.cutoutCanvas)return;
   const final=composeFinal(S.cutoutCanvas,S.background,S.backgroundImage);
   S.rendered=final;
-  final.toBlob(function(blob){
-    const url=URL.createObjectURL(blob);
-    if(afterImg.dataset.url)URL.revokeObjectURL(afterImg.dataset.url);
-    afterImg.dataset.url=url;
-    afterImg.src=url;
-  },'image/png');
+  try{
+    const dataUrl=final.toDataURL('image/png');
+    afterImg.src=dataUrl;
+    console.log('[Qunvero] Rendered result:',final.width,'x',final.height);
+  }catch(e){
+    console.error('[Qunvero] Render failed:',e);
+    toast('Render error: '+e.message,'error');
+  }
 }
 
 function cloneCanvas(src){const c=document.createElement('canvas');c.width=src.width;c.height=src.height;c.getContext('2d').drawImage(src,0,0);return c}
 
+/* ---------- HISTORY ---------- */
 function pushHistory(){
   const snap=cloneCanvas(S.cutoutCanvas);
   S.history.push({cutout:snap,bg:S.background,bgImg:S.backgroundImage,edge:Object.assign({},S.edgeParams)});
@@ -543,7 +599,6 @@ function pushHistory(){
   S.future.length=0;
   updateHistoryUI();updateUndoRedo();
 }
-
 function updateHistoryUI(){
   if(S.history.length<2){historyStrip.classList.remove('show');return}
   historyStrip.classList.add('show');
@@ -563,7 +618,6 @@ function updateHistoryUI(){
     historyStrip.appendChild(div);
   });
 }
-
 function restoreHistory(idx){
   const h=S.history[idx];if(!h)return;
   S.cutoutCanvas=h.cutout;S.background=h.bg;S.backgroundImage=h.bgImg;S.edgeParams=Object.assign({},h.edge);
@@ -573,17 +627,18 @@ function restoreHistory(idx){
   $('hair').value=h.edge.hair;$('hairVal').textContent=h.edge.hair;
   renderResult();updateHistoryUI();updateUndoRedo();
 }
-
 function updateUndoRedo(){
   $('undoBtn').disabled=S.history.length<2;
   $('redoBtn').disabled=S.future.length===0;
 }
 
+/* ---------- FILE HANDLING ---------- */
 async function handleFile(file){
   if(!file)return;
   if(ACCEPTED.indexOf(file.type)===-1){toast('Unsupported format. Use JPG, PNG, or WEBP.','error');return}
   if(file.size>MAX_MB*1024*1024){toast('File too large (max '+MAX_MB+'MB)','error');return}
   try{
+    console.log('[Qunvero] File:',file.name,file.size,'bytes',file.type);
     S.originalName=(file.name||'image').replace(/\.[^.]+$/,'');
     const bitmap=await createImageBitmap(file);
     S.originalBitmap=bitmap;
@@ -598,9 +653,10 @@ async function handleFile(file){
     workspace.classList.add('active');
     historyStrip.classList.remove('show');
     await processImage(bitmap);
-  }catch(e){console.error(e);toast('Failed to load image','error')}
+  }catch(e){console.error('[Qunvero] File error:',e);toast('Failed to load image','error')}
 }
 
+/* ---------- COMPARE SLIDER ---------- */
 let dragging=false;
 function setSlider(x){
   const rect=compare.getBoundingClientRect();
@@ -619,6 +675,7 @@ window.addEventListener('touchmove',onMove,{passive:false});
 window.addEventListener('mouseup',onUp);
 window.addEventListener('touchend',onUp);
 
+/* ---------- ZOOM ---------- */
 function applyZoom(){
   const scale=S.zoom;
   beforeImg.style.transform='scale('+scale+')';
@@ -628,6 +685,7 @@ function applyZoom(){
 $('zoomInBtn').onclick=function(){S.zoom=Math.min(4,S.zoom+0.25);applyZoom()};
 $('zoomOutBtn').onclick=function(){S.zoom=Math.max(0.25,S.zoom-0.25);applyZoom()};
 
+/* ---------- BACKGROUND ---------- */
 document.querySelectorAll('.swatch').forEach(function(sw){
   sw.onclick=function(){
     document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('active')});
@@ -648,11 +706,13 @@ $('bgUpload').onchange=function(e){
   img.src=URL.createObjectURL(f);
 };
 
+/* ---------- REFINEMENT SLIDERS ---------- */
 function bindSlider(id,valId,key){
   const el=$(id),val=$(valId);
   el.oninput=function(){val.textContent=el.value;S.edgeParams[key]=+el.value};
   el.onchange=function(){
     if(!S.rawMask||!S.originalBitmap)return;
+    console.log('[Qunvero] Re-refining with',S.edgeParams);
     const refined=refineMask(cloneCanvas(S.rawMask),S.edgeParams);
     S.maskCanvas=refined;
     S.cutoutCanvas=applyMask(S.originalBitmap,refined);
@@ -663,6 +723,7 @@ bindSlider('smooth','smoothVal','smooth');
 bindSlider('feather','featherVal','feather');
 bindSlider('hair','hairVal','hair');
 
+/* ---------- UNDO / REDO ---------- */
 $('undoBtn').onclick=function(){
   if(S.history.length<2)return;
   const cur=S.history.pop();S.future.push(cur);
@@ -674,6 +735,7 @@ $('redoBtn').onclick=function(){
   restoreHistory(S.history.length-1);updateUndoRedo();
 };
 
+/* ---------- CLEAR ---------- */
 function clearAll(){
   S.originalBitmap=null;S.rawMask=null;S.maskCanvas=null;S.cutoutCanvas=null;S.rendered=null;
   S.history.length=0;S.future.length=0;
@@ -689,6 +751,7 @@ function clearAll(){
 $('clearBtn').onclick=clearAll;
 $('reuploadBtn').onclick=clearAll;
 
+/* ---------- UPLOAD ---------- */
 drop.onclick=function(){fileInput.click()};
 drop.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fileInput.click()};
 fileInput.onchange=function(e){handleFile(e.target.files[0])};
@@ -707,6 +770,7 @@ drop.addEventListener('drop',function(e){const f=e.dataTransfer.files[0];if(f)ha
 workspace.addEventListener('dragover',function(e){e.preventDefault()});
 workspace.addEventListener('drop',function(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)handleFile(f)});
 
+/* ---------- DOWNLOAD ---------- */
 document.querySelectorAll('.dl-btn').forEach(function(btn){
   btn.onclick=function(){download(btn.dataset.format)};
 });
@@ -728,10 +792,14 @@ async function download(format){
   const canvas=S.rendered;
   const name=S.originalName+'-qunvero';
   try{
-    if(format==='png'){canvas.toBlob(function(b){saveBlob(b,name+'.png')},'image/png')}
-    else if(format==='jpg'){const flat=flattenOn(canvas,'#ffffff');flat.toBlob(function(b){saveBlob(b,name+'.jpg')},'image/jpeg',0.95)}
-    else if(format==='webp'){canvas.toBlob(function(b){saveBlob(b,name+'.webp')},'image/webp',0.95)}
-    else if(format==='pdf'){
+    if(format==='png'){
+      canvas.toBlob(function(b){saveBlob(b,name+'.png')},'image/png');
+    }else if(format==='jpg'){
+      const flat=flattenOn(canvas,'#ffffff');
+      flat.toBlob(function(b){saveBlob(b,name+'.jpg')},'image/jpeg',0.95);
+    }else if(format==='webp'){
+      canvas.toBlob(function(b){saveBlob(b,name+'.webp')},'image/webp',0.95);
+    }else if(format==='pdf'){
       const jsPDF=window.jspdf.jsPDF;
       const orientation=canvas.width>canvas.height?'l':'p';
       const pdf=new jsPDF({orientation:orientation,unit:'px',format:[canvas.width,canvas.height],hotfixes:['px_scaling']});
@@ -746,9 +814,10 @@ async function download(format){
       win.document.write('<!DOCTYPE html><html><head><title>Print</title><style>body{margin:0;display:grid;place-items:center;min-height:100vh;background:#fff}img{max-width:100%;max-height:100vh;display:block}</style></head><body><img src="'+dataUrl+'" onload="setTimeout(function(){window.print()},200)" /></body></html>');
       win.document.close();
     }
-  }catch(e){console.error(e);toast('Download failed: '+e.message,'error')}
+  }catch(e){console.error('[Qunvero] Download error:',e);toast('Download failed: '+e.message,'error')}
 }
 
+/* ---------- KEYBOARD ---------- */
 document.addEventListener('keydown',function(e){
   if(!workspace.classList.contains('active'))return;
   const tag=(e.target.tagName||'').toLowerCase();
@@ -759,10 +828,14 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='-'){$('zoomOutBtn').click()}
 });
 
-if('requestIdleCallback' in window){requestIdleCallback(function(){loadModel().catch(function(){})},{timeout:8000})}
-else{setTimeout(function(){loadModel().catch(function(){})},5000)}
+/* ---------- PRELOAD ---------- */
+if('requestIdleCallback' in window){
+  requestIdleCallback(function(){loadModel().catch(function(){})},{timeout:8000});
+}else{
+  setTimeout(function(){loadModel().catch(function(){})},5000);
+}
 
-console.log('%cQunvero Background Remover ready','color:#8b7dff;font-weight:bold;font-size:14px');
+console.log('%cQunvero Background Remover — ready','color:#8b7dff;font-weight:bold;font-size:14px');
 })();
 </script>
 </body>
