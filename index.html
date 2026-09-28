@@ -3,494 +3,522 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>AI Background Remover Online – Free HD Background Removal | Qunvero</title>
-<meta name="description" content="Remove image backgrounds instantly with AI. Local, private, unlimited, free.">
-<meta property="og:title" content="AI Background Remover – Qunvero">
-<meta property="og:description" content="Remove backgrounds instantly — locally, privately, free.">
-<meta name="theme-color" content="#0b0e14">
+<title>AI Background Remover – Qunvero</title>
+<meta name="description" content="Remove backgrounds locally, free, unlimited.">
 <style>
-:root{--bg:#0b0e14;--surface:#141823;--surface-2:#1c212e;--surface-3:#252b3b;--border:#2a3142;--primary:#6d5dfc;--text:#eef0f6;--text-dim:#9aa1b4;--success:#34d399;--danger:#f87171;--radius:14px;--radius-sm:8px;--shadow:0 8px 30px rgba(0,0,0,.35)}
+:root{--bg:#0b0e14;--surface:#141823;--surface-2:#1c212e;--surface-3:#252b3b;--border:#2a3142;--primary:#6d5dfc;--text:#eef0f6;--text-dim:#9aa1b4;--success:#34d399;--danger:#f87171;--warning:#fbbf24}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5;overflow-x:hidden;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(109,93,252,.10),transparent)}
-:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.app-container{max-width:1200px;margin:0 auto;padding:16px;padding-bottom:100px}
-@media(min-width:768px){.app-container{padding:24px}}
-.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 20px;flex-wrap:wrap;gap:12px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#a78bfa);display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;box-shadow:0 0 24px rgba(109,93,252,.4)}
-.brand-name{font-weight:700;font-size:1.15rem}
-.brand-sub{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
-.privacy-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--success);font-size:.72rem;padding:5px 10px;border-radius:20px;font-weight:500}
-.privacy-badge svg{width:13px;height:13px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface)}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--primary);background:rgba(109,93,252,.05)}
-.upload-icon{width:56px;height:56px;margin:0 auto 16px;color:var(--primary)}
-.upload-title{font-size:1.1rem;font-weight:600;margin-bottom:6px}
-.upload-sub{font-size:.85rem;color:var(--text-dim);margin-bottom:16px}
-.upload-formats{font-size:.72rem;color:var(--text-dim)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:var(--radius-sm);border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;background:var(--surface-3);color:var(--text);white-space:nowrap}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.app{max-width:900px;margin:0 auto;padding:16px}
+.header{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#6d5dfc,#a78bfa);display:grid;place-items:center;font-weight:800;font-size:20px;color:#fff}
+.title{font-size:1.2rem;font-weight:700}
+.subtitle{font-size:.75rem;color:var(--text-dim)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h2{font-size:1rem;font-weight:600;margin-bottom:14px}
+.upload{border:2px dashed var(--border);border-radius:14px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s}
+.upload:hover,.upload.drag{border-color:var(--primary);background:rgba(109,93,252,.05)}
+.upload svg{width:56px;height:56px;color:var(--primary);margin-bottom:12px}
+.btn{padding:12px 22px;border-radius:8px;border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;background:var(--surface-3);color:var(--text);display:inline-flex;align-items:center;gap:8px;justify-content:center}
 .btn:hover:not(:disabled){background:#2e3548}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-primary{background:linear-gradient(135deg,var(--primary),#8b5cf6);color:#fff;box-shadow:0 4px 20px rgba(109,93,252,.35)}
-.btn-danger{background:rgba(248,113,113,.15);color:var(--danger);border:1px solid rgba(248,113,113,.3)}
-.btn-sm{padding:8px 14px;font-size:.8rem}
+.btn-primary{background:linear-gradient(135deg,#6d5dfc,#8b5cf6);color:#fff}
+.btn-danger{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)}
 .btn-block{width:100%}
-.btn svg{width:16px;height:16px}
-.preview-container{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface-2);display:grid;place-items:center;min-height:200px;max-height:50vh}
-.preview-container img{max-width:100%;max-height:50vh;object-fit:contain;display:block}
-.file-info{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:.78rem;color:var(--text-dim)}
-.progress-stages{display:flex;flex-direction:column;gap:10px;margin:16px 0}
-.stage{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:.85rem;color:var(--text-dim);transition:all .3s}
+.hidden{display:none!important}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}
+.flex{display:flex}.gap-8{gap:8px}.flex-wrap{flex-wrap:wrap}
+/* LOG PANEL */
+#logPanel{background:#000;border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:16px;font-family:'Courier New',monospace;font-size:.8rem;max-height:400px;overflow:hidden;display:flex;flex-direction:column}
+.log-header{background:#0f1117;padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-family:inherit;font-size:.75rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
+.log-status{padding:3px 10px;border-radius:12px;background:rgba(109,93,252,.2);color:#a78bfa;font-size:.7rem}
+.log-status.ok{background:rgba(52,211,153,.2);color:#34d399}
+.log-status.err{background:rgba(248,113,113,.2);color:#f87171}
+.log-status.wait{background:rgba(251,191,36,.2);color:#fbbf24}
+#logBody{padding:12px 14px;overflow-y:auto;max-height:350px;line-height:1.6}
+.log-line{margin-bottom:4px;word-break:break-word}
+.log-line.info{color:#9aa1b4}
+.log-line.ok{color:#34d399}
+.log-line.err{color:#f87171}
+.log-line.warn{color:#fbbf24}
+.log-line.step{color:#a78bfa;font-weight:600;margin-top:8px}
+.log-time{color:#5f677b;margin-right:8px}
+/* STAGES */
+.stages{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.stage{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);font-size:.85rem;color:var(--text-dim)}
 .stage.active{border-color:var(--primary);color:var(--text);background:rgba(109,93,252,.08)}
 .stage.done{color:var(--success);border-color:rgba(52,211,153,.3)}
-.stage-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;flex-shrink:0}
+.stage.err{color:var(--danger);border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
+.stage-icon{width:20px;height:20px;border-radius:50%;border:2px solid currentColor;flex-shrink:0;display:grid;place-items:center;font-size:11px}
 .stage.active .stage-icon{border-color:var(--primary);border-top-color:transparent;animation:spin .8s linear infinite}
-.stage.done .stage-icon{border-color:var(--success);background:var(--success)}
-.stage.done .stage-icon::after{content:'✓';font-size:11px;color:var(--bg);font-weight:700}
+.stage.done .stage-icon{border-color:var(--success);background:var(--success);color:var(--bg)}
+.stage.done .stage-icon::after{content:'✓';font-weight:700}
+.stage.err .stage-icon{border-color:var(--danger);background:var(--danger);color:#fff}
+.stage.err .stage-icon::after{content:'✕';font-weight:700}
 @keyframes spin{to{transform:rotate(360deg)}}
-.compare-wrapper{position:relative;border-radius:var(--radius);overflow:hidden;background:repeating-conic-gradient(#1a1f2b 0% 25%,#232a38 0% 50%) 50%/20px 20px;user-select:none;touch-action:none;max-height:55vh;display:grid;place-items:center;min-height:200px}
-.compare-wrapper img{display:block;max-width:100%;max-height:55vh;pointer-events:none}
-.compare-after{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
-.compare-after img{width:100%;height:100%;object-fit:contain}
-.compare-handle{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 12px rgba(0,0,0,.6);cursor:ew-resize;z-index:5}
-.compare-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.5)}
-.compare-handle::before{content:'◀ ▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:9px;color:#333;z-index:6;letter-spacing:1px}
-.tabs{display:flex;gap:4px;background:var(--surface-2);border-radius:var(--radius-sm);padding:4px;margin-bottom:16px;overflow-x:auto}
-.tab{flex:1;padding:9px 12px;border:none;background:transparent;color:var(--text-dim);font-family:inherit;font-size:.8rem;font-weight:600;border-radius:6px;cursor:pointer;white-space:nowrap}
-.tab.active{background:var(--primary);color:#fff}
-.tab-panel{display:none}
-.tab-panel.active{display:block;animation:fadeIn .25s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.control-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.control-row label{font-size:.82rem;color:var(--text-dim);min-width:70px}
-input[type="range"]{-webkit-appearance:none;flex:1;height:5px;border-radius:3px;background:var(--surface-3);outline:none;min-width:100px}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--primary);cursor:pointer}
-input[type="color"]{width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0}
-.value-badge{font-size:.75rem;font-family:monospace;color:var(--text-dim);min-width:40px;text-align:right}
-select{background:var(--surface-3);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-family:inherit;font-size:.82rem;cursor:pointer}
-.toggle-group{display:flex;gap:8px;flex-wrap:wrap}
-.color-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.swatch{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);cursor:pointer}
-.swatch.active{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary)}
-.editor-canvas-wrap{position:relative;display:inline-block;line-height:0;max-width:100%}
-.editor-canvas-wrap canvas{display:block;max-width:100%;cursor:crosshair;border-radius:var(--radius-sm);background:repeating-conic-gradient(#1a1f2b 0% 25%,#232a38 0% 50%) 50%/20px 20px}
-.toast-container{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:400px}
-.toast{background:var(--surface-3);color:var(--text);padding:12px 18px;border-radius:var(--radius-sm);font-size:.85rem;box-shadow:var(--shadow);border:1px solid var(--border);animation:toastIn .3s;pointer-events:auto;width:100%;text-align:center}
-.toast.error{border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.15)}
-.toast.success{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.15)}
-@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.hidden{display:none!important}
-.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
-.mb-16{margin-bottom:16px}
-.text-dim{color:var(--text-dim)}
-.text-sm{font-size:.82rem}
-.gap-8{gap:8px}
-.flex{display:flex}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:480px){.grid-2{grid-template-columns:1fr}}
+.preview{background:var(--surface-2);border-radius:12px;padding:10px;text-align:center;margin-top:12px}
+.preview img{max-width:100%;max-height:300px;border-radius:8px}
+.info{font-size:.8rem;color:var(--text-dim);margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
+.info b{color:var(--text)}
+.result{background:repeating-conic-gradient(#1a1f2b 0% 25%,#232a38 0% 50%) 50%/20px 20px;border-radius:12px;padding:10px;text-align:center;margin-top:12px}
+.result img{max-width:100%;max-height:400px;border-radius:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.notice{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);color:#fbbf24;padding:10px 14px;border-radius:8px;font-size:.8rem;margin-bottom:12px}
+.notice b{color:#fbbf24}
 </style>
 </head>
 <body>
 
-<div class="app-container">
-<header class="app-header">
-<div class="brand">
-<div class="brand-logo">Q</div>
-<div>
-<div class="brand-name">Qunvero</div>
-<div class="brand-sub">AI Background Remover</div>
-</div>
-</div>
-<div class="privacy-badge">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-Processed locally
-</div>
-</header>
+<div class="app">
+  <div class="header">
+    <div class="logo">Q</div>
+    <div>
+      <div class="title">Qunvero AI Background Remover</div>
+      <div class="subtitle">Diagnostic Mode — live progress log</div>
+    </div>
+  </div>
 
-<main>
-<section id="uploadSection" class="card">
-<h1 style="font-size:1.4rem;font-weight:700;margin-bottom:6px">Remove backgrounds instantly</h1>
-<p class="text-dim text-sm mb-16">Locally, privately, free. No upload, no limits.</p>
+  <!-- LOG PANEL (ALWAYS VISIBLE) -->
+  <div id="logPanel">
+    <div class="log-header">
+      <span>📋 Processing Log</span>
+      <span class="log-status" id="logStatus">IDLE</span>
+    </div>
+    <div id="logBody"></div>
+  </div>
 
-<div id="uploadZone" class="upload-zone" tabindex="0" role="button">
-<svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-</svg>
-<div class="upload-title">Drop your image here</div>
-<div class="upload-sub">or click to browse · paste from clipboard</div>
-<div class="upload-formats">JPG · PNG · WEBP · Large files supported</div>
-<input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" class="hidden" multiple>
-</div>
+  <div class="notice">
+    <b>Note:</b> Pehli baar AI model download hoga (176 MB). Model 3 different sources se try karega. Log panel me har step live dikhega.
+  </div>
 
-<div id="originalPreviewSection" class="hidden mt-16">
-<div class="preview-container">
-<img id="originalPreview" alt="Original image">
-</div>
-<div class="file-info" id="fileInfo"></div>
-<div class="flex gap-8 mt-16 flex-wrap">
-<button class="btn btn-primary" id="removeBgBtn">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-Remove Background
-</button>
-<button class="btn btn-danger" id="clearImageBtn">Remove</button>
-</div>
-</div>
-</section>
+  <!-- UPLOAD -->
+  <div class="card" id="uploadCard">
+    <h2>Step 1: Upload Image</h2>
+    <div class="upload" id="uploadZone" tabindex="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <div style="font-size:1rem;font-weight:600;margin-bottom:6px">Drop image / Click / Paste</div>
+      <div style="font-size:.8rem;color:var(--text-dim)">JPG · PNG · WEBP</div>
+      <input type="file" id="fileInput" accept="image/*" class="hidden">
+    </div>
+    <div class="preview hidden" id="previewWrap">
+      <img id="previewImg" alt="preview">
+      <div class="info" id="imgInfo"></div>
+    </div>
+    <div class="actions hidden" id="uploadActions">
+      <button class="btn btn-primary" id="startBtn">🚀 Remove Background</button>
+      <button class="btn btn-danger" id="clearBtn">✕ Clear</button>
+    </div>
+  </div>
 
-<section id="processingSection" class="card mt-24 hidden">
-<h2 style="font-size:1rem;font-weight:600;margin-bottom:16px">Processing</h2>
-<div class="progress-stages" id="progressStages"></div>
-<button class="btn btn-danger btn-block" id="cancelBtn">Cancel</button>
-</section>
+  <!-- PROGRESS -->
+  <div class="card hidden" id="progressCard">
+    <h2>Step 2: Processing</h2>
+    <div class="stages" id="stages"></div>
+    <button class="btn btn-danger btn-block mt-8" id="cancelBtn">Cancel</button>
+  </div>
 
-<section id="resultSection" class="hidden mt-24">
-<div class="card">
-<div class="flex justify-between items-center mb-16 flex-wrap gap-8">
-<h2 style="font-size:1rem;font-weight:600">Result</h2>
-<div class="text-sm text-dim" id="resultInfo"></div>
-</div>
-
-<div class="compare-wrapper" id="compareWrapper">
-<img id="compareBefore" alt="Original">
-<div class="compare-after" id="compareAfterWrap">
-<img id="compareAfter" alt="Result">
-</div>
-<div class="compare-handle" id="compareHandle"></div>
-</div>
-
-<div class="tabs mt-16">
-<button class="tab active" data-tab="tabEdit">✏️ Refine</button>
-<button class="tab" data-tab="tabBg">🎨 Background</button>
-<button class="tab" data-tab="tabShadow">🌑 Shadow</button>
-<button class="tab" data-tab="tabEnhance">✨ Enhance</button>
-<button class="tab" data-tab="tabExport">⬇️ Export</button>
+  <!-- RESULT -->
+  <div class="card hidden" id="resultCard">
+    <h2>Step 3: Result</h2>
+    <div class="result">
+      <img id="resultImg" alt="result">
+    </div>
+    <div class="info" id="resultInfo"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="downloadBtn">⬇️ Download PNG</button>
+      <button class="btn" id="newBtn">+ New Image</button>
+    </div>
+  </div>
 </div>
 
-<div class="tab-panel active" id="tabEdit">
-<div class="editor-canvas-wrap"><canvas id="editorCanvas"></canvas></div>
-<div class="mt-16">
-<div class="toggle-group mb-8">
-<button class="btn btn-sm" id="toolEraser" style="background:var(--primary);color:#fff">🧹 Eraser</button>
-<button class="btn btn-sm" id="toolRestore">🖌️ Restore</button>
-</div>
-<div class="control-row"><label for="brushSize">Size</label><input type="range" id="brushSize" min="5" max="150" value="40"><span class="value-badge" id="brushSizeVal">40</span></div>
-<div class="control-row"><label for="brushSoftness">Softness</label><input type="range" id="brushSoftness" min="0" max="100" value="50"><span class="value-badge" id="brushSoftnessVal">50</span></div>
-<div class="flex gap-8">
-<button class="btn btn-sm" id="undoBtn">↩ Undo</button>
-<button class="btn btn-sm" id="redoBtn">↪ Redo</button>
-<button class="btn btn-sm btn-danger" id="resetEditBtn">Reset</button>
-</div>
-</div>
-</div>
-
-<div class="tab-panel" id="tabBg">
-<div class="toggle-group mb-16">
-<button class="btn btn-sm" data-bg="transparent" style="background:var(--primary);color:#fff">Transparent</button>
-<button class="btn btn-sm" data-bg="color">Solid Color</button>
-<button class="btn btn-sm" data-bg="gradient">Gradient</button>
-<button class="btn btn-sm" data-bg="image">Custom Image</button>
-</div>
-<div id="bgColorPanel" class="hidden">
-<div class="control-row"><label for="bgColorPicker">Color</label><input type="color" id="bgColorPicker" value="#ffffff"></div>
-<div class="color-swatches">
-<div class="swatch active" data-color="#ffffff" style="background:#fff"></div>
-<div class="swatch" data-color="#000000" style="background:#000"></div>
-<div class="swatch" data-color="#6d5dfc" style="background:#6d5dfc"></div>
-<div class="swatch" data-color="#34d399" style="background:#34d399"></div>
-<div class="swatch" data-color="#f87171" style="background:#f87171"></div>
-<div class="swatch" data-color="#fbbf24" style="background:#fbbf24"></div>
-</div>
-</div>
-<div id="bgGradientPanel" class="hidden">
-<div class="control-row"><label for="gradColor1">Color 1</label><input type="color" id="gradColor1" value="#6d5dfc"></div>
-<div class="control-row"><label for="gradColor2">Color 2</label><input type="color" id="gradColor2" value="#0b0e14"></div>
-<div class="control-row"><label for="gradAngle">Angle</label><input type="range" id="gradAngle" min="0" max="360" value="135"><span class="value-badge" id="gradAngleVal">135°</span></div>
-</div>
-<div id="bgImagePanel" class="hidden">
-<button class="btn btn-sm" id="uploadBgImageBtn">📁 Upload Background</button>
-<input type="file" id="bgImageInput" accept="image/*" class="hidden">
-</div>
-</div>
-
-<div class="tab-panel" id="tabShadow">
-<div class="control-row"><label for="shadowToggle">Enable</label><input type="checkbox" id="shadowToggle" style="width:20px;height:20px"></div>
-<div>
-<div class="control-row"><label for="shadowOpacity">Opacity</label><input type="range" id="shadowOpacity" min="0" max="100" value="50"><span class="value-badge" id="shadowOpacityVal">50</span></div>
-<div class="control-row"><label for="shadowBlur">Blur</label><input type="range" id="shadowBlur" min="0" max="100" value="30"><span class="value-badge" id="shadowBlurVal">30</span></div>
-<div class="control-row"><label for="shadowDistance">Distance</label><input type="range" id="shadowDistance" min="0" max="80" value="20"><span class="value-badge" id="shadowDistanceVal">20</span></div>
-<div class="control-row"><label for="shadowAngle">Angle</label><input type="range" id="shadowAngle" min="0" max="360" value="135"><span class="value-badge" id="shadowAngleVal">135°</span></div>
-<div class="control-row"><label for="shadowSize">Size</label><input type="range" id="shadowSize" min="50" max="200" value="100"><span class="value-badge" id="shadowSizeVal">100</span></div>
-</div>
-</div>
-
-<div class="tab-panel" id="tabEnhance">
-<div class="control-row"><label for="enhSharpness">Sharpness</label><input type="range" id="enhSharpness" min="0" max="100" value="0"><span class="value-badge" id="enhSharpnessVal">0</span></div>
-<div class="control-row"><label for="enhContrast">Contrast</label><input type="range" id="enhContrast" min="-50" max="50" value="0"><span class="value-badge" id="enhContrastVal">0</span></div>
-<div class="control-row"><label for="enhBrightness">Brightness</label><input type="range" id="enhBrightness" min="-50" max="50" value="0"><span class="value-badge" id="enhBrightnessVal">0</span></div>
-<div class="control-row"><label for="enhSaturation">Saturation</label><input type="range" id="enhSaturation" min="-50" max="50" value="0"><span class="value-badge" id="enhSaturationVal">0</span></div>
-<button class="btn btn-sm mt-8" id="resetEnhanceBtn">Reset</button>
-</div>
-
-<div class="tab-panel" id="tabExport">
-<div class="grid-2">
-<div>
-<label for="exportFormat" class="text-sm text-dim">Format</label>
-<select id="exportFormat" class="mt-8" style="width:100%">
-<option value="png">PNG (transparent)</option>
-<option value="jpeg">JPG</option>
-<option value="webp">WEBP</option>
-</select>
-</div>
-<div id="qualityWrap" class="hidden">
-<label for="exportQuality" class="text-sm text-dim">Quality</label>
-<div class="control-row mt-8">
-<input type="range" id="exportQuality" min="1" max="100" value="92">
-<span class="value-badge" id="exportQualityVal">92</span>
-</div>
-</div>
-</div>
-<div class="flex gap-8 mt-16 flex-wrap">
-<button class="btn btn-primary" id="downloadBtn">⬇️ Download</button>
-<button class="btn" id="downloadPdfBtn">📄 PDF</button>
-<button class="btn" id="printBtn">🖨️ Print</button>
-</div>
-<button class="btn btn-sm mt-16" id="newImageBtn">+ New Image</button>
-</div>
-
-</div>
-</section>
-
-<section id="batchSection" class="card mt-24 hidden">
-<div class="flex justify-between items-center mb-16 flex-wrap gap-8">
-<h2 style="font-size:1rem;font-weight:600">Batch Queue</h2>
-<div class="flex gap-8 flex-wrap">
-<button class="btn btn-sm btn-primary" id="processBatchBtn">Process All</button>
-<button class="btn btn-sm" id="downloadZipBtn">ZIP</button>
-<button class="btn btn-sm btn-danger" id="clearBatchBtn">Clear</button>
-</div>
-</div>
-<div id="batchList"></div>
-</section>
-
-</main>
-</div>
-
-<canvas id="workCanvas" class="hidden"></canvas>
-<div class="toast-container" id="toastContainer"></div>
+<canvas id="workCanvas" style="display:none"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/ort.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
 <script>
 'use strict';
 
-const State = {
-  originalFile:null, originalImage:null, originalBitmap:null,
-  originalWidth:0, originalHeight:0,
-  maskCanvas:null, maskCtx:null,
-  resultCanvas:null, resultCtx:null,
-  processedCanvas:null, processedCtx:null,
-  bgType:'transparent', bgColor:'#ffffff',
-  gradColor1:'#6d5dfc', gradColor2:'#0b0e14', gradAngle:135,
-  bgImage:null,
-  shadowEnabled:false, shadowOpacity:0.5, shadowBlur:30, shadowDistance:20, shadowAngle:135, shadowSize:100,
-  enhance:{sharpness:0,contrast:0,brightness:0,saturation:0},
-  isProcessing:false, cancelRequested:false,
-  modelSession:null, modelReady:false, modelLoading:false,
-  deviceInfo:{}, undoStack:[], redoStack:[],
-  isDrawing:false, lastX:0, lastY:0,
-  currentTool:'eraser', brushSize:40, brushSoftness:0.5,
-  comparePos:0.5, batchQueue:[], batchProcessing:false,
+/* ============================================================
+   LIVE LOGGER — Screen pe har step dikhata hai
+   ============================================================ */
+const LOG = {
+  body: null,
+  status: null,
+  init(){
+    this.body = document.getElementById('logBody');
+    this.status = document.getElementById('logStatus');
+  },
+  line(msg, type = 'info'){
+    const t = new Date().toLocaleTimeString('en-IN', {hour12:false});
+    const div = document.createElement('div');
+    div.className = 'log-line ' + type;
+    div.innerHTML = `<span class="log-time">[${t}]</span>${this.escape(msg)}`;
+    this.body.appendChild(div);
+    this.body.scrollTop = this.body.scrollHeight;
+    console.log('[' + type.toUpperCase() + ']', msg);
+  },
+  escape(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
+  step(msg){ this.line('▶ ' + msg, 'step'); },
+  ok(msg){ this.line('✓ ' + msg, 'ok'); },
+  err(msg){ this.line('✕ ' + msg, 'err'); },
+  warn(msg){ this.line('⚠ ' + msg, 'warn'); },
+  info(msg){ this.line('ℹ ' + msg, 'info'); },
+  setStatus(text, type = ''){
+    this.status.textContent = text;
+    this.status.className = 'log-status ' + type;
+  },
+  clear(){ this.body.innerHTML = ''; }
 };
 
-const MODEL_URL = 'https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx';
+/* ============================================================
+   STATE
+   ============================================================ */
+const State = {
+  file: null,
+  img: null,
+  bitmap: null,
+  resultCanvas: null,
+  processedCanvas: null,
+  maskCanvas: null,
+  isProcessing: false,
+  cancelled: false,
+  modelReady: false,
+  modelSession: null,
+  modelLoading: false,
+};
+
 const MODEL_INPUT_SIZE = 1024;
 
+/* Multiple model URLs — ek fail hua to doosra try karega */
+const MODEL_URLS = [
+  'https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx',
+  'https://hf-mirror.com/briaai/RMBG-1.4/resolve/main/onnx/model.onnx',
+  'https://corsproxy.io/?https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx',
+];
+
+/* ============================================================
+   DOM
+   ============================================================ */
 const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
 const DOM = {
-  uploadSection:$('#uploadSection'), uploadZone:$('#uploadZone'), fileInput:$('#fileInput'),
-  originalPreviewSection:$('#originalPreviewSection'), originalPreview:$('#originalPreview'), fileInfo:$('#fileInfo'),
-  removeBgBtn:$('#removeBgBtn'), clearImageBtn:$('#clearImageBtn'),
-  processingSection:$('#processingSection'), progressStages:$('#progressStages'), cancelBtn:$('#cancelBtn'),
-  resultSection:$('#resultSection'), resultInfo:$('#resultInfo'),
-  compareWrapper:$('#compareWrapper'), compareBefore:$('#compareBefore'), compareAfter:$('#compareAfter'),
-  compareAfterWrap:$('#compareAfterWrap'), compareHandle:$('#compareHandle'),
-  editorCanvas:$('#editorCanvas'), workCanvas:$('#workCanvas'),
-  toastContainer:$('#toastContainer'),
-  batchSection:$('#batchSection'), batchList:$('#batchList'),
+  uploadCard: $('#uploadCard'),
+  uploadZone: $('#uploadZone'),
+  fileInput: $('#fileInput'),
+  previewWrap: $('#previewWrap'),
+  previewImg: $('#previewImg'),
+  imgInfo: $('#imgInfo'),
+  uploadActions: $('#uploadActions'),
+  startBtn: $('#startBtn'),
+  clearBtn: $('#clearBtn'),
+  progressCard: $('#progressCard'),
+  stages: $('#stages'),
+  cancelBtn: $('#cancelBtn'),
+  resultCard: $('#resultCard'),
+  resultImg: $('#resultImg'),
+  resultInfo: $('#resultInfo'),
+  downloadBtn: $('#downloadBtn'),
+  newBtn: $('#newBtn'),
+  workCanvas: $('#workCanvas'),
 };
 
-function toast(msg, type='info', dur=3500){
-  const el = document.createElement('div');
-  el.className = 'toast ' + type;
-  el.textContent = msg;
-  DOM.toastContainer.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); }, dur);
+/* ============================================================
+   STAGE DISPLAY
+   ============================================================ */
+const STAGES = [
+  'Preparing image',
+  'Loading AI model',
+  'Analyzing background',
+  'Removing background',
+  'Refining edges',
+  'Creating final image',
+];
+const stageStatus = new Array(STAGES.length).fill('pending'); // pending | active | done | err
+
+function renderStages(){
+  DOM.stages.innerHTML = STAGES.map((s, i) => {
+    const st = stageStatus[i];
+    let icon = '';
+    if(st === 'done') icon = '✓';
+    else if(st === 'err') icon = '✕';
+    return `<div class="stage ${st}"><div class="stage-icon">${icon}</div><span>${i+1}. ${s}</span></div>`;
+  }).join('');
 }
 
-function formatBytes(b){
-  if(!b) return '0 B';
-  const k=1024, s=['B','KB','MB','GB'];
-  const i=Math.floor(Math.log(b)/Math.log(k));
-  return (b/Math.pow(k,i)).toFixed(1)+' '+s[i];
+function setStage(i, st){
+  stageStatus[i] = st;
+  renderStages();
 }
 
-async function detectDevice(){
-  State.deviceInfo = {
-    memory: navigator.deviceMemory || 4,
-    cores: navigator.hardwareConcurrency || 4,
-    isMobile: /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent),
-  };
-  return State.deviceInfo;
+function resetStages(){
+  stageStatus.fill('pending');
+  renderStages();
 }
 
-function getInferenceSize(w,h){
-  const {memory, cores, isMobile} = State.deviceInfo;
-  const maxDim = Math.max(w,h);
-  let target = 768;
-  if(memory>=8 && cores>=6 && !isMobile) target = 1024;
-  else if(memory>=4 && cores>=4) target = 896;
-  else if(memory>=2) target = 768;
-  else target = 512;
-  if(maxDim < target) target = maxDim;
-  const px = w*h;
-  if(px > 20e6) target = Math.min(target, 768);
-  if(px > 40e6) target = Math.min(target, 640);
-  return target;
+/* ============================================================
+   LOGGER HELPERS
+   ============================================================ */
+function logDeviceInfo(){
+  LOG.info('User Agent: ' + navigator.userAgent);
+  LOG.info('Device Memory: ' + (navigator.deviceMemory || 'unknown') + ' GB');
+  LOG.info('CPU Cores: ' + (navigator.hardwareConcurrency || 'unknown'));
+  LOG.info('ONNX Runtime: ' + (typeof ort !== 'undefined' ? (ort.env?.versions?.web || 'loaded') : 'NOT LOADED'));
+  LOG.info('Screen: ' + window.innerWidth + 'x' + window.innerHeight);
+  LOG.info('Online: ' + navigator.onLine);
+  if(!navigator.onLine){
+    LOG.err('No internet — model download will fail!');
+  }
 }
 
-async function loadModel(onProgress){
-  if(State.modelReady) return State.modelSession;
-  if(State.modelLoading){
-    while(State.modelLoading) await new Promise(r=>setTimeout(r,100));
+/* ============================================================
+   MODEL LOADING
+   ============================================================ */
+async function loadModel(){
+  if(State.modelReady) {
+    LOG.ok('Model already loaded (from cache)');
     return State.modelSession;
   }
+  if(State.modelLoading){
+    LOG.warn('Model already loading — waiting...');
+    while(State.modelLoading) await sleep(200);
+    return State.modelSession;
+  }
+  
   State.modelLoading = true;
+  LOG.setStatus('LOADING MODEL', 'wait');
+  LOG.step('Starting model load');
+
   try {
-    if(typeof ort === 'undefined') throw new Error('ONNX Runtime not loaded');
-    ort.env.wasm.numThreads = 1;
-    ort.env.wasm.simd = true;
-    ort.env.logLevel = 'error';
-    
-    const executionProviders = ['wasm'];
-    let modelBuffer = null;
-    
+    if(typeof ort === 'undefined'){
+      throw new Error('ONNX Runtime library not loaded. Check script tag.');
+    }
+    LOG.ok('ONNX Runtime found');
+
+    // Configure ORT safely
     try {
-      const cache = await caches.open('qunvero-models-v4');
-      const cached = await cache.match(MODEL_URL);
+      ort.env.wasm.numThreads = 1;
+      ort.env.wasm.simd = true;
+      ort.env.logLevel = 'error';
+      LOG.ok('ORT configured: threads=1, simd=true');
+    } catch(e){
+      LOG.warn('ORT config warning: ' + e.message);
+    }
+
+    let modelBuffer = null;
+    let loadedFrom = '';
+
+    // STEP 1: Try cache
+    LOG.step('Checking browser cache...');
+    try {
+      const cache = await caches.open('qunvero-final-v1');
+      const cached = await cache.match(MODEL_URLS[0]);
       if(cached){
         modelBuffer = await cached.arrayBuffer();
-        console.log('✅ Model from cache');
-        if(onProgress) onProgress('cached');
+        loadedFrom = 'cache';
+        LOG.ok(`Model from cache: ${(modelBuffer.byteLength/1024/1024).toFixed(1)} MB`);
+      } else {
+        LOG.info('Not in cache, will download');
       }
-    } catch(e){ console.warn('Cache:', e.message); }
-    
-    if(!modelBuffer){
-      if(onProgress) onProgress(0);
-      console.log('📥 Downloading model...');
-      const res = await fetch(MODEL_URL);
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const total = parseInt(res.headers.get('content-length') || '0', 10);
-      const reader = res.body.getReader();
-      const chunks = [];
-      let received = 0;
-      while(true){
-        const {done, value} = await reader.read();
-        if(done) break;
-        chunks.push(value);
-        received += value.length;
-        if(onProgress && total > 0) onProgress(Math.round((received/total)*100));
-      }
-      const blob = new Blob(chunks);
-      modelBuffer = await blob.arrayBuffer();
-      console.log('✅ Downloaded:', (modelBuffer.byteLength/1024/1024).toFixed(1), 'MB');
-      try {
-        const cache = await caches.open('qunvero-models-v4');
-        await cache.put(MODEL_URL, new Response(modelBuffer.slice(0)));
-        console.log('💾 Cached');
-      } catch(e){ console.warn('Cache save:', e.message); }
+    } catch(e){
+      LOG.warn('Cache API error: ' + e.message);
     }
+
+    // STEP 2: Download from URLs one by one
+    if(!modelBuffer){
+      for(let i = 0; i < MODEL_URLS.length; i++){
+        const url = MODEL_URLS[i];
+        const shortUrl = url.split('/').slice(-2).join('/');
+        LOG.step(`Trying source ${i+1}/${MODEL_URLS.length}: ${shortUrl}`);
+        
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 180000); // 3 min timeout
+          
+          LOG.info('Fetching... (this may take a while on first load)');
+          const startTime = Date.now();
+          
+          const res = await fetch(url, {
+            signal: controller.signal,
+            mode: 'cors',
+          });
+          clearTimeout(timeout);
+          
+          if(!res.ok){
+            throw new Error('HTTP ' + res.status + ' ' + res.statusText);
+          }
+          
+          LOG.ok('Connection established, downloading...');
+          
+          const total = parseInt(res.headers.get('content-length') || '0', 10);
+          LOG.info('Total size: ' + (total ? (total/1024/1024).toFixed(1) + ' MB' : 'unknown'));
+          
+          const reader = res.body.getReader();
+          const chunks = [];
+          let received = 0;
+          let lastLog = 0;
+          
+          while(true){
+            const {done, value} = await reader.read();
+            if(done) break;
+            chunks.push(value);
+            received += value.length;
+            
+            // Log progress every 10 MB
+            if(received - lastLog > 10 * 1024 * 1024 || (total && received === total)){
+              lastLog = received;
+              const mb = (received/1024/1024).toFixed(1);
+              const pct = total ? Math.round((received/total)*100) : '?';
+              const speed = (received / 1024 / 1024 / ((Date.now()-startTime)/1000)).toFixed(1);
+              LOG.info(`Downloaded: ${mb} MB (${pct}%) @ ${speed} MB/s`);
+            }
+          }
+          
+          const blob = new Blob(chunks);
+          modelBuffer = await blob.arrayBuffer();
+          loadedFrom = 'download';
+          const elapsed = ((Date.now()-startTime)/1000).toFixed(1);
+          LOG.ok(`Downloaded ${(modelBuffer.byteLength/1024/1024).toFixed(1)} MB in ${elapsed}s`);
+          
+          // Save to cache
+          try {
+            const cache = await caches.open('qunvero-final-v1');
+            await cache.put(MODEL_URLS[0], new Response(modelBuffer.slice(0)));
+            LOG.ok('Saved to cache for next time');
+          } catch(e){
+            LOG.warn('Cache save failed: ' + e.message);
+          }
+          
+          break; // success, exit loop
+          
+        } catch(e){
+          LOG.err(`Source ${i+1} failed: ${e.message}`);
+          if(i < MODEL_URLS.length - 1){
+            LOG.warn('Trying next source...');
+          }
+        }
+      }
+    }
+
+    if(!modelBuffer){
+      throw new Error('All model sources failed. Internet check karein ya VPN try karein.');
+    }
+
+    // STEP 3: Create inference session
+    LOG.step('Creating inference session...');
+    LOG.info('This may take 10-30 seconds on first load');
     
-    console.log('🔧 Creating session...');
+    const sessionStart = Date.now();
     const session = await ort.InferenceSession.create(modelBuffer, {
-      executionProviders: executionProviders,
-      graphOptimizationLevel: 'basic'
+      executionProviders: ['wasm'],
+      graphOptimizationLevel: 'basic',
     });
+    const sessionTime = ((Date.now()-sessionStart)/1000).toFixed(1);
     
-    console.log('✅ Model ready! Inputs:', session.inputNames, 'Outputs:', session.outputNames);
-    
+    LOG.ok(`Session created in ${sessionTime}s`);
+    LOG.info('Inputs: ' + JSON.stringify(session.inputNames));
+    LOG.info('Outputs: ' + JSON.stringify(session.outputNames));
+
     State.modelSession = session;
     State.modelReady = true;
     State.modelLoading = false;
+    LOG.setStatus('MODEL READY', 'ok');
+    LOG.ok('MODEL LOAD COMPLETE ✓');
     return session;
+
   } catch(err){
     State.modelLoading = false;
-    console.error('❌ Model error:', err);
-    throw new Error('Model load failed: ' + err.message);
+    LOG.setStatus('MODEL FAILED', 'err');
+    LOG.err('MODEL LOAD FAILED: ' + err.message);
+    if(err.stack){
+      LOG.info('Stack: ' + err.stack.split('\n').slice(0,3).join(' | '));
+    }
+    throw err;
   }
 }
 
-function preprocessImage(imageBitmap, size){
+/* ============================================================
+   PREPROCESS
+   ============================================================ */
+function preprocessImage(bitmap, size){
+  LOG.step('Preprocessing image to ' + size + 'x' + size);
   const canvas = DOM.workCanvas;
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext('2d', {willReadFrequently:true});
+  const ctx = canvas.getContext('2d', {willReadFrequently: true});
   ctx.fillStyle = '#000';
-  ctx.fillRect(0,0,size,size);
-  const scale = Math.min(size/imageBitmap.width, size/imageBitmap.height);
-  const w = imageBitmap.width * scale;
-  const h = imageBitmap.height * scale;
-  const x = (size - w) / 2;
-  const y = (size - h) / 2;
-  ctx.drawImage(imageBitmap, x, y, w, h);
-  const imgData = ctx.getImageData(0,0,size,size);
+  ctx.fillRect(0, 0, size, size);
+
+  const scale = Math.min(size / bitmap.width, size / bitmap.height);
+  const w = Math.round(bitmap.width * scale);
+  const h = Math.round(bitmap.height * scale);
+  const x = Math.round((size - w) / 2);
+  const y = Math.round((size - h) / 2);
+  
+  ctx.drawImage(bitmap, x, y, w, h);
+  LOG.info(`Drawn at (${x},${y}) size ${w}x${h}`);
+  
+  const imgData = ctx.getImageData(0, 0, size, size);
   const data = imgData.data;
-  const float32 = new Float32Array(3*size*size);
-  const mean = [0.485,0.456,0.406], std = [0.229,0.224,0.225];
-  for(let i=0;i<size*size;i++){
-    float32[i] = (data[i*4]/255 - mean[0])/std[0];
-    float32[size*size+i] = (data[i*4+1]/255 - mean[1])/std[1];
-    float32[2*size*size+i] = (data[i*4+2]/255 - mean[2])/std[2];
+  const float32 = new Float32Array(3 * size * size);
+  const mean = [0.485, 0.456, 0.406];
+  const std = [0.229, 0.224, 0.225];
+  
+  for(let i = 0; i < size * size; i++){
+    float32[i] = (data[i*4] / 255 - mean[0]) / std[0];
+    float32[size*size + i] = (data[i*4+1] / 255 - mean[1]) / std[1];
+    float32[2*size*size + i] = (data[i*4+2] / 255 - mean[2]) / std[2];
   }
-  return new ort.Tensor('float32', float32, [1,3,size,size]);
+  
+  LOG.ok('Tensor created: [1,3,' + size + ',' + size + ']');
+  return new ort.Tensor('float32', float32, [1, 3, size, size]);
 }
 
+/* ============================================================
+   POSTPROCESS
+   ============================================================ */
 function postprocessMask(outputTensor, origW, origH){
+  LOG.step('Post-processing mask');
   const data = outputTensor.data;
   const dims = outputTensor.dims;
-  console.log('🔍 Output dims:', dims, 'Length:', data.length);
+  LOG.info('Output dims: ' + JSON.stringify(dims));
+  LOG.info('Output data length: ' + data.length);
   
-  // Auto-detect size from output shape
+  // Auto-detect mask size
   let size = 1024;
   if(dims.length >= 2){
-    const lastDim = dims[dims.length-1];
-    const secondLast = dims[dims.length-2];
+    const lastDim = dims[dims.length - 1];
+    const secondLast = dims[dims.length - 2];
     if(lastDim === secondLast && lastDim > 0){
       size = lastDim;
     }
   }
-  console.log('🔍 Using mask size:', size);
+  LOG.info('Using mask size: ' + size);
   
+  // Find min/max
   let min = Infinity, max = -Infinity;
-  for(let i=0;i<data.length;i++){
+  for(let i = 0; i < data.length; i++){
     if(data[i] < min) min = data[i];
     if(data[i] > max) max = data[i];
   }
-  console.log('🔍 Data range:', min.toFixed(4), 'to', max.toFixed(4));
+  LOG.info(`Data range: ${min.toFixed(4)} to ${max.toFixed(4)}`);
   const range = max - min || 1;
   
   const pixelCount = size * size;
+  const loopCount = Math.min(pixelCount, data.length);
+  if(loopCount < pixelCount){
+    LOG.warn(`Only ${loopCount} pixels available, expected ${pixelCount}`);
+  }
+  
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   const imgData = ctx.createImageData(size, size);
   
-  const loopCount = Math.min(pixelCount, data.length);
-  for(let i=0;i<loopCount;i++){
+  for(let i = 0; i < loopCount; i++){
     const val = (data[i] - min) / range;
     const alpha = Math.round(Math.min(1, Math.max(0, val)) * 255);
     imgData.data[i*4] = 255;
@@ -499,9 +527,10 @@ function postprocessMask(outputTensor, origW, origH){
     imgData.data[i*4+3] = alpha;
   }
   ctx.putImageData(imgData, 0, 0);
+  LOG.ok('Mask canvas created: ' + size + 'x' + size);
   
-  // Scale mask from size x size to original image dimensions
-  const scale = Math.min(size/origW, size/origH);
+  // Scale to original
+  const scale = Math.min(size / origW, size / origH);
   const w = origW * scale;
   const h = origH * scale;
   const x = (size - w) / 2;
@@ -510,37 +539,46 @@ function postprocessMask(outputTensor, origW, origH){
   const maskCanvas = document.createElement('canvas');
   maskCanvas.width = origW;
   maskCanvas.height = origH;
-  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
+  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently: true});
   maskCtx.imageSmoothingEnabled = true;
   maskCtx.imageSmoothingQuality = 'high';
   maskCtx.drawImage(canvas, x, y, w, h, 0, 0, origW, origH);
   
-  // Refine mask (contrast boost)
-  const mData = maskCtx.getImageData(0,0,origW,origH);
-  for(let i=3;i<mData.data.length;i+=4){
-    let a = mData.data[i]/255;
-    a = a*a*(3-2*a); // smoothstep
-    mData.data[i] = Math.round(a*255);
+  // Contrast boost
+  const mData = maskCtx.getImageData(0, 0, origW, origH);
+  for(let i = 3; i < mData.data.length; i += 4){
+    let a = mData.data[i] / 255;
+    a = a * a * (3 - 2 * a);
+    mData.data[i] = Math.round(a * 255);
   }
   maskCtx.putImageData(mData, 0, 0);
   
-  console.log('✅ Mask created:', origW, 'x', origH);
+  LOG.ok('Mask scaled to original: ' + origW + 'x' + origH);
   return maskCanvas;
 }
 
-function applyMaskToOriginal(origBitmap, maskCanvas){
-  const w = origBitmap.width, h = origBitmap.height;
-  const result = document.createElement('canvas');
-  result.width = w; result.height = h;
-  const rCtx = result.getContext('2d', {willReadFrequently:true});
-  rCtx.drawImage(origBitmap, 0, 0, w, h);
+/* ============================================================
+   APPLY MASK
+   ============================================================ */
+function applyMaskToOriginal(bitmap, maskCanvas){
+  LOG.step('Applying mask to original image');
+  const w = bitmap.width;
+  const h = bitmap.height;
   
-  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
+  const result = document.createElement('canvas');
+  result.width = w;
+  result.height = h;
+  const rCtx = result.getContext('2d', {willReadFrequently: true});
+  rCtx.drawImage(bitmap, 0, 0, w, h);
+  LOG.info('Original drawn at ' + w + 'x' + h);
+  
+  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently: true});
   const maskData = maskCtx.getImageData(0, 0, w, h);
   const resultData = rCtx.getImageData(0, 0, w, h);
-  const rD = resultData.data, mD = maskData.data;
+  const rD = resultData.data;
+  const mD = maskData.data;
   
-  for(let i=0;i<w*h;i++){
+  for(let i = 0; i < w * h; i++){
     const a = mD[i*4+3];
     if(a > 0 && a < 255){
       const f = a / 255;
@@ -551,622 +589,263 @@ function applyMaskToOriginal(origBitmap, maskCanvas){
     rD[i*4+3] = a;
   }
   rCtx.putImageData(resultData, 0, 0);
+  LOG.ok('Mask applied at FULL original resolution');
   return result;
 }
 
-async function processImage(){
+/* ============================================================
+   MAIN PROCESS
+   ============================================================ */
+async function process(){
   if(State.isProcessing) return;
   State.isProcessing = true;
-  State.cancelRequested = false;
-  State.sessionId = (State.sessionId || 0) + 1;
-
-  const stages = ['Preparing image...','Loading AI model...','Analyzing background...','Removing background...','Refining edges...','Creating final image...'];
-  function renderStages(active, done=[]){
-    DOM.progressStages.innerHTML = stages.map((s,i)=>
-      `<div class="stage ${i===active?'active':''} ${done.includes(i)?'done':''}"><div class="stage-icon"></div><span>${s}</span></div>`
-    ).join('');
-  }
-
-  renderStages(0);
-  DOM.processingSection.classList.remove('hidden');
-  DOM.uploadSection.classList.add('hidden');
-  DOM.resultSection.classList.add('hidden');
+  State.cancelled = false;
+  
+  LOG.clear();
+  LOG.setStatus('PROCESSING', 'wait');
+  LOG.step('=== PROCESS STARTED ===');
+  logDeviceInfo();
+  resetStages();
+  
+  DOM.uploadCard.classList.add('hidden');
+  DOM.progressCard.classList.remove('hidden');
+  DOM.resultCard.classList.add('hidden');
 
   try {
-    const file = State.originalFile;
-    const img = State.originalImage;
-    if(!file || !img) throw new Error('No image');
-
+    // STAGE 0: Prepare
+    setStage(0, 'active');
+    LOG.step('Stage 1/6: Preparing image');
+    const file = State.file;
+    const img = State.img;
+    if(!file || !img) throw new Error('No image loaded');
+    
     const w = img.naturalWidth || img.width;
     const h = img.naturalHeight || img.height;
-    console.log('📸 Image:', w, 'x', h);
-
-    let origBitmap;
+    LOG.info(`Image dimensions: ${w}x${h}`);
+    LOG.info(`File size: ${(file.size/1024/1024).toFixed(2)} MB`);
+    
+    let bitmap;
     try {
-      origBitmap = await createImageBitmap(img);
+      LOG.info('Creating ImageBitmap...');
+      bitmap = await createImageBitmap(img);
+      LOG.ok('ImageBitmap created');
     } catch(e){
+      LOG.warn('ImageBitmap failed: ' + e.message + ' — using canvas fallback');
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
       c.getContext('2d').drawImage(img, 0, 0);
-      origBitmap = await createImageBitmap(c);
+      bitmap = await createImageBitmap(c);
+      LOG.ok('Bitmap via canvas fallback');
     }
-    State.originalBitmap = origBitmap;
-    console.log('✅ Bitmap ready');
+    State.bitmap = bitmap;
+    setStage(0, 'done');
 
-    if(State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelled) throw new Error('cancelled');
 
-    renderStages(1, [0]);
-    console.log('🔄 Loading model...');
-    const session = await loadModel(p => {
-      const el = DOM.progressStages.querySelector('.stage.active span');
-      if(el && typeof p === 'number') el.textContent = `Loading AI model... ${p}%`;
-    });
-    console.log('✅ Model loaded');
-    console.log('   Inputs:', session.inputNames);
-    console.log('   Outputs:', session.outputNames);
+    // STAGE 1: Load model
+    setStage(1, 'active');
+    LOG.step('Stage 2/6: Loading AI model');
+    const session = await loadModel();
+    LOG.ok('Model loaded and ready');
+    setStage(1, 'done');
 
-    if(State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelled) throw new Error('cancelled');
 
-    renderStages(2, [0, 1]);
-    console.log('🔄 Preprocessing...');
-    const tensor = preprocessImage(origBitmap, MODEL_INPUT_SIZE);
-    console.log('✅ Tensor:', tensor.dims, 'type:', tensor.type);
+    // STAGE 2: Analyze (preprocess)
+    setStage(2, 'active');
+    LOG.step('Stage 3/6: Analyzing background');
+    const tensor = preprocessImage(bitmap, MODEL_INPUT_SIZE);
+    LOG.ok('Tensor ready: ' + JSON.stringify(tensor.dims));
+    setStage(2, 'done');
 
-    if(State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelled) throw new Error('cancelled');
 
-    renderStages(3, [0, 1, 2]);
-    console.log('🔄 Running inference...');
+    // STAGE 3: Inference
+    setStage(3, 'active');
+    LOG.step('Stage 4/6: Running AI inference');
+    LOG.info('Running model... (may take 5-30 sec)');
     
     const feeds = {};
-    const inputName = session.inputNames[0] || 'input';
-    feeds[inputName] = tensor;
+    feeds[session.inputNames[0]] = tensor;
     
+    const inferenceStart = Date.now();
     let results;
     try {
       results = await session.run(feeds);
-      console.log('✅ Inference complete');
     } catch(e){
-      console.error('❌ session.run error:', e);
-      throw new Error('Inference failed: ' + e.message);
+      LOG.err('Inference error: ' + e.message);
+      throw new Error('AI inference failed: ' + e.message);
     }
+    const inferenceTime = ((Date.now() - inferenceStart) / 1000).toFixed(1);
+    LOG.ok(`Inference complete in ${inferenceTime}s`);
     
     const outputName = session.outputNames[0];
     const output = results[outputName];
-    
     if(!output){
-      console.error('❌ No output. Keys:', Object.keys(results));
+      LOG.err('No output. Available keys: ' + Object.keys(results).join(','));
       throw new Error('Model returned no output');
     }
-    
-    console.log('✅ Output dims:', output.dims, 'Length:', output.data.length);
+    LOG.ok('Output received: ' + JSON.stringify(output.dims));
+    setStage(3, 'done');
 
-    if(State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelled) throw new Error('cancelled');
 
-    renderStages(4, [0, 1, 2, 3]);
-    console.log('🔄 Creating mask...');
-    const maskCanvas = postprocessMask(output, w, h);
-    State.maskCanvas = maskCanvas;
-    State.maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
+    // STAGE 4: Refine mask
+    setStage(4, 'active');
+    LOG.step('Stage 5/6: Refining edges');
+    const mask = postprocessMask(output, w, h);
+    State.maskCanvas = mask;
+    setStage(4, 'done');
 
-    if(State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelled) throw new Error('cancelled');
 
-    renderStages(5, [0, 1, 2, 3, 4]);
-    console.log('🔄 Applying mask to original...');
-    const processed = applyMaskToOriginal(origBitmap, maskCanvas);
+    // STAGE 5: Create final
+    setStage(5, 'active');
+    LOG.step('Stage 6/6: Creating final image');
+    const processed = applyMaskToOriginal(bitmap, mask);
     State.processedCanvas = processed;
-    State.processedCtx = processed.getContext('2d', {willReadFrequently:true});
-    console.log('✅ Mask applied at original resolution');
+    
+    // Create result canvas (transparent)
+    const result = document.createElement('canvas');
+    result.width = w;
+    result.height = h;
+    const rCtx = result.getContext('2d');
+    rCtx.drawImage(processed, 0, 0);
+    State.resultCanvas = result;
+    setStage(5, 'done');
+    
+    LOG.ok('Final image created');
+    LOG.step('=== PROCESS COMPLETE ===');
+    LOG.setStatus('DONE', 'ok');
 
-    State.resultCanvas = document.createElement('canvas');
-    State.resultCanvas.width = w;
-    State.resultCanvas.height = h;
-    State.resultCtx = State.resultCanvas.getContext('2d', {willReadFrequently:true});
-
-    State.bgType = 'transparent';
-    await renderResult();
-    console.log('✅ Result rendered');
-
-    renderStages(-1, [0,1,2,3,4,5]);
-    await new Promise(r=>setTimeout(r,300));
-
-    DOM.processingSection.classList.add('hidden');
-    DOM.resultSection.classList.remove('hidden');
-    DOM.compareBefore.src = URL.createObjectURL(file);
-    DOM.compareAfter.src = State.resultCanvas.toDataURL('image/png');
-    initEditorCanvas();
-    DOM.resultInfo.textContent = `${w} × ${h} · ${formatBytes(file.size)}`;
-    toast('✅ Background removed!', 'success');
-    console.log('🎉 DONE');
+    // Show result
+    await sleep(300);
+    DOM.progressCard.classList.add('hidden');
+    DOM.resultCard.classList.remove('hidden');
+    
+    result.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      DOM.resultImg.src = url;
+    }, 'image/png');
+    
+    DOM.resultInfo.innerHTML = `
+      <span>📐 <b>${w} × ${h}</b> px</span>
+      <span>💾 <b>${(file.size/1024/1024).toFixed(2)} MB</b></span>
+      <span>⚡ <b>${inferenceTime}s</b> inference</span>
+    `;
+    
     State.isProcessing = false;
-
-    if(State.batchQueue.length > 0 && !State.batchProcessing) processBatchQueue();
 
   } catch(err){
     State.isProcessing = false;
-    DOM.processingSection.classList.add('hidden');
-    console.error('❌ FULL ERROR:', err);
+    console.error('PROCESS ERROR:', err);
     
     if(err.message === 'cancelled'){
-      toast('Cancelled', 'info');
-      DOM.uploadSection.classList.remove('hidden');
+      LOG.warn('Process cancelled by user');
+      LOG.setStatus('CANCELLED', 'warn');
     } else {
-      let msg = 'Error: ' + err.message;
-      if(/memory/i.test(err.message)) msg = '⚠️ Image too large. Try smaller.';
-      else if(/model/i.test(err.message)) msg = '⚠️ Model load failed. Retry.';
-      else if(/inference/i.test(err.message)) msg = '⚠️ AI failed: ' + err.message;
-      toast(msg, 'error', 10000);
-      DOM.uploadSection.classList.remove('hidden');
-    }
-  }
-}
-
-async function renderResult(){
-  if(!State.processedCanvas || !State.resultCanvas) return;
-  const w = State.processedCanvas.width;
-  const h = State.processedCanvas.height;
-  const ctx = State.resultCtx;
-  ctx.clearRect(0,0,w,h);
-
-  if(State.bgType === 'color'){
-    ctx.fillStyle = State.bgColor;
-    ctx.fillRect(0,0,w,h);
-  } else if(State.bgType === 'gradient'){
-    const a = State.gradAngle * Math.PI / 180;
-    const g = ctx.createLinearGradient(w/2 - Math.cos(a)*w/2, h/2 - Math.sin(a)*h/2, w/2 + Math.cos(a)*w/2, h/2 + Math.sin(a)*h/2);
-    g.addColorStop(0, State.gradColor1);
-    g.addColorStop(1, State.gradColor2);
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,w,h);
-  } else if(State.bgType === 'image' && State.bgImage){
-    const ir = State.bgImage.width / State.bgImage.height;
-    const cr = w / h;
-    let dw, dh, dx, dy;
-    if(ir > cr){ dh = h; dw = h*ir; dx = (w-dw)/2; dy = 0; }
-    else { dw = w; dh = w/ir; dx = 0; dy = (h-dh)/2; }
-    ctx.drawImage(State.bgImage, dx, dy, dw, dh);
-  }
-
-  if(State.shadowEnabled) await drawShadow(ctx, w, h);
-
-  const e = State.enhance;
-  if(e.sharpness > 0 || e.contrast !== 0 || e.brightness !== 0 || e.saturation !== 0){
-    ctx.drawImage(applyEnhancement(State.processedCanvas, e), 0, 0);
-  } else {
-    ctx.drawImage(State.processedCanvas, 0, 0);
-  }
-  DOM.compareAfter.src = State.resultCanvas.toDataURL('image/png');
-}
-
-async function drawShadow(ctx, w, h){
-  if(!State.maskCanvas) return;
-  const a = State.shadowAngle * Math.PI / 180;
-  const dist = State.shadowDistance * (Math.min(w,h)/500);
-  const ox = Math.cos(a)*dist, oy = Math.sin(a)*dist;
-  const blur = State.shadowBlur * (Math.min(w,h)/500);
-  const scale = State.shadowSize / 100;
-
-  const maskData = State.maskCtx.getImageData(0,0,w,h);
-  const shadowCanvas = document.createElement('canvas');
-  shadowCanvas.width = w; shadowCanvas.height = h;
-  const sCtx = shadowCanvas.getContext('2d');
-  const sData = sCtx.createImageData(w,h);
-  for(let i=0;i<w*h;i++) sData.data[i*4+3] = maskData.data[i*4+3];
-  sCtx.putImageData(sData, 0, 0);
-
-  const layer = document.createElement('canvas');
-  layer.width = w; layer.height = h;
-  const lCtx = layer.getContext('2d');
-  lCtx.save();
-  lCtx.translate(w/2, h/2);
-  lCtx.scale(scale, scale);
-  lCtx.translate(-w/2, -h/2);
-  lCtx.filter = `blur(${blur}px)`;
-  lCtx.drawImage(shadowCanvas, ox/scale, oy/scale);
-  lCtx.filter = 'none';
-  lCtx.restore();
-
-  ctx.save();
-  ctx.globalAlpha = State.shadowOpacity;
-  ctx.drawImage(layer, 0, 0);
-  ctx.restore();
-}
-
-function applyEnhancement(src, p){
-  const w = src.width, h = src.height;
-  const c = document.createElement('canvas');
-  c.width = w; c.height = h;
-  const ctx = c.getContext('2d', {willReadFrequently:true});
-  ctx.drawImage(src, 0, 0);
-  const d = ctx.getImageData(0,0,w,h);
-  const data = d.data;
-  const br = p.brightness * 2.55;
-  const co = (p.contrast + 100) / 100;
-  const sa = (p.saturation + 100) / 100;
-  for(let i=0;i<data.length;i+=4){
-    let r = data[i]+br, g = data[i+1]+br, b = data[i+2]+br;
-    r = ((r/255 - 0.5)*co + 0.5)*255;
-    g = ((g/255 - 0.5)*co + 0.5)*255;
-    b = ((b/255 - 0.5)*co + 0.5)*255;
-    const gray = 0.2989*r + 0.5870*g + 0.1140*b;
-    r = gray + (r-gray)*sa;
-    g = gray + (g-gray)*sa;
-    b = gray + (b-gray)*sa;
-    data[i] = Math.max(0, Math.min(255, r));
-    data[i+1] = Math.max(0, Math.min(255, g));
-    data[i+2] = Math.max(0, Math.min(255, b));
-  }
-  ctx.putImageData(d, 0, 0);
-  if(p.sharpness > 0){
-    const bl = document.createElement('canvas');
-    bl.width = w; bl.height = h;
-    const bCtx = bl.getContext('2d');
-    bCtx.filter = 'blur(2px)';
-    bCtx.drawImage(c, 0, 0);
-    bCtx.filter = 'none';
-    const sD = ctx.getImageData(0,0,w,h);
-    const bD = bCtx.getImageData(0,0,w,h);
-    const amt = p.sharpness/100 * 1.5;
-    for(let i=0;i<sD.data.length;i+=4){
-      for(let k=0;k<3;k++){
-        const diff = sD.data[i+k] - bD.data[i+k];
-        sD.data[i+k] = Math.max(0, Math.min(255, sD.data[i+k] + diff*amt));
+      LOG.err('=== PROCESS FAILED ===');
+      LOG.err('Error: ' + err.message);
+      LOG.info('Error name: ' + err.name);
+      if(err.stack){
+        const lines = err.stack.split('\n').slice(0, 5);
+        lines.forEach(l => LOG.info(l.trim()));
       }
+      LOG.setStatus('FAILED', 'err');
+      
+      // Mark current active stage as error
+      for(let i = 0; i < STAGES.length; i++){
+        if(stageStatus[i] === 'active'){
+          setStage(i, 'err');
+          LOG.err(`Failed at: ${STAGES[i]}`);
+          break;
+        }
+      }
+      
+      alert('❌ ERROR: ' + err.message + '\n\nLog panel me details dekhein aur screenshot lein.');
     }
-    ctx.putImageData(sD, 0, 0);
-  }
-  return c;
-}
-
-let editorEventsSetup = false;
-function initEditorCanvas(){
-  if(!State.processedCanvas) return;
-  const canvas = DOM.editorCanvas;
-  const w = State.processedCanvas.width;
-  const h = State.processedCanvas.height;
-  const maxD = 800;
-  const scale = Math.min(1, maxD/Math.max(w,h));
-  canvas.width = Math.round(w*scale);
-  canvas.height = Math.round(h*scale);
-  canvas.style.width = '100%';
-  canvas.style.height = 'auto';
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(State.processedCanvas, 0, 0, canvas.width, canvas.height);
-  canvas.dataset.scale = scale;
-  canvas.dataset.origW = w;
-  canvas.dataset.origH = h;
-  if(!editorEventsSetup){
-    editorEventsSetup = true;
-    setupEditorEvents();
+    
+    DOM.progressCard.classList.remove('hidden');
+    DOM.cancelBtn.textContent = '← Back';
+    DOM.cancelBtn.onclick = () => {
+      DOM.progressCard.classList.add('hidden');
+      DOM.uploadCard.classList.remove('hidden');
+    };
   }
 }
 
-function setupEditorEvents(){
-  const canvas = DOM.editorCanvas;
-  const getPos = e => {
-    const r = canvas.getBoundingClientRect();
-    const sx = canvas.width/r.width, sy = canvas.height/r.height;
-    let cx, cy;
-    if(e.touches){ cx = e.touches[0].clientX; cy = e.touches[0].clientY; }
-    else { cx = e.clientX; cy = e.clientY; }
-    return {x:(cx-r.left)*sx, y:(cy-r.top)*sy};
-  };
-  const start = e => {
-    e.preventDefault();
-    if(State.isProcessing) return;
-    State.isDrawing = true;
-    const p = getPos(e);
-    State.lastX = p.x; State.lastY = p.y;
-    State.undoStack.push(canvas.toDataURL());
-    if(State.undoStack.length > 20) State.undoStack.shift();
-    State.redoStack = [];
-    drawAt(p.x, p.y);
-  };
-  const move = e => {
-    if(!State.isDrawing) return;
-    e.preventDefault();
-    const p = getPos(e);
-    drawLine(State.lastX, State.lastY, p.x, p.y);
-    State.lastX = p.x; State.lastY = p.y;
-  };
-  const end = () => {
-    if(!State.isDrawing) return;
-    State.isDrawing = false;
-    applyEditorToProcessed();
-  };
-  canvas.addEventListener('mousedown', start);
-  canvas.addEventListener('mousemove', move);
-  canvas.addEventListener('mouseup', end);
-  canvas.addEventListener('mouseleave', end);
-  canvas.addEventListener('touchstart', start, {passive:false});
-  canvas.addEventListener('touchmove', move, {passive:false});
-  canvas.addEventListener('touchend', end);
-  canvas.addEventListener('touchcancel', end);
-}
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
-function drawAt(x, y){
-  const canvas = DOM.editorCanvas;
-  const ctx = canvas.getContext('2d');
-  const size = State.brushSize * (canvas.width/800);
-  const soft = State.brushSoftness;
-  ctx.save();
-  ctx.globalCompositeOperation = 'destination-out';
-  const g = ctx.createRadialGradient(x, y, 0, x, y, size/2);
-  g.addColorStop(0, 'rgba(0,0,0,1)');
-  g.addColorStop(soft, `rgba(0,0,0,${1-soft*0.5})`);
-  g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.arc(x, y, size/2, 0, Math.PI*2);
-  ctx.fill();
-  ctx.restore();
-}
-
-function drawLine(x1, y1, x2, y2){
-  const d = Math.hypot(x2-x1, y2-y1);
-  const s = Math.max(1, Math.ceil(d/3));
-  for(let i=0;i<=s;i++) drawAt(x1+(x2-x1)*i/s, y1+(y2-y1)*i/s);
-}
-
-function applyEditorToProcessed(){
-  const canvas = DOM.editorCanvas;
-  const oW = parseInt(canvas.dataset.origW);
-  const oH = parseInt(canvas.dataset.origH);
-  const full = document.createElement('canvas');
-  full.width = oW; full.height = oH;
-  const fCtx = full.getContext('2d', {willReadFrequently:true});
-  fCtx.imageSmoothingEnabled = true;
-  fCtx.imageSmoothingQuality = 'high';
-  fCtx.drawImage(canvas, 0, 0, oW, oH);
-
-  const pCtx = State.processedCtx;
-  const pData = pCtx.getImageData(0, 0, oW, oH);
-  const eData = fCtx.getImageData(0, 0, oW, oH);
-  for(let i=0;i<oW*oH;i++){
-    const editA = eData.data[i*4+3]/255;
-    if(editA < 0.99){
-      pData.data[i*4+3] = Math.round(pData.data[i*4+3] * editA);
-    }
-  }
-  pCtx.putImageData(pData, 0, 0);
-  renderResult();
-}
-
+/* ============================================================
+   FILE HANDLING
+   ============================================================ */
 function handleFile(file){
   if(!file) return;
+  LOG.clear();
+  LOG.setStatus('FILE LOADED', 'ok');
+  LOG.step('File selected: ' + file.name);
+  LOG.info('Type: ' + file.type);
+  LOG.info('Size: ' + (file.size/1024/1024).toFixed(2) + ' MB');
+  
   const valid = ['image/jpeg','image/jpg','image/png','image/webp'];
-  if(!valid.includes(file.type)){ toast('❌ Only JPG, PNG, WEBP', 'error'); return; }
-  if(file.size > 100*1024*1024){ toast('❌ File too large (100MB max)', 'error'); return; }
-  cleanup();
-  State.originalFile = file;
+  if(!valid.includes(file.type)){
+    LOG.err('Unsupported format. Use JPG/PNG/WEBP');
+    alert('❌ Unsupported format');
+    return;
+  }
+  if(file.size > 100 * 1024 * 1024){
+    LOG.err('File too large (>100MB)');
+    alert('❌ File too large');
+    return;
+  }
+  
+  State.file = file;
   const url = URL.createObjectURL(file);
   const img = new Image();
   img.onload = () => {
-    State.originalImage = img;
-    State.originalWidth = img.naturalWidth;
-    State.originalHeight = img.naturalHeight;
-    DOM.originalPreview.src = url;
-    DOM.originalPreviewSection.classList.remove('hidden');
+    State.img = img;
+    LOG.ok('Image loaded: ' + img.naturalWidth + 'x' + img.naturalHeight);
+    DOM.previewImg.src = url;
+    DOM.previewWrap.classList.remove('hidden');
+    DOM.uploadActions.classList.remove('hidden');
     DOM.uploadZone.classList.add('hidden');
-    const w = img.naturalWidth, h = img.naturalHeight;
-    DOM.fileInfo.innerHTML = `<span>📐 ${w} × ${h} px</span><span>💾 ${formatBytes(file.size)}</span><span>🎨 ${file.type.split('/')[1].toUpperCase()}</span>`;
-    if(!State.modelReady && !State.modelLoading) loadModel().catch(()=>{});
+    DOM.imgInfo.innerHTML = `
+      <span>📐 <b>${img.naturalWidth} × ${img.naturalHeight}</b> px</span>
+      <span>💾 <b>${(file.size/1024/1024).toFixed(2)} MB</b></span>
+    `;
+    // Preload model in background
+    if(!State.modelReady && !State.modelLoading){
+      LOG.info('Preloading model in background...');
+      loadModel().catch(() => {});
+    }
   };
-  img.onerror = () => { toast('❌ Failed to load', 'error'); URL.revokeObjectURL(url); };
+  img.onerror = () => {
+    LOG.err('Failed to load image file');
+    alert('❌ Corrupted image');
+  };
   img.src = url;
 }
 
-function cleanup(){
-  if(DOM.originalPreview.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.originalPreview.src);
-  if(DOM.compareBefore.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.compareBefore.src);
-  State.originalFile = null;
-  State.originalImage = null;
-  State.originalBitmap = null;
-  State.maskCanvas = null;
-  State.resultCanvas = null;
-  State.processedCanvas = null;
-  State.undoStack = [];
-  State.redoStack = [];
-  DOM.originalPreviewSection.classList.add('hidden');
-  DOM.uploadZone.classList.remove('hidden');
-  DOM.resultSection.classList.add('hidden');
-  DOM.processingSection.classList.add('hidden');
-  DOM.originalPreview.src = '';
-  DOM.compareBefore.src = '';
-  DOM.compareAfter.src = '';
-  DOM.fileInput.value = '';
-}
-
-function setupCompareSlider(){
-  const handle = DOM.compareHandle;
-  const wrapper = DOM.compareWrapper;
-  let dragging = false;
-  const update = cx => {
-    const r = wrapper.getBoundingClientRect();
-    let p = (cx - r.left)/r.width;
-    p = Math.max(0, Math.min(1, p));
-    State.comparePos = p;
-    handle.style.left = (p*100) + '%';
-    DOM.compareAfterWrap.style.clipPath = `inset(0 ${(1-p)*100}% 0 0)`;
-  };
-  const start = e => {
-    e.preventDefault();
-    dragging = true;
-    update(e.touches ? e.touches[0].clientX : e.clientX);
-  };
-  const move = e => {
-    if(!dragging) return;
-    e.preventDefault();
-    update(e.touches ? e.touches[0].clientX : e.clientX);
-  };
-  const end = () => { dragging = false; };
-  handle.addEventListener('mousedown', start);
-  wrapper.addEventListener('mousemove', move);
-  document.addEventListener('mouseup', end);
-  handle.addEventListener('touchstart', start, {passive:false});
-  wrapper.addEventListener('touchmove', move, {passive:false});
-  document.addEventListener('touchend', end);
-  setTimeout(() => {
-    const r = wrapper.getBoundingClientRect();
-    if(r.width) update(r.left + r.width/2);
-  }, 100);
-}
-
-function addToBatch(files){
-  const valid = Array.from(files).filter(f => ['image/jpeg','image/jpg','image/png','image/webp'].includes(f.type));
-  if(!valid.length) return;
-  valid.forEach(file => State.batchQueue.push({file, id:Date.now()+Math.random(), status:'pending', resultCanvas:null}));
-  DOM.batchSection.classList.remove('hidden');
-  renderBatchList();
-  toast(`Added ${valid.length} image(s)`, 'info');
-}
-
-function renderBatchList(){
-  DOM.batchList.innerHTML = State.batchQueue.map((it,i) => `
-    <div class="batch-item" style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px">
-      <img src="${URL.createObjectURL(it.file)}" style="width:48px;height:48px;border-radius:8px;object-fit:cover" alt="thumb">
-      <div style="flex:1;min-width:0">
-        <div style="font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.file.name}</div>
-        <div style="font-size:.7rem;color:${it.status === 'done' ? 'var(--success)' : it.status === 'error' ? 'var(--danger)' : 'var(--text-dim)'}">
-          ${it.status === 'pending' ? '⏳ Pending' : it.status === 'processing' ? '⚙️ Processing...' : it.status === 'done' ? '✅ Done' : '❌ Error'}
-        </div>
-      </div>
-      ${it.status === 'done' ? `<button class="btn btn-sm btn-primary" data-dl="${i}">Download</button>` : ''}
-      <button class="btn btn-sm btn-danger" data-rm="${i}">×</button>
-    </div>
-  `).join('');
-  DOM.batchList.querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => {
-    const it = State.batchQueue[parseInt(b.dataset.dl)];
-    if(it.resultCanvas){
-      it.resultCanvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `qunvero-${it.file.name.replace(/\.[^.]+$/, '')}.png`;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      });
-    }
-  }));
-  DOM.batchList.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
-    State.batchQueue.splice(parseInt(b.dataset.rm), 1);
-    renderBatchList();
-    if(!State.batchQueue.length) DOM.batchSection.classList.add('hidden');
-  }));
-}
-
-async function processBatchQueue(){
-  if(State.batchProcessing) return;
-  State.batchProcessing = true;
-  for(let i=0;i<State.batchQueue.length;i++){
-    const it = State.batchQueue[i];
-    if(it.status === 'done' || it.status === 'error') continue;
-    it.status = 'processing';
-    renderBatchList();
-    try {
-      const img = await new Promise((res, rej) => {
-        const url = URL.createObjectURL(it.file);
-        const im = new Image();
-        im.onload = () => res(im);
-        im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('load fail')); };
-        im.src = url;
-      });
-      State.originalFile = it.file;
-      State.originalImage = img;
-      const savedBatch = State.batchQueue;
-      State.batchQueue = [];
-      await processImage();
-      State.batchQueue = savedBatch;
-      it.resultCanvas = State.resultCanvas;
-      it.status = 'done';
-    } catch(e){
-      console.error(e);
-      it.status = 'error';
-    }
-    renderBatchList();
-    await new Promise(r => setTimeout(r, 500));
-  }
-  State.batchProcessing = false;
-  toast('✅ Batch complete!', 'success');
-}
-
-function downloadResult(){
-  if(!State.resultCanvas){ toast('No result', 'error'); return; }
-  const fmt = $('#exportFormat').value;
-  const q = parseInt($('#exportQuality').value)/100;
-  let mime = 'image/png', ext = 'png';
-  if(fmt === 'jpeg'){ mime = 'image/jpeg'; ext = 'jpg'; }
-  if(fmt === 'webp'){ mime = 'image/webp'; ext = 'webp'; }
-  State.resultCanvas.toBlob(blob => {
-    if(!blob){ toast('Failed', 'error'); return; }
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `qunvero-nobg-${Date.now()}.${ext}`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast('✅ Downloaded!', 'success');
-  }, mime, q);
-}
-
-function downloadPdf(){
-  if(!State.resultCanvas){ toast('No result', 'error'); return; }
-  const {jsPDF} = window.jspdf;
-  const pdf = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  const img = State.resultCanvas.toDataURL('image/png');
-  const pw = 210, ph = 297, m = 15;
-  const mw = pw-m*2, mh = ph-m*2;
-  const ratio = State.resultCanvas.width / State.resultCanvas.height;
-  let dw = mw, dh = dw/ratio;
-  if(dh > mh){ dh = mh; dw = dh*ratio; }
-  pdf.setFillColor(255,255,255);
-  pdf.rect(0,0,pw,ph,'F');
-  pdf.addImage(img, 'PNG', (pw-dw)/2, (ph-dh)/2, dw, dh);
-  pdf.save(`qunvero-${Date.now()}.pdf`);
-  toast('✅ PDF downloaded!', 'success');
-}
-
-function printResult(){
-  if(!State.resultCanvas){ toast('No result', 'error'); return; }
-  const dataUrl = State.resultCanvas.toDataURL('image/png');
-  const win = window.open('', '_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>body{margin:0;display:grid;place-items:center;min-height:100vh}img{max-width:100%;max-height:100vh}</style></head><body><img src="${dataUrl}" onload="window.print()"></body></html>`);
-  win.document.close();
-}
-
-function downloadZip(){
-  const items = State.batchQueue.filter(i => i.status === 'done' && i.resultCanvas);
-  if(!items.length){ toast('No results', 'error'); return; }
-  const zip = new JSZip();
-  items.forEach(it => {
-    const b64 = it.resultCanvas.toDataURL('image/png').split(',')[1];
-    zip.file(it.file.name.replace(/\.[^.]+$/, '') + '-nobg.png', b64, {base64:true});
-  });
-  zip.generateAsync({type:'blob'}).then(blob => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `qunvero-batch-${Date.now()}.zip`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast('✅ ZIP downloaded!', 'success');
-  });
-}
-
+/* ============================================================
+   EVENTS
+   ============================================================ */
 function setupEvents(){
   DOM.uploadZone.addEventListener('click', () => DOM.fileInput.click());
-  DOM.uploadZone.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); DOM.fileInput.click(); }});
-  DOM.fileInput.addEventListener('change', e => {
-    if(e.target.files.length > 1) addToBatch(e.target.files);
-    else if(e.target.files[0]) handleFile(e.target.files[0]);
+  DOM.uploadZone.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); DOM.fileInput.click(); }
   });
-  DOM.uploadZone.addEventListener('dragover', e => { e.preventDefault(); DOM.uploadZone.classList.add('dragover'); });
-  DOM.uploadZone.addEventListener('dragleave', () => DOM.uploadZone.classList.remove('dragover'));
+  DOM.fileInput.addEventListener('change', e => {
+    if(e.target.files[0]) handleFile(e.target.files[0]);
+  });
+  DOM.uploadZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    DOM.uploadZone.classList.add('drag');
+  });
+  DOM.uploadZone.addEventListener('dragleave', () => DOM.uploadZone.classList.remove('drag'));
   DOM.uploadZone.addEventListener('drop', e => {
     e.preventDefault();
-    DOM.uploadZone.classList.remove('dragover');
-    if(e.dataTransfer.files.length > 1) addToBatch(e.dataTransfer.files);
-    else if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    DOM.uploadZone.classList.remove('drag');
+    if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
   document.addEventListener('paste', e => {
     const items = e.clipboardData?.items;
@@ -1178,145 +857,81 @@ function setupEvents(){
       }
     }
   });
-  DOM.removeBgBtn.addEventListener('click', processImage);
-  DOM.clearImageBtn.addEventListener('click', () => { cleanup(); toast('Cleared', 'info'); });
-  DOM.cancelBtn.addEventListener('click', () => { State.cancelRequested = true; DOM.cancelBtn.disabled = true; });
-
-  $$('.tab').forEach(t => t.addEventListener('click', () => {
-    $$('.tab').forEach(x => x.classList.remove('active'));
-    $$('.tab-panel').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    const p = document.getElementById(t.dataset.tab);
-    if(p) p.classList.add('active');
-    if(t.dataset.tab === 'tabEdit') initEditorCanvas();
-  }));
-
-  $('#toolEraser').addEventListener('click', () => {
-    State.currentTool = 'eraser';
-    $('#toolEraser').style.background = 'var(--primary)';
-    $('#toolEraser').style.color = '#fff';
-    $('#toolRestore').style.background = '';
-    $('#toolRestore').style.color = '';
+  
+  DOM.startBtn.addEventListener('click', process);
+  DOM.clearBtn.addEventListener('click', () => {
+    State.file = null;
+    State.img = null;
+    DOM.previewWrap.classList.add('hidden');
+    DOM.uploadActions.classList.add('hidden');
+    DOM.uploadZone.classList.remove('hidden');
+    DOM.fileInput.value = '';
+    LOG.clear();
+    LOG.info('Cleared');
   });
-  $('#toolRestore').addEventListener('click', () => {
-    State.currentTool = 'restore';
-    $('#toolRestore').style.background = 'var(--primary)';
-    $('#toolRestore').style.color = '#fff';
-    $('#toolEraser').style.background = '';
-    $('#toolEraser').style.color = '';
+  DOM.cancelBtn.addEventListener('click', () => {
+    State.cancelled = true;
+    LOG.warn('Cancel requested...');
   });
-  $('#brushSize').addEventListener('input', e => { State.brushSize = +e.target.value; $('#brushSizeVal').textContent = e.target.value; });
-  $('#brushSoftness').addEventListener('input', e => { State.brushSoftness = +e.target.value/100; $('#brushSoftnessVal').textContent = e.target.value; });
-
-  $('#undoBtn').addEventListener('click', () => {
-    if(!State.undoStack.length) return;
-    State.redoStack.push(DOM.editorCanvas.toDataURL());
-    const prev = State.undoStack.pop();
-    const im = new Image();
-    im.onload = () => {
-      const ctx = DOM.editorCanvas.getContext('2d');
-      ctx.clearRect(0,0,DOM.editorCanvas.width,DOM.editorCanvas.height);
-      ctx.drawImage(im, 0, 0);
-    };
-    im.src = prev;
+  DOM.downloadBtn.addEventListener('click', () => {
+    if(!State.resultCanvas) return;
+    State.resultCanvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `qunvero-${Date.now()}.png`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      LOG.ok('Downloaded');
+    }, 'image/png');
   });
-  $('#redoBtn').addEventListener('click', () => {
-    if(!State.redoStack.length) return;
-    State.undoStack.push(DOM.editorCanvas.toDataURL());
-    const next = State.redoStack.pop();
-    const im = new Image();
-    im.onload = () => {
-      const ctx = DOM.editorCanvas.getContext('2d');
-      ctx.clearRect(0,0,DOM.editorCanvas.width,DOM.editorCanvas.height);
-      ctx.drawImage(im, 0, 0);
-    };
-    im.src = next;
+  DOM.newBtn.addEventListener('click', () => {
+    State.file = null;
+    State.img = null;
+    State.resultCanvas = null;
+    DOM.resultCard.classList.add('hidden');
+    DOM.uploadCard.classList.remove('hidden');
+    DOM.previewWrap.classList.add('hidden');
+    DOM.uploadActions.classList.add('hidden');
+    DOM.uploadZone.classList.remove('hidden');
+    DOM.fileInput.value = '';
   });
-  $('#resetEditBtn').addEventListener('click', () => { initEditorCanvas(); toast('Reset', 'info'); });
-
-  $$('[data-bg]').forEach(b => b.addEventListener('click', async () => {
-    $$('[data-bg]').forEach(x => { x.style.background = ''; x.style.color = ''; });
-    b.style.background = 'var(--primary)';
-    b.style.color = '#fff';
-    State.bgType = b.dataset.bg;
-    $('#bgColorPanel').classList.add('hidden');
-    $('#bgGradientPanel').classList.add('hidden');
-    $('#bgImagePanel').classList.add('hidden');
-    if(State.bgType === 'color') $('#bgColorPanel').classList.remove('hidden');
-    if(State.bgType === 'gradient') $('#bgGradientPanel').classList.remove('hidden');
-    if(State.bgType === 'image') $('#bgImagePanel').classList.remove('hidden');
-    await renderResult();
-  }));
-
-  $('#bgColorPicker').addEventListener('input', async e => { State.bgColor = e.target.value; await renderResult(); });
-  $$('.swatch').forEach(s => s.addEventListener('click', async () => {
-    $$('.swatch').forEach(x => x.classList.remove('active'));
-    s.classList.add('active');
-    State.bgColor = s.dataset.color;
-    $('#bgColorPicker').value = s.dataset.color;
-    await renderResult();
-  }));
-  $('#gradColor1').addEventListener('input', async e => { State.gradColor1 = e.target.value; await renderResult(); });
-  $('#gradColor2').addEventListener('input', async e => { State.gradColor2 = e.target.value; await renderResult(); });
-  $('#gradAngle').addEventListener('input', async e => { State.gradAngle = +e.target.value; $('#gradAngleVal').textContent = e.target.value + '°'; await renderResult(); });
-  $('#uploadBgImageBtn').addEventListener('click', () => $('#bgImageInput').click());
-  $('#bgImageInput').addEventListener('change', e => {
-    const f = e.target.files[0];
-    if(!f) return;
-    const im = new Image();
-    im.onload = async () => { State.bgImage = im; await renderResult(); };
-    im.src = URL.createObjectURL(f);
-  });
-
-  $('#shadowToggle').addEventListener('change', async e => { State.shadowEnabled = e.target.checked; await renderResult(); });
-  $('#shadowOpacity').addEventListener('input', async e => { State.shadowOpacity = +e.target.value/100; $('#shadowOpacityVal').textContent = e.target.value; await renderResult(); });
-  $('#shadowBlur').addEventListener('input', async e => { State.shadowBlur = +e.target.value; $('#shadowBlurVal').textContent = e.target.value; await renderResult(); });
-  $('#shadowDistance').addEventListener('input', async e => { State.shadowDistance = +e.target.value; $('#shadowDistanceVal').textContent = e.target.value; await renderResult(); });
-  $('#shadowAngle').addEventListener('input', async e => { State.shadowAngle = +e.target.value; $('#shadowAngleVal').textContent = e.target.value + '°'; await renderResult(); });
-  $('#shadowSize').addEventListener('input', async e => { State.shadowSize = +e.target.value; $('#shadowSizeVal').textContent = e.target.value; await renderResult(); });
-
-  $('#enhSharpness').addEventListener('input', async e => { State.enhance.sharpness = +e.target.value; $('#enhSharpnessVal').textContent = e.target.value; await renderResult(); });
-  $('#enhContrast').addEventListener('input', async e => { State.enhance.contrast = +e.target.value; $('#enhContrastVal').textContent = e.target.value; await renderResult(); });
-  $('#enhBrightness').addEventListener('input', async e => { State.enhance.brightness = +e.target.value; $('#enhBrightnessVal').textContent = e.target.value; await renderResult(); });
-  $('#enhSaturation').addEventListener('input', async e => { State.enhance.saturation = +e.target.value; $('#enhSaturationVal').textContent = e.target.value; await renderResult(); });
-  $('#resetEnhanceBtn').addEventListener('click', async () => {
-    State.enhance = {sharpness:0,contrast:0,brightness:0,saturation:0};
-    ['Sharpness','Contrast','Brightness','Saturation'].forEach(k => {
-      $('#enh'+k).value = 0;
-      $('#enh'+k+'Val').textContent = '0';
-    });
-    await renderResult();
-  });
-
-  $('#exportFormat').addEventListener('change', e => {
-    $('#qualityWrap').classList.toggle('hidden', e.target.value === 'png');
-  });
-  $('#exportQuality').addEventListener('input', e => { $('#exportQualityVal').textContent = e.target.value; });
-
-  $('#downloadBtn').addEventListener('click', downloadResult);
-  $('#downloadPdfBtn').addEventListener('click', downloadPdf);
-  $('#printBtn').addEventListener('click', printResult);
-  $('#newImageBtn').addEventListener('click', () => { cleanup(); DOM.uploadSection.classList.remove('hidden'); });
-
-  $('#processBatchBtn').addEventListener('click', processBatchQueue);
-  $('#downloadZipBtn').addEventListener('click', downloadZip);
-  $('#clearBatchBtn').addEventListener('click', () => { State.batchQueue = []; renderBatchList(); DOM.batchSection.classList.add('hidden'); });
 }
 
-async function init(){
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  LOG.init();
   setupEvents();
-  setupCompareSlider();
-  await detectDevice();
-  console.log('🎨 Qunvero initialized');
-  console.log('Device:', State.deviceInfo);
-  console.log('ORT Version:', ort?.env?.versions?.web || 'unknown');
-  loadModel().catch(e => console.warn('Preload:', e.message));
+  LOG.step('=== QUNVERO DIAGNOSTIC MODE ===');
+  LOG.info('Ye log har step dikhayega');
+  logDeviceInfo();
+  LOG.setStatus('IDLE');
+  LOG.info('Image upload karke "Remove Background" click karein');
+  
+  // Auto-preload model
+  LOG.step('Preloading model in background...');
+  loadModel()
+    .then(() => LOG.info('Model preloaded — ready for processing'))
+    .catch(e => LOG.warn('Preload failed: ' + e.message + ' — will retry on process'));
 }
 
-if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-else init();
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
-window.addEventListener('error', e => { if(!/ResizeObserver/.test(e.message)) console.error(e); });
+// Global error handlers
+window.addEventListener('error', e => {
+  if(!/ResizeObserver/.test(e.message)){
+    LOG.err('GLOBAL ERROR: ' + e.message);
+  }
+});
+window.addEventListener('unhandledrejection', e => {
+  LOG.err('PROMISE REJECTION: ' + (e.reason?.message || e.reason));
+});
 </script>
 </body>
 </html>
