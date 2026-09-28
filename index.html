@@ -4,53 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>AI Background Remover Online – Free HD Background Removal | Qunvero</title>
-<meta name="description" content="Remove image backgrounds instantly with AI. Local, private, unlimited, and free.">
+<meta name="description" content="Remove image backgrounds instantly with AI. Local, private, unlimited, free.">
 <meta property="og:title" content="AI Background Remover – Qunvero">
 <meta property="og:description" content="Remove backgrounds instantly — locally, privately, free.">
 <meta name="theme-color" content="#0b0e14">
 <style>
-:root{--bg:#0b0e14;--surface:#141823;--surface-2:#1c212e;--surface-3:#252b3b;--border:#2a3142;--primary:#6d5dfc;--primary-glow:#8b7aff;--text:#eef0f6;--text-dim:#9aa1b4;--text-faint:#5f677b;--success:#34d399;--danger:#f87171;--radius:14px;--radius-sm:8px;--shadow:0 8px 30px rgba(0,0,0,.35);--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'SF Mono',monospace}
+:root{--bg:#0b0e14;--surface:#141823;--surface-2:#1c212e;--surface-3:#252b3b;--border:#2a3142;--primary:#6d5dfc;--text:#eef0f6;--text-dim:#9aa1b4;--success:#34d399;--danger:#f87171;--radius:14px;--radius-sm:8px;--shadow:0 8px 30px rgba(0,0,0,.35)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px;-webkit-text-size-adjust:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5;overflow-x:hidden;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(109,93,252,.10),transparent)}
-::selection{background:var(--primary);color:#fff}
-:focus-visible{outline:2px solid var(--primary-glow);outline-offset:2px;border-radius:4px}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5;overflow-x:hidden;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(109,93,252,.10),transparent)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 .app-container{max-width:1200px;margin:0 auto;padding:16px;padding-bottom:100px}
 @media(min-width:768px){.app-container{padding:24px}}
 .app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 20px;flex-wrap:wrap;gap:12px}
 .brand{display:flex;align-items:center;gap:10px}
 .brand-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#a78bfa);display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;box-shadow:0 0 24px rgba(109,93,252,.4)}
-.brand-name{font-weight:700;font-size:1.15rem;letter-spacing:-.02em}
-.brand-sub{font-size:.7rem;color:var(--text-dim);letter-spacing:.05em;text-transform:uppercase}
+.brand-name{font-weight:700;font-size:1.15rem}
+.brand-sub{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
 .privacy-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--success);font-size:.72rem;padding:5px 10px;border-radius:20px;font-weight:500}
 .privacy-badge svg{width:13px;height:13px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
 .upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface)}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--primary);background:rgba(109,93,252,.05);transform:translateY(-1px)}
-.upload-icon{width:56px;height:56px;margin:0 auto 16px;color:var(--primary);opacity:.9}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--primary);background:rgba(109,93,252,.05)}
+.upload-icon{width:56px;height:56px;margin:0 auto 16px;color:var(--primary)}
 .upload-title{font-size:1.1rem;font-weight:600;margin-bottom:6px}
 .upload-sub{font-size:.85rem;color:var(--text-dim);margin-bottom:16px}
-.upload-formats{font-size:.72rem;color:var(--text-faint)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:var(--radius-sm);border:none;font-family:var(--font);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;user-select:none;background:var(--surface-3);color:var(--text)}
+.upload-formats{font-size:.72rem;color:var(--text-dim)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:var(--radius-sm);border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;background:var(--surface-3);color:var(--text);white-space:nowrap}
 .btn:hover:not(:disabled){background:#2e3548}
-.btn:active:not(:disabled){transform:scale(.98)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:linear-gradient(135deg,var(--primary),#8b5cf6);color:#fff;box-shadow:0 4px 20px rgba(109,93,252,.35)}
-.btn-primary:hover:not(:disabled){background:linear-gradient(135deg,#7c6cff,#9d7bff);box-shadow:0 6px 28px rgba(109,93,252,.5)}
 .btn-danger{background:rgba(248,113,113,.15);color:var(--danger);border:1px solid rgba(248,113,113,.3)}
 .btn-sm{padding:8px 14px;font-size:.8rem}
 .btn-block{width:100%}
-.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn svg{width:16px;height:16px}
 .preview-container{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface-2);display:grid;place-items:center;min-height:200px;max-height:50vh}
 .preview-container img{max-width:100%;max-height:50vh;object-fit:contain;display:block}
 .file-info{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:.78rem;color:var(--text-dim)}
-.file-info span{display:inline-flex;align-items:center;gap:4px}
-.file-info svg{width:13px;height:13px;opacity:.6}
 .progress-stages{display:flex;flex-direction:column;gap:10px;margin:16px 0}
 .stage{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--surface-2);border:1px solid var(--border);font-size:.85rem;color:var(--text-dim);transition:all .3s}
 .stage.active{border-color:var(--primary);color:var(--text);background:rgba(109,93,252,.08)}
 .stage.done{color:var(--success);border-color:rgba(52,211,153,.3)}
-.stage-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;flex-shrink:0;transition:all .3s}
+.stage-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:grid;place-items:center;flex-shrink:0}
 .stage.active .stage-icon{border-color:var(--primary);border-top-color:transparent;animation:spin .8s linear infinite}
 .stage.done .stage-icon{border-color:var(--success);background:var(--success)}
 .stage.done .stage-icon::after{content:'✓';font-size:11px;color:var(--bg);font-weight:700}
@@ -61,57 +55,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .compare-after img{width:100%;height:100%;object-fit:contain}
 .compare-handle{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 12px rgba(0,0,0,.6);cursor:ew-resize;z-index:5}
 .compare-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.5)}
-.compare-handle::before{content:'◀ ▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:9px;color:#333;z-index:6;white-space:nowrap;letter-spacing:1px}
+.compare-handle::before{content:'◀ ▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:9px;color:#333;z-index:6;letter-spacing:1px}
 .tabs{display:flex;gap:4px;background:var(--surface-2);border-radius:var(--radius-sm);padding:4px;margin-bottom:16px;overflow-x:auto}
-.tab{flex:1;padding:9px 12px;border:none;background:transparent;color:var(--text-dim);font-family:var(--font);font-size:.8rem;font-weight:600;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;min-width:fit-content}
-.tab:hover{color:var(--text)}
-.tab.active{background:var(--primary);color:#fff;box-shadow:0 2px 12px rgba(109,93,252,.3)}
+.tab{flex:1;padding:9px 12px;border:none;background:transparent;color:var(--text-dim);font-family:inherit;font-size:.8rem;font-weight:600;border-radius:6px;cursor:pointer;white-space:nowrap}
+.tab.active{background:var(--primary);color:#fff}
 .tab-panel{display:none}
-.tab-panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tab-panel.active{display:block;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .control-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .control-row label{font-size:.82rem;color:var(--text-dim);min-width:70px}
-input[type="range"]{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;background:var(--surface-3);outline:none;min-width:100px}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--primary);cursor:pointer;box-shadow:0 0 8px rgba(109,93,252,.5)}
-input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--primary);cursor:pointer;border:none}
-input[type="color"]{-webkit-appearance:none;width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0}
-input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}
-input[type="color"]::-webkit-color-swatch{border-radius:6px;border:2px solid var(--border)}
-.value-badge{font-size:.75rem;font-family:var(--mono);color:var(--text-dim);min-width:40px;text-align:right}
-select{background:var(--surface-3);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font);font-size:.82rem;cursor:pointer}
+input[type="range"]{-webkit-appearance:none;flex:1;height:5px;border-radius:3px;background:var(--surface-3);outline:none;min-width:100px}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--primary);cursor:pointer}
+input[type="color"]{width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0}
+.value-badge{font-size:.75rem;font-family:monospace;color:var(--text-dim);min-width:40px;text-align:right}
+select{background:var(--surface-3);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-family:inherit;font-size:.82rem;cursor:pointer}
 .toggle-group{display:flex;gap:8px;flex-wrap:wrap}
 .color-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.swatch{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:all .2s}
-.swatch:hover{transform:scale(1.1);border-color:var(--primary)}
-.swatch.active{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-glow)}
+.swatch{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);cursor:pointer}
+.swatch.active{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary)}
 .editor-canvas-wrap{position:relative;display:inline-block;line-height:0;max-width:100%}
 .editor-canvas-wrap canvas{display:block;max-width:100%;cursor:crosshair;border-radius:var(--radius-sm);background:repeating-conic-gradient(#1a1f2b 0% 25%,#232a38 0% 50%) 50%/20px 20px}
-.batch-item{display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px}
-.batch-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex-shrink:0}
-.batch-info{flex:1;min-width:0}
-.batch-name{font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.batch-status{font-size:.7rem;color:var(--text-dim)}
-.batch-status.done{color:var(--success)}
-.batch-status.error{color:var(--danger)}
 .toast-container{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:400px}
-.toast{background:var(--surface-3);color:var(--text);padding:12px 18px;border-radius:var(--radius-sm);font-size:.85rem;box-shadow:var(--shadow);border:1px solid var(--border);animation:toastIn .3s ease;pointer-events:auto;width:100%;text-align:center}
+.toast{background:var(--surface-3);color:var(--text);padding:12px 18px;border-radius:var(--radius-sm);font-size:.85rem;box-shadow:var(--shadow);border:1px solid var(--border);animation:toastIn .3s;pointer-events:auto;width:100%;text-align:center}
 .toast.error{border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.15)}
 .toast.success{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.15)}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .hidden{display:none!important}
 .mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
-.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}
-.text-center{text-align:center}
+.mb-16{margin-bottom:16px}
 .text-dim{color:var(--text-dim)}
 .text-sm{font-size:.82rem}
-.gap-8{gap:8px}.gap-12{gap:12px}
+.gap-8{gap:8px}
 .flex{display:flex}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:480px){.grid-2{grid-template-columns:1fr}}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:var(--surface-2)}
-::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:#4a3fbf}
 </style>
 </head>
 <body>
@@ -127,16 +104,16 @@ select{background:var(--surface-3);color:var(--text);border:1px solid var(--bord
 </div>
 <div class="privacy-badge">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-Processed locally on your device
+Processed locally
 </div>
 </header>
 
 <main>
 <section id="uploadSection" class="card">
-<h1 style="font-size:1.4rem;font-weight:700;margin-bottom:6px;letter-spacing:-.02em">Remove backgrounds instantly</h1>
-<p class="text-dim text-sm mb-16">Locally, privately and at high quality. No upload, no limits.</p>
+<h1 style="font-size:1.4rem;font-weight:700;margin-bottom:6px">Remove backgrounds instantly</h1>
+<p class="text-dim text-sm mb-16">Locally, privately, free. No upload, no limits.</p>
 
-<div id="uploadZone" class="upload-zone" tabindex="0" role="button" aria-label="Upload image">
+<div id="uploadZone" class="upload-zone" tabindex="0" role="button">
 <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
 </svg>
@@ -148,7 +125,7 @@ Processed locally on your device
 
 <div id="originalPreviewSection" class="hidden mt-16">
 <div class="preview-container">
-<img id="originalPreview" alt="Original image preview">
+<img id="originalPreview" alt="Original image">
 </div>
 <div class="file-info" id="fileInfo"></div>
 <div class="flex gap-8 mt-16 flex-wrap">
@@ -156,18 +133,15 @@ Processed locally on your device
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
 Remove Background
 </button>
-<button class="btn btn-danger" id="clearImageBtn">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-Remove
-</button>
+<button class="btn btn-danger" id="clearImageBtn">Remove</button>
 </div>
 </div>
 </section>
 
 <section id="processingSection" class="card mt-24 hidden">
 <h2 style="font-size:1rem;font-weight:600;margin-bottom:16px">Processing</h2>
-<div class="progress-stages" id="progressStages" aria-live="polite"></div>
-<button class="btn btn-danger btn-block mt-8" id="cancelBtn">Cancel</button>
+<div class="progress-stages" id="progressStages"></div>
+<button class="btn btn-danger btn-block" id="cancelBtn">Cancel</button>
 </section>
 
 <section id="resultSection" class="hidden mt-24">
@@ -182,7 +156,7 @@ Remove
 <div class="compare-after" id="compareAfterWrap">
 <img id="compareAfter" alt="Result">
 </div>
-<div class="compare-handle" id="compareHandle" role="slider" tabindex="0"></div>
+<div class="compare-handle" id="compareHandle"></div>
 </div>
 
 <div class="tabs mt-16">
@@ -194,25 +168,15 @@ Remove
 </div>
 
 <div class="tab-panel active" id="tabEdit">
-<div class="editor-canvas-wrap" id="editorCanvasWrap">
-<canvas id="editorCanvas"></canvas>
-</div>
+<div class="editor-canvas-wrap"><canvas id="editorCanvas"></canvas></div>
 <div class="mt-16">
 <div class="toggle-group mb-8">
 <button class="btn btn-sm" id="toolEraser" style="background:var(--primary);color:#fff">🧹 Eraser</button>
 <button class="btn btn-sm" id="toolRestore">🖌️ Restore</button>
 </div>
-<div class="control-row">
-<label for="brushSize">Size</label>
-<input type="range" id="brushSize" min="5" max="150" value="40">
-<span class="value-badge" id="brushSizeVal">40</span>
-</div>
-<div class="control-row">
-<label for="brushSoftness">Softness</label>
-<input type="range" id="brushSoftness" min="0" max="100" value="50">
-<span class="value-badge" id="brushSoftnessVal">50</span>
-</div>
-<div class="flex gap-8 flex-wrap">
+<div class="control-row"><label for="brushSize">Size</label><input type="range" id="brushSize" min="5" max="150" value="40"><span class="value-badge" id="brushSizeVal">40</span></div>
+<div class="control-row"><label for="brushSoftness">Softness</label><input type="range" id="brushSoftness" min="0" max="100" value="50"><span class="value-badge" id="brushSoftnessVal">50</span></div>
+<div class="flex gap-8">
 <button class="btn btn-sm" id="undoBtn">↩ Undo</button>
 <button class="btn btn-sm" id="redoBtn">↪ Redo</button>
 <button class="btn btn-sm btn-danger" id="resetEditBtn">Reset</button>
@@ -228,17 +192,14 @@ Remove
 <button class="btn btn-sm" data-bg="image">Custom Image</button>
 </div>
 <div id="bgColorPanel" class="hidden">
-<div class="control-row">
-<label for="bgColorPicker">Color</label>
-<input type="color" id="bgColorPicker" value="#ffffff">
-</div>
+<div class="control-row"><label for="bgColorPicker">Color</label><input type="color" id="bgColorPicker" value="#ffffff"></div>
 <div class="color-swatches">
-<div class="swatch active" data-color="#ffffff" style="background:#fff" tabindex="0"></div>
-<div class="swatch" data-color="#000000" style="background:#000" tabindex="0"></div>
-<div class="swatch" data-color="#6d5dfc" style="background:#6d5dfc" tabindex="0"></div>
-<div class="swatch" data-color="#34d399" style="background:#34d399" tabindex="0"></div>
-<div class="swatch" data-color="#f87171" style="background:#f87171" tabindex="0"></div>
-<div class="swatch" data-color="#fbbf24" style="background:#fbbf24" tabindex="0"></div>
+<div class="swatch active" data-color="#ffffff" style="background:#fff"></div>
+<div class="swatch" data-color="#000000" style="background:#000"></div>
+<div class="swatch" data-color="#6d5dfc" style="background:#6d5dfc"></div>
+<div class="swatch" data-color="#34d399" style="background:#34d399"></div>
+<div class="swatch" data-color="#f87171" style="background:#f87171"></div>
+<div class="swatch" data-color="#fbbf24" style="background:#fbbf24"></div>
 </div>
 </div>
 <div id="bgGradientPanel" class="hidden">
@@ -247,17 +208,14 @@ Remove
 <div class="control-row"><label for="gradAngle">Angle</label><input type="range" id="gradAngle" min="0" max="360" value="135"><span class="value-badge" id="gradAngleVal">135°</span></div>
 </div>
 <div id="bgImagePanel" class="hidden">
-<button class="btn btn-sm" id="uploadBgImageBtn">📁 Upload Background Image</button>
+<button class="btn btn-sm" id="uploadBgImageBtn">📁 Upload Background</button>
 <input type="file" id="bgImageInput" accept="image/*" class="hidden">
 </div>
 </div>
 
 <div class="tab-panel" id="tabShadow">
-<div class="control-row">
-<label for="shadowToggle">Enable</label>
-<input type="checkbox" id="shadowToggle" style="width:20px;height:20px;accent-color:var(--primary)">
-</div>
-<div id="shadowControls">
+<div class="control-row"><label for="shadowToggle">Enable</label><input type="checkbox" id="shadowToggle" style="width:20px;height:20px"></div>
+<div>
 <div class="control-row"><label for="shadowOpacity">Opacity</label><input type="range" id="shadowOpacity" min="0" max="100" value="50"><span class="value-badge" id="shadowOpacityVal">50</span></div>
 <div class="control-row"><label for="shadowBlur">Blur</label><input type="range" id="shadowBlur" min="0" max="100" value="30"><span class="value-badge" id="shadowBlurVal">30</span></div>
 <div class="control-row"><label for="shadowDistance">Distance</label><input type="range" id="shadowDistance" min="0" max="80" value="20"><span class="value-badge" id="shadowDistanceVal">20</span></div>
@@ -271,7 +229,7 @@ Remove
 <div class="control-row"><label for="enhContrast">Contrast</label><input type="range" id="enhContrast" min="-50" max="50" value="0"><span class="value-badge" id="enhContrastVal">0</span></div>
 <div class="control-row"><label for="enhBrightness">Brightness</label><input type="range" id="enhBrightness" min="-50" max="50" value="0"><span class="value-badge" id="enhBrightnessVal">0</span></div>
 <div class="control-row"><label for="enhSaturation">Saturation</label><input type="range" id="enhSaturation" min="-50" max="50" value="0"><span class="value-badge" id="enhSaturationVal">0</span></div>
-<button class="btn btn-sm mt-8" id="resetEnhanceBtn">Reset Enhancements</button>
+<button class="btn btn-sm mt-8" id="resetEnhanceBtn">Reset</button>
 </div>
 
 <div class="tab-panel" id="tabExport">
@@ -293,14 +251,11 @@ Remove
 </div>
 </div>
 <div class="flex gap-8 mt-16 flex-wrap">
-<button class="btn btn-primary" id="downloadBtn">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-Download
-</button>
-<button class="btn" id="downloadPdfBtn">PDF</button>
-<button class="btn" id="printBtn">Print</button>
+<button class="btn btn-primary" id="downloadBtn">⬇️ Download</button>
+<button class="btn" id="downloadPdfBtn">📄 PDF</button>
+<button class="btn" id="printBtn">🖨️ Print</button>
 </div>
-<button class="btn btn-sm mt-16" id="newImageBtn">+ Process Another Image</button>
+<button class="btn btn-sm mt-16" id="newImageBtn">+ New Image</button>
 </div>
 
 </div>
@@ -322,7 +277,7 @@ Download
 </div>
 
 <canvas id="workCanvas" class="hidden"></canvas>
-<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/ort.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -331,250 +286,211 @@ Download
 <script>
 'use strict';
 
-// ============ STATE ============
 const State = {
-  originalFile: null,
-  originalImage: null,
-  originalWidth: 0,
-  originalHeight: 0,
-  originalBitmap: null,
-  maskCanvas: null,
-  maskCtx: null,
-  resultCanvas: null,
-  resultCtx: null,
-  processedCanvas: null,
-  processedCtx: null,
-  bgType: 'transparent',
-  bgColor: '#ffffff',
-  gradColor1: '#6d5dfc',
-  gradColor2: '#0b0e14',
-  gradAngle: 135,
-  bgImage: null,
-  shadowEnabled: false,
-  shadowOpacity: 0.5,
-  shadowBlur: 30,
-  shadowDistance: 20,
-  shadowAngle: 135,
-  shadowSize: 100,
-  enhance: { sharpness: 0, contrast: 0, brightness: 0, saturation: 0 },
-  isProcessing: false,
-  cancelRequested: false,
-  modelSession: null,
-  modelReady: false,
-  modelLoading: false,
-  deviceInfo: {},
-  undoStack: [],
-  redoStack: [],
-  isDrawing: false,
-  lastX: 0,
-  lastY: 0,
-  currentTool: 'eraser',
-  brushSize: 40,
-  brushSoftness: 0.5,
-  comparePos: 0.5,
-  batchQueue: [],
-  batchProcessing: false,
+  originalFile:null, originalImage:null, originalBitmap:null,
+  originalWidth:0, originalHeight:0,
+  maskCanvas:null, maskCtx:null,
+  resultCanvas:null, resultCtx:null,
+  processedCanvas:null, processedCtx:null,
+  bgType:'transparent', bgColor:'#ffffff',
+  gradColor1:'#6d5dfc', gradColor2:'#0b0e14', gradAngle:135,
+  bgImage:null,
+  shadowEnabled:false, shadowOpacity:0.5, shadowBlur:30, shadowDistance:20, shadowAngle:135, shadowSize:100,
+  enhance:{sharpness:0,contrast:0,brightness:0,saturation:0},
+  isProcessing:false, cancelRequested:false,
+  modelSession:null, modelReady:false, modelLoading:false,
+  deviceInfo:{}, undoStack:[], redoStack:[],
+  isDrawing:false, lastX:0, lastY:0,
+  currentTool:'eraser', brushSize:40, brushSoftness:0.5,
+  comparePos:0.5, batchQueue:[], batchProcessing:false,
 };
 
 const MODEL_URL = 'https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx';
 const MODEL_INPUT_SIZE = 1024;
 
-// ============ DOM ============
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const DOM = {
-  uploadSection: $('#uploadSection'),
-  uploadZone: $('#uploadZone'),
-  fileInput: $('#fileInput'),
-  originalPreviewSection: $('#originalPreviewSection'),
-  originalPreview: $('#originalPreview'),
-  fileInfo: $('#fileInfo'),
-  removeBgBtn: $('#removeBgBtn'),
-  clearImageBtn: $('#clearImageBtn'),
-  processingSection: $('#processingSection'),
-  progressStages: $('#progressStages'),
-  cancelBtn: $('#cancelBtn'),
-  resultSection: $('#resultSection'),
-  resultInfo: $('#resultInfo'),
-  compareWrapper: $('#compareWrapper'),
-  compareBefore: $('#compareBefore'),
-  compareAfter: $('#compareAfter'),
-  compareAfterWrap: $('#compareAfterWrap'),
-  compareHandle: $('#compareHandle'),
-  editorCanvas: $('#editorCanvas'),
-  workCanvas: $('#workCanvas'),
-  toastContainer: $('#toastContainer'),
-  batchSection: $('#batchSection'),
-  batchList: $('#batchList'),
+  uploadSection:$('#uploadSection'), uploadZone:$('#uploadZone'), fileInput:$('#fileInput'),
+  originalPreviewSection:$('#originalPreviewSection'), originalPreview:$('#originalPreview'), fileInfo:$('#fileInfo'),
+  removeBgBtn:$('#removeBgBtn'), clearImageBtn:$('#clearImageBtn'),
+  processingSection:$('#processingSection'), progressStages:$('#progressStages'), cancelBtn:$('#cancelBtn'),
+  resultSection:$('#resultSection'), resultInfo:$('#resultInfo'),
+  compareWrapper:$('#compareWrapper'), compareBefore:$('#compareBefore'), compareAfter:$('#compareAfter'),
+  compareAfterWrap:$('#compareAfterWrap'), compareHandle:$('#compareHandle'),
+  editorCanvas:$('#editorCanvas'), workCanvas:$('#workCanvas'),
+  toastContainer:$('#toastContainer'),
+  batchSection:$('#batchSection'), batchList:$('#batchList'),
 };
 
-// ============ UTIL ============
-function toast(msg, type = 'info', duration = 3500) {
+function toast(msg, type='info', dur=3500){
   const el = document.createElement('div');
   el.className = 'toast ' + type;
   el.textContent = msg;
   DOM.toastContainer.appendChild(el);
-  setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.transition = 'all .3s';
-    setTimeout(() => el.remove(), 300);
-  }, duration);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='all .3s'; setTimeout(()=>el.remove(),300); }, dur);
 }
 
-function formatBytes(b) {
-  if (!b) return '0 B';
-  const k = 1024, s = ['B','KB','MB','GB'];
-  const i = Math.floor(Math.log(b) / Math.log(k));
-  return (b / Math.pow(k, i)).toFixed(1) + ' ' + s[i];
+function formatBytes(b){
+  if(!b) return '0 B';
+  const k=1024, s=['B','KB','MB','GB'];
+  const i=Math.floor(Math.log(b)/Math.log(k));
+  return (b/Math.pow(k,i)).toFixed(1)+' '+s[i];
 }
 
-// ============ DEVICE DETECT ============
-async function detectDevice() {
-  const info = {
+async function detectDevice(){
+  State.deviceInfo = {
     memory: navigator.deviceMemory || 4,
     cores: navigator.hardwareConcurrency || 4,
     isMobile: /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent),
   };
-  State.deviceInfo = info;
-  return info;
+  return State.deviceInfo;
 }
 
-// ============ INFERENCE SIZE ============
-function getInferenceSize(w, h) {
-  const { memory, cores, isMobile } = State.deviceInfo;
-  const maxDim = Math.max(w, h);
+function getInferenceSize(w,h){
+  const {memory, cores, isMobile} = State.deviceInfo;
+  const maxDim = Math.max(w,h);
   let target = 768;
-  if (memory >= 8 && cores >= 6 && !isMobile) target = 1024;
-  else if (memory >= 4 && cores >= 4) target = 896;
-  else if (memory >= 2) target = 768;
+  if(memory>=8 && cores>=6 && !isMobile) target = 1024;
+  else if(memory>=4 && cores>=4) target = 896;
+  else if(memory>=2) target = 768;
   else target = 512;
-  if (maxDim < target) target = maxDim;
-  const px = w * h;
-  if (px > 20e6) target = Math.min(target, 768);
-  if (px > 40e6) target = Math.min(target, 640);
+  if(maxDim < target) target = maxDim;
+  const px = w*h;
+  if(px > 20e6) target = Math.min(target, 768);
+  if(px > 40e6) target = Math.min(target, 640);
   return target;
 }
 
-// ============ LOAD MODEL ============
-async function loadModel(onProgress) {
-  if (State.modelReady) return State.modelSession;
-  if (State.modelLoading) {
-    while (State.modelLoading) await new Promise(r => setTimeout(r, 100));
+async function loadModel(onProgress){
+  if(State.modelReady) return State.modelSession;
+  if(State.modelLoading){
+    while(State.modelLoading) await new Promise(r=>setTimeout(r,100));
     return State.modelSession;
   }
   State.modelLoading = true;
   try {
-    if (typeof ort === 'undefined') throw new Error('ONNX Runtime not loaded');
-
+    if(typeof ort === 'undefined') throw new Error('ONNX Runtime not loaded');
     ort.env.wasm.numThreads = 1;
     ort.env.wasm.simd = true;
     ort.env.logLevel = 'error';
-
+    
     const executionProviders = ['wasm'];
     let modelBuffer = null;
-
-    // Try cache
+    
     try {
-      const cache = await caches.open('qunvero-models-v3');
+      const cache = await caches.open('qunvero-models-v4');
       const cached = await cache.match(MODEL_URL);
-      if (cached) {
+      if(cached){
         modelBuffer = await cached.arrayBuffer();
         console.log('✅ Model from cache');
-        if (onProgress) onProgress('cached');
+        if(onProgress) onProgress('cached');
       }
-    } catch (e) { console.warn('Cache:', e.message); }
-
-    // Download
-    if (!modelBuffer) {
-      if (onProgress) onProgress(0);
-      console.log('📥 Downloading AI model...');
-      const response = await fetch(MODEL_URL);
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      const total = parseInt(response.headers.get('content-length') || '0', 10);
-      const reader = response.body.getReader();
+    } catch(e){ console.warn('Cache:', e.message); }
+    
+    if(!modelBuffer){
+      if(onProgress) onProgress(0);
+      console.log('📥 Downloading model...');
+      const res = await fetch(MODEL_URL);
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const total = parseInt(res.headers.get('content-length') || '0', 10);
+      const reader = res.body.getReader();
       const chunks = [];
       let received = 0;
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      while(true){
+        const {done, value} = await reader.read();
+        if(done) break;
         chunks.push(value);
         received += value.length;
-        if (onProgress && total > 0) {
-          onProgress(Math.round((received / total) * 100));
-        }
+        if(onProgress && total > 0) onProgress(Math.round((received/total)*100));
       }
       const blob = new Blob(chunks);
       modelBuffer = await blob.arrayBuffer();
       console.log('✅ Downloaded:', (modelBuffer.byteLength/1024/1024).toFixed(1), 'MB');
       try {
-        const cache = await caches.open('qunvero-models-v3');
+        const cache = await caches.open('qunvero-models-v4');
         await cache.put(MODEL_URL, new Response(modelBuffer.slice(0)));
         console.log('💾 Cached');
-      } catch (e) { console.warn('Cache save:', e.message); }
+      } catch(e){ console.warn('Cache save:', e.message); }
     }
-
+    
     console.log('🔧 Creating session...');
     const session = await ort.InferenceSession.create(modelBuffer, {
       executionProviders: executionProviders,
       graphOptimizationLevel: 'basic'
     });
-    console.log('✅ Model ready. Inputs:', session.inputNames, 'Outputs:', session.outputNames);
-
+    
+    console.log('✅ Model ready! Inputs:', session.inputNames, 'Outputs:', session.outputNames);
+    
     State.modelSession = session;
     State.modelReady = true;
     State.modelLoading = false;
     return session;
-  } catch (err) {
+  } catch(err){
     State.modelLoading = false;
     console.error('❌ Model error:', err);
     throw new Error('Model load failed: ' + err.message);
   }
 }
 
-// ============ PREPROCESS ============
-function preprocessImage(imageBitmap, size) {
+function preprocessImage(imageBitmap, size){
   const canvas = DOM.workCanvas;
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const ctx = canvas.getContext('2d', {willReadFrequently:true});
   ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, size, size);
-  const scale = Math.min(size / imageBitmap.width, size / imageBitmap.height);
+  ctx.fillRect(0,0,size,size);
+  const scale = Math.min(size/imageBitmap.width, size/imageBitmap.height);
   const w = imageBitmap.width * scale;
   const h = imageBitmap.height * scale;
   const x = (size - w) / 2;
   const y = (size - h) / 2;
   ctx.drawImage(imageBitmap, x, y, w, h);
-  const imgData = ctx.getImageData(0, 0, size, size);
+  const imgData = ctx.getImageData(0,0,size,size);
   const data = imgData.data;
-  const float32 = new Float32Array(3 * size * size);
-  const mean = [0.485, 0.456, 0.406];
-  const std = [0.229, 0.224, 0.225];
-  for (let i = 0; i < size * size; i++) {
-    float32[i] = (data[i*4]/255 - mean[0]) / std[0];
-    float32[size*size + i] = (data[i*4+1]/255 - mean[1]) / std[1];
-    float32[2*size*size + i] = (data[i*4+2]/255 - mean[2]) / std[2];
+  const float32 = new Float32Array(3*size*size);
+  const mean = [0.485,0.456,0.406], std = [0.229,0.224,0.225];
+  for(let i=0;i<size*size;i++){
+    float32[i] = (data[i*4]/255 - mean[0])/std[0];
+    float32[size*size+i] = (data[i*4+1]/255 - mean[1])/std[1];
+    float32[2*size*size+i] = (data[i*4+2]/255 - mean[2])/std[2];
   }
-  return new ort.Tensor('float32', float32, [1, 3, size, size]);
+  return new ort.Tensor('float32', float32, [1,3,size,size]);
 }
 
-// ============ POSTPROCESS ============
-function postprocessMask(outputTensor, _, __, origW, origH) {
+function postprocessMask(outputTensor, origW, origH){
   const data = outputTensor.data;
-  const size = MODEL_INPUT_SIZE;
-  let min = Infinity, max = -Infinity;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i] < min) min = data[i];
-    if (data[i] > max) max = data[i];
+  const dims = outputTensor.dims;
+  console.log('🔍 Output dims:', dims, 'Length:', data.length);
+  
+  // Auto-detect size from output shape
+  let size = 1024;
+  if(dims.length >= 2){
+    const lastDim = dims[dims.length-1];
+    const secondLast = dims[dims.length-2];
+    if(lastDim === secondLast && lastDim > 0){
+      size = lastDim;
+    }
   }
+  console.log('🔍 Using mask size:', size);
+  
+  let min = Infinity, max = -Infinity;
+  for(let i=0;i<data.length;i++){
+    if(data[i] < min) min = data[i];
+    if(data[i] > max) max = data[i];
+  }
+  console.log('🔍 Data range:', min.toFixed(4), 'to', max.toFixed(4));
   const range = max - min || 1;
-
+  
+  const pixelCount = size * size;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   const imgData = ctx.createImageData(size, size);
-  for (let i = 0; i < size * size; i++) {
+  
+  const loopCount = Math.min(pixelCount, data.length);
+  for(let i=0;i<loopCount;i++){
     const val = (data[i] - min) / range;
     const alpha = Math.round(Math.min(1, Math.max(0, val)) * 255);
     imgData.data[i*4] = 255;
@@ -583,48 +499,50 @@ function postprocessMask(outputTensor, _, __, origW, origH) {
     imgData.data[i*4+3] = alpha;
   }
   ctx.putImageData(imgData, 0, 0);
-
-  const scale = Math.min(size / origW, size / origH);
+  
+  // Scale mask from size x size to original image dimensions
+  const scale = Math.min(size/origW, size/origH);
   const w = origW * scale;
   const h = origH * scale;
   const x = (size - w) / 2;
   const y = (size - h) / 2;
-
+  
   const maskCanvas = document.createElement('canvas');
   maskCanvas.width = origW;
   maskCanvas.height = origH;
-  const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
+  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
   maskCtx.imageSmoothingEnabled = true;
   maskCtx.imageSmoothingQuality = 'high';
   maskCtx.drawImage(canvas, x, y, w, h, 0, 0, origW, origH);
-
-  const mData = maskCtx.getImageData(0, 0, origW, origH);
-  for (let i = 3; i < mData.data.length; i += 4) {
-    let a = mData.data[i] / 255;
-    a = a * a * (3 - 2 * a);
-    mData.data[i] = Math.round(a * 255);
+  
+  // Refine mask (contrast boost)
+  const mData = maskCtx.getImageData(0,0,origW,origH);
+  for(let i=3;i<mData.data.length;i+=4){
+    let a = mData.data[i]/255;
+    a = a*a*(3-2*a); // smoothstep
+    mData.data[i] = Math.round(a*255);
   }
   maskCtx.putImageData(mData, 0, 0);
+  
+  console.log('✅ Mask created:', origW, 'x', origH);
   return maskCanvas;
 }
 
-// ============ APPLY MASK ============
-function applyMaskToOriginal(origBitmap, maskCanvas) {
-  const w = origBitmap.width;
-  const h = origBitmap.height;
+function applyMaskToOriginal(origBitmap, maskCanvas){
+  const w = origBitmap.width, h = origBitmap.height;
   const result = document.createElement('canvas');
-  result.width = w;
-  result.height = h;
-  const rCtx = result.getContext('2d', { willReadFrequently: true });
+  result.width = w; result.height = h;
+  const rCtx = result.getContext('2d', {willReadFrequently:true});
   rCtx.drawImage(origBitmap, 0, 0, w, h);
-  const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
+  
+  const maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
   const maskData = maskCtx.getImageData(0, 0, w, h);
   const resultData = rCtx.getImageData(0, 0, w, h);
-  const rD = resultData.data;
-  const mD = maskData.data;
-  for (let i = 0; i < w * h; i++) {
+  const rD = resultData.data, mD = maskData.data;
+  
+  for(let i=0;i<w*h;i++){
     const a = mD[i*4+3];
-    if (a > 0 && a < 255) {
+    if(a > 0 && a < 255){
       const f = a / 255;
       rD[i*4] = Math.round(rD[i*4] * (0.9 + 0.1*f));
       rD[i*4+1] = Math.round(rD[i*4+1] * (0.9 + 0.1*f));
@@ -636,16 +554,15 @@ function applyMaskToOriginal(origBitmap, maskCanvas) {
   return result;
 }
 
-// ============ PROCESS ============
-async function processImage() {
-  if (State.isProcessing) return;
+async function processImage(){
+  if(State.isProcessing) return;
   State.isProcessing = true;
   State.cancelRequested = false;
+  State.sessionId = (State.sessionId || 0) + 1;
 
   const stages = ['Preparing image...','Loading AI model...','Analyzing background...','Removing background...','Refining edges...','Creating final image...'];
-
-  function renderStages(active, done = []) {
-    DOM.progressStages.innerHTML = stages.map((s, i) =>
+  function renderStages(active, done=[]){
+    DOM.progressStages.innerHTML = stages.map((s,i)=>
       `<div class="stage ${i===active?'active':''} ${done.includes(i)?'done':''}"><div class="stage-icon"></div><span>${s}</span></div>`
     ).join('');
   }
@@ -658,71 +575,99 @@ async function processImage() {
   try {
     const file = State.originalFile;
     const img = State.originalImage;
-    if (!file || !img) throw new Error('No image');
+    if(!file || !img) throw new Error('No image');
 
     const w = img.naturalWidth || img.width;
     const h = img.naturalHeight || img.height;
+    console.log('📸 Image:', w, 'x', h);
 
     let origBitmap;
     try {
       origBitmap = await createImageBitmap(img);
-    } catch (e) {
+    } catch(e){
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
       c.getContext('2d').drawImage(img, 0, 0);
       origBitmap = await createImageBitmap(c);
     }
     State.originalBitmap = origBitmap;
+    console.log('✅ Bitmap ready');
 
-    if (State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelRequested) throw new Error('cancelled');
 
     renderStages(1, [0]);
+    console.log('🔄 Loading model...');
     const session = await loadModel(p => {
       const el = DOM.progressStages.querySelector('.stage.active span');
-      if (el && typeof p === 'number') el.textContent = `Loading AI model... ${p}%`;
+      if(el && typeof p === 'number') el.textContent = `Loading AI model... ${p}%`;
     });
+    console.log('✅ Model loaded');
+    console.log('   Inputs:', session.inputNames);
+    console.log('   Outputs:', session.outputNames);
 
-    if (State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelRequested) throw new Error('cancelled');
 
     renderStages(2, [0, 1]);
+    console.log('🔄 Preprocessing...');
     const tensor = preprocessImage(origBitmap, MODEL_INPUT_SIZE);
+    console.log('✅ Tensor:', tensor.dims, 'type:', tensor.type);
+
+    if(State.cancelRequested) throw new Error('cancelled');
 
     renderStages(3, [0, 1, 2]);
+    console.log('🔄 Running inference...');
+    
     const feeds = {};
-    feeds[session.inputNames[0]] = tensor;
+    const inputName = session.inputNames[0] || 'input';
+    feeds[inputName] = tensor;
+    
     let results;
     try {
       results = await session.run(feeds);
-    } catch (e) {
-      throw new Error('AI inference failed: ' + e.message);
+      console.log('✅ Inference complete');
+    } catch(e){
+      console.error('❌ session.run error:', e);
+      throw new Error('Inference failed: ' + e.message);
     }
-    const output = results[session.outputNames[0]];
-    if (!output) throw new Error('No model output');
+    
+    const outputName = session.outputNames[0];
+    const output = results[outputName];
+    
+    if(!output){
+      console.error('❌ No output. Keys:', Object.keys(results));
+      throw new Error('Model returned no output');
+    }
+    
+    console.log('✅ Output dims:', output.dims, 'Length:', output.data.length);
 
-    if (State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelRequested) throw new Error('cancelled');
 
     renderStages(4, [0, 1, 2, 3]);
-    const maskCanvas = postprocessMask(output, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE, w, h);
+    console.log('🔄 Creating mask...');
+    const maskCanvas = postprocessMask(output, w, h);
     State.maskCanvas = maskCanvas;
-    State.maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
+    State.maskCtx = maskCanvas.getContext('2d', {willReadFrequently:true});
 
-    if (State.cancelRequested) throw new Error('cancelled');
+    if(State.cancelRequested) throw new Error('cancelled');
 
     renderStages(5, [0, 1, 2, 3, 4]);
+    console.log('🔄 Applying mask to original...');
     const processed = applyMaskToOriginal(origBitmap, maskCanvas);
     State.processedCanvas = processed;
-    State.processedCtx = processed.getContext('2d', { willReadFrequently: true });
+    State.processedCtx = processed.getContext('2d', {willReadFrequently:true});
+    console.log('✅ Mask applied at original resolution');
 
     State.resultCanvas = document.createElement('canvas');
     State.resultCanvas.width = w;
     State.resultCanvas.height = h;
-    State.resultCtx = State.resultCanvas.getContext('2d', { willReadFrequently: true });
+    State.resultCtx = State.resultCanvas.getContext('2d', {willReadFrequently:true});
 
     State.bgType = 'transparent';
     await renderResult();
+    console.log('✅ Result rendered');
 
-    renderStages(-1, [0, 1, 2, 3, 4, 5]);
-    await new Promise(r => setTimeout(r, 300));
+    renderStages(-1, [0,1,2,3,4,5]);
+    await new Promise(r=>setTimeout(r,300));
 
     DOM.processingSection.classList.add('hidden');
     DOM.resultSection.classList.remove('hidden');
@@ -731,59 +676,60 @@ async function processImage() {
     initEditorCanvas();
     DOM.resultInfo.textContent = `${w} × ${h} · ${formatBytes(file.size)}`;
     toast('✅ Background removed!', 'success');
+    console.log('🎉 DONE');
     State.isProcessing = false;
 
-    if (State.batchQueue.length > 0 && !State.batchProcessing) processBatchQueue();
+    if(State.batchQueue.length > 0 && !State.batchProcessing) processBatchQueue();
 
-  } catch (err) {
+  } catch(err){
     State.isProcessing = false;
     DOM.processingSection.classList.add('hidden');
-    if (err.message === 'cancelled') {
+    console.error('❌ FULL ERROR:', err);
+    
+    if(err.message === 'cancelled'){
       toast('Cancelled', 'info');
       DOM.uploadSection.classList.remove('hidden');
     } else {
-      console.error('Error:', err);
-      let msg = 'Processing failed: ' + err.message;
-      if (/memory/i.test(err.message)) msg = '⚠️ Image too large. Try smaller image.';
-      else if (/model/i.test(err.message)) msg = '⚠️ Model load failed. Check internet & retry.';
-      else if (/inference/i.test(err.message)) msg = '⚠️ AI processing failed. Try again.';
-      toast(msg, 'error', 8000);
+      let msg = 'Error: ' + err.message;
+      if(/memory/i.test(err.message)) msg = '⚠️ Image too large. Try smaller.';
+      else if(/model/i.test(err.message)) msg = '⚠️ Model load failed. Retry.';
+      else if(/inference/i.test(err.message)) msg = '⚠️ AI failed: ' + err.message;
+      toast(msg, 'error', 10000);
       DOM.uploadSection.classList.remove('hidden');
     }
   }
 }
 
-// ============ RENDER RESULT ============
-async function renderResult() {
-  if (!State.processedCanvas || !State.resultCanvas) return;
+async function renderResult(){
+  if(!State.processedCanvas || !State.resultCanvas) return;
   const w = State.processedCanvas.width;
   const h = State.processedCanvas.height;
   const ctx = State.resultCtx;
-  ctx.clearRect(0, 0, w, h);
+  ctx.clearRect(0,0,w,h);
 
-  if (State.bgType === 'color') {
+  if(State.bgType === 'color'){
     ctx.fillStyle = State.bgColor;
-    ctx.fillRect(0, 0, w, h);
-  } else if (State.bgType === 'gradient') {
+    ctx.fillRect(0,0,w,h);
+  } else if(State.bgType === 'gradient'){
     const a = State.gradAngle * Math.PI / 180;
     const g = ctx.createLinearGradient(w/2 - Math.cos(a)*w/2, h/2 - Math.sin(a)*h/2, w/2 + Math.cos(a)*w/2, h/2 + Math.sin(a)*h/2);
     g.addColorStop(0, State.gradColor1);
     g.addColorStop(1, State.gradColor2);
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-  } else if (State.bgType === 'image' && State.bgImage) {
+    ctx.fillRect(0,0,w,h);
+  } else if(State.bgType === 'image' && State.bgImage){
     const ir = State.bgImage.width / State.bgImage.height;
     const cr = w / h;
     let dw, dh, dx, dy;
-    if (ir > cr) { dh = h; dw = h * ir; dx = (w-dw)/2; dy = 0; }
-    else { dw = w; dh = w / ir; dx = 0; dy = (h-dh)/2; }
+    if(ir > cr){ dh = h; dw = h*ir; dx = (w-dw)/2; dy = 0; }
+    else { dw = w; dh = w/ir; dx = 0; dy = (h-dh)/2; }
     ctx.drawImage(State.bgImage, dx, dy, dw, dh);
   }
 
-  if (State.shadowEnabled) await drawShadow(ctx, w, h);
+  if(State.shadowEnabled) await drawShadow(ctx, w, h);
 
   const e = State.enhance;
-  if (e.sharpness > 0 || e.contrast !== 0 || e.brightness !== 0 || e.saturation !== 0) {
+  if(e.sharpness > 0 || e.contrast !== 0 || e.brightness !== 0 || e.saturation !== 0){
     ctx.drawImage(applyEnhancement(State.processedCanvas, e), 0, 0);
   } else {
     ctx.drawImage(State.processedCanvas, 0, 0);
@@ -791,29 +737,24 @@ async function renderResult() {
   DOM.compareAfter.src = State.resultCanvas.toDataURL('image/png');
 }
 
-// ============ SHADOW ============
-async function drawShadow(ctx, w, h) {
-  if (!State.maskCanvas) return;
+async function drawShadow(ctx, w, h){
+  if(!State.maskCanvas) return;
   const a = State.shadowAngle * Math.PI / 180;
-  const dist = State.shadowDistance * (Math.min(w, h) / 500);
-  const ox = Math.cos(a) * dist, oy = Math.sin(a) * dist;
-  const blur = State.shadowBlur * (Math.min(w, h) / 500);
+  const dist = State.shadowDistance * (Math.min(w,h)/500);
+  const ox = Math.cos(a)*dist, oy = Math.sin(a)*dist;
+  const blur = State.shadowBlur * (Math.min(w,h)/500);
   const scale = State.shadowSize / 100;
 
-  const maskData = State.maskCtx.getImageData(0, 0, w, h);
+  const maskData = State.maskCtx.getImageData(0,0,w,h);
   const shadowCanvas = document.createElement('canvas');
-  shadowCanvas.width = w;
-  shadowCanvas.height = h;
+  shadowCanvas.width = w; shadowCanvas.height = h;
   const sCtx = shadowCanvas.getContext('2d');
-  const sData = sCtx.createImageData(w, h);
-  for (let i = 0; i < w * h; i++) {
-    sData.data[i*4+3] = maskData.data[i*4+3];
-  }
+  const sData = sCtx.createImageData(w,h);
+  for(let i=0;i<w*h;i++) sData.data[i*4+3] = maskData.data[i*4+3];
   sCtx.putImageData(sData, 0, 0);
 
   const layer = document.createElement('canvas');
-  layer.width = w;
-  layer.height = h;
+  layer.width = w; layer.height = h;
   const lCtx = layer.getContext('2d');
   lCtx.save();
   lCtx.translate(w/2, h/2);
@@ -830,48 +771,45 @@ async function drawShadow(ctx, w, h) {
   ctx.restore();
 }
 
-// ============ ENHANCE ============
-function applyEnhancement(src, p) {
+function applyEnhancement(src, p){
   const w = src.width, h = src.height;
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
-  const ctx = c.getContext('2d', { willReadFrequently: true });
+  const ctx = c.getContext('2d', {willReadFrequently:true});
   ctx.drawImage(src, 0, 0);
-  const d = ctx.getImageData(0, 0, w, h);
+  const d = ctx.getImageData(0,0,w,h);
   const data = d.data;
   const br = p.brightness * 2.55;
   const co = (p.contrast + 100) / 100;
   const sa = (p.saturation + 100) / 100;
-
-  for (let i = 0; i < data.length; i += 4) {
-    let r = data[i] + br, g = data[i+1] + br, b = data[i+2] + br;
-    r = ((r/255 - 0.5) * co + 0.5) * 255;
-    g = ((g/255 - 0.5) * co + 0.5) * 255;
-    b = ((b/255 - 0.5) * co + 0.5) * 255;
+  for(let i=0;i<data.length;i+=4){
+    let r = data[i]+br, g = data[i+1]+br, b = data[i+2]+br;
+    r = ((r/255 - 0.5)*co + 0.5)*255;
+    g = ((g/255 - 0.5)*co + 0.5)*255;
+    b = ((b/255 - 0.5)*co + 0.5)*255;
     const gray = 0.2989*r + 0.5870*g + 0.1140*b;
-    r = gray + (r - gray) * sa;
-    g = gray + (g - gray) * sa;
-    b = gray + (b - gray) * sa;
+    r = gray + (r-gray)*sa;
+    g = gray + (g-gray)*sa;
+    b = gray + (b-gray)*sa;
     data[i] = Math.max(0, Math.min(255, r));
     data[i+1] = Math.max(0, Math.min(255, g));
     data[i+2] = Math.max(0, Math.min(255, b));
   }
   ctx.putImageData(d, 0, 0);
-
-  if (p.sharpness > 0) {
+  if(p.sharpness > 0){
     const bl = document.createElement('canvas');
     bl.width = w; bl.height = h;
     const bCtx = bl.getContext('2d');
     bCtx.filter = 'blur(2px)';
     bCtx.drawImage(c, 0, 0);
     bCtx.filter = 'none';
-    const sD = ctx.getImageData(0, 0, w, h);
-    const bD = bCtx.getImageData(0, 0, w, h);
-    const amt = p.sharpness / 100 * 1.5;
-    for (let i = 0; i < sD.data.length; i += 4) {
-      for (let k = 0; k < 3; k++) {
+    const sD = ctx.getImageData(0,0,w,h);
+    const bD = bCtx.getImageData(0,0,w,h);
+    const amt = p.sharpness/100 * 1.5;
+    for(let i=0;i<sD.data.length;i+=4){
+      for(let k=0;k<3;k++){
         const diff = sD.data[i+k] - bD.data[i+k];
-        sD.data[i+k] = Math.max(0, Math.min(255, sD.data[i+k] + diff * amt));
+        sD.data[i+k] = Math.max(0, Math.min(255, sD.data[i+k] + diff*amt));
       }
     }
     ctx.putImageData(sD, 0, 0);
@@ -879,122 +817,104 @@ function applyEnhancement(src, p) {
   return c;
 }
 
-// ============ EDITOR CANVAS ============
-function initEditorCanvas() {
-  if (!State.processedCanvas) return;
+let editorEventsSetup = false;
+function initEditorCanvas(){
+  if(!State.processedCanvas) return;
   const canvas = DOM.editorCanvas;
   const w = State.processedCanvas.width;
   const h = State.processedCanvas.height;
   const maxD = 800;
-  const scale = Math.min(1, maxD / Math.max(w, h));
-  canvas.width = Math.round(w * scale);
-  canvas.height = Math.round(h * scale);
+  const scale = Math.min(1, maxD/Math.max(w,h));
+  canvas.width = Math.round(w*scale);
+  canvas.height = Math.round(h*scale);
   canvas.style.width = '100%';
   canvas.style.height = 'auto';
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.drawImage(State.processedCanvas, 0, 0, canvas.width, canvas.height);
   canvas.dataset.scale = scale;
   canvas.dataset.origW = w;
   canvas.dataset.origH = h;
-  setupEditorEvents();
+  if(!editorEventsSetup){
+    editorEventsSetup = true;
+    setupEditorEvents();
+  }
 }
 
-let editorEventsSetup = false;
-function setupEditorEvents() {
-  if (editorEventsSetup) return;
-  editorEventsSetup = true;
+function setupEditorEvents(){
   const canvas = DOM.editorCanvas;
-
-  const getPos = (e) => {
+  const getPos = e => {
     const r = canvas.getBoundingClientRect();
-    const sx = canvas.width / r.width;
-    const sy = canvas.height / r.height;
+    const sx = canvas.width/r.width, sy = canvas.height/r.height;
     let cx, cy;
-    if (e.touches) { cx = e.touches[0].clientX; cy = e.touches[0].clientY; }
+    if(e.touches){ cx = e.touches[0].clientX; cy = e.touches[0].clientY; }
     else { cx = e.clientX; cy = e.clientY; }
-    return { x: (cx - r.left) * sx, y: (cy - r.top) * sy };
+    return {x:(cx-r.left)*sx, y:(cy-r.top)*sy};
   };
-
-  const start = (e) => {
+  const start = e => {
     e.preventDefault();
-    if (State.isProcessing) return;
+    if(State.isProcessing) return;
     State.isDrawing = true;
     const p = getPos(e);
     State.lastX = p.x; State.lastY = p.y;
     State.undoStack.push(canvas.toDataURL());
-    if (State.undoStack.length > 20) State.undoStack.shift();
+    if(State.undoStack.length > 20) State.undoStack.shift();
     State.redoStack = [];
     drawAt(p.x, p.y);
   };
-  const move = (e) => {
-    if (!State.isDrawing) return;
+  const move = e => {
+    if(!State.isDrawing) return;
     e.preventDefault();
     const p = getPos(e);
     drawLine(State.lastX, State.lastY, p.x, p.y);
     State.lastX = p.x; State.lastY = p.y;
   };
   const end = () => {
-    if (!State.isDrawing) return;
+    if(!State.isDrawing) return;
     State.isDrawing = false;
     applyEditorToProcessed();
   };
-
   canvas.addEventListener('mousedown', start);
   canvas.addEventListener('mousemove', move);
   canvas.addEventListener('mouseup', end);
   canvas.addEventListener('mouseleave', end);
-  canvas.addEventListener('touchstart', start, { passive: false });
-  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
   canvas.addEventListener('touchend', end);
   canvas.addEventListener('touchcancel', end);
 }
 
-function drawAt(x, y) {
+function drawAt(x, y){
   const canvas = DOM.editorCanvas;
   const ctx = canvas.getContext('2d');
-  const size = State.brushSize * (canvas.width / 800);
+  const size = State.brushSize * (canvas.width/800);
   const soft = State.brushSoftness;
-
   ctx.save();
-  if (State.currentTool === 'eraser') {
-    ctx.globalCompositeOperation = 'destination-out';
-    const g = ctx.createRadialGradient(x, y, 0, x, y, size/2);
-    g.addColorStop(0, 'rgba(0,0,0,1)');
-    g.addColorStop(soft, `rgba(0,0,0,${1 - soft * 0.5})`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g;
-  } else {
-    ctx.globalCompositeOperation = 'destination-out';
-    const g = ctx.createRadialGradient(x, y, 0, x, y, size/2);
-    g.addColorStop(0, 'rgba(0,0,0,1)');
-    g.addColorStop(soft, `rgba(0,0,0,${1 - soft * 0.5})`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g;
-  }
+  ctx.globalCompositeOperation = 'destination-out';
+  const g = ctx.createRadialGradient(x, y, 0, x, y, size/2);
+  g.addColorStop(0, 'rgba(0,0,0,1)');
+  g.addColorStop(soft, `rgba(0,0,0,${1-soft*0.5})`);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
   ctx.beginPath();
-  ctx.arc(x, y, size/2, 0, Math.PI * 2);
+  ctx.arc(x, y, size/2, 0, Math.PI*2);
   ctx.fill();
   ctx.restore();
 }
 
-function drawLine(x1, y1, x2, y2) {
-  const d = Math.hypot(x2 - x1, y2 - y1);
-  const s = Math.max(1, Math.ceil(d / 3));
-  for (let i = 0; i <= s; i++) {
-    drawAt(x1 + (x2 - x1) * i / s, y1 + (y2 - y1) * i / s);
-  }
+function drawLine(x1, y1, x2, y2){
+  const d = Math.hypot(x2-x1, y2-y1);
+  const s = Math.max(1, Math.ceil(d/3));
+  for(let i=0;i<=s;i++) drawAt(x1+(x2-x1)*i/s, y1+(y2-y1)*i/s);
 }
 
-function applyEditorToProcessed() {
+function applyEditorToProcessed(){
   const canvas = DOM.editorCanvas;
-  const scale = parseFloat(canvas.dataset.scale);
   const oW = parseInt(canvas.dataset.origW);
   const oH = parseInt(canvas.dataset.origH);
-
   const full = document.createElement('canvas');
   full.width = oW; full.height = oH;
-  const fCtx = full.getContext('2d', { willReadFrequently: true });
+  const fCtx = full.getContext('2d', {willReadFrequently:true});
   fCtx.imageSmoothingEnabled = true;
   fCtx.imageSmoothingQuality = 'high';
   fCtx.drawImage(canvas, 0, 0, oW, oH);
@@ -1002,12 +922,9 @@ function applyEditorToProcessed() {
   const pCtx = State.processedCtx;
   const pData = pCtx.getImageData(0, 0, oW, oH);
   const eData = fCtx.getImageData(0, 0, oW, oH);
-
-  // Editor canvas stores what's LEFT (alpha 255 = keep, 0 = erase)
-  // Since we use destination-out, erased areas have alpha 0
-  for (let i = 0; i < oW * oH; i++) {
-    const editA = eData.data[i*4+3] / 255;
-    if (editA < 0.99) {
+  for(let i=0;i<oW*oH;i++){
+    const editA = eData.data[i*4+3]/255;
+    if(editA < 0.99){
       pData.data[i*4+3] = Math.round(pData.data[i*4+3] * editA);
     }
   }
@@ -1015,13 +932,11 @@ function applyEditorToProcessed() {
   renderResult();
 }
 
-// ============ FILE HANDLING ============
-function handleFile(file) {
-  if (!file) return;
+function handleFile(file){
+  if(!file) return;
   const valid = ['image/jpeg','image/jpg','image/png','image/webp'];
-  if (!valid.includes(file.type)) { toast('❌ Only JPG, PNG, WEBP allowed', 'error'); return; }
-  if (file.size > 100 * 1024 * 1024) { toast('❌ File too large (max 100MB)', 'error'); return; }
-
+  if(!valid.includes(file.type)){ toast('❌ Only JPG, PNG, WEBP', 'error'); return; }
+  if(file.size > 100*1024*1024){ toast('❌ File too large (100MB max)', 'error'); return; }
   cleanup();
   State.originalFile = file;
   const url = URL.createObjectURL(file);
@@ -1034,20 +949,16 @@ function handleFile(file) {
     DOM.originalPreviewSection.classList.remove('hidden');
     DOM.uploadZone.classList.add('hidden');
     const w = img.naturalWidth, h = img.naturalHeight;
-    DOM.fileInfo.innerHTML = `
-      <span>📐 ${w} × ${h} px</span>
-      <span>💾 ${formatBytes(file.size)}</span>
-      <span>🎨 ${file.type.split('/')[1].toUpperCase()}</span>
-    `;
-    if (!State.modelReady && !State.modelLoading) loadModel().catch(() => {});
+    DOM.fileInfo.innerHTML = `<span>📐 ${w} × ${h} px</span><span>💾 ${formatBytes(file.size)}</span><span>🎨 ${file.type.split('/')[1].toUpperCase()}</span>`;
+    if(!State.modelReady && !State.modelLoading) loadModel().catch(()=>{});
   };
-  img.onerror = () => { toast('❌ Failed to load image', 'error'); URL.revokeObjectURL(url); };
+  img.onerror = () => { toast('❌ Failed to load', 'error'); URL.revokeObjectURL(url); };
   img.src = url;
 }
 
-function cleanup() {
-  if (DOM.originalPreview.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.originalPreview.src);
-  if (DOM.compareBefore.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.compareBefore.src);
+function cleanup(){
+  if(DOM.originalPreview.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.originalPreview.src);
+  if(DOM.compareBefore.src?.startsWith('blob:')) URL.revokeObjectURL(DOM.compareBefore.src);
   State.originalFile = null;
   State.originalImage = null;
   State.originalBitmap = null;
@@ -1066,61 +977,57 @@ function cleanup() {
   DOM.fileInput.value = '';
 }
 
-// ============ COMPARE SLIDER ============
-function setupCompareSlider() {
+function setupCompareSlider(){
   const handle = DOM.compareHandle;
   const wrapper = DOM.compareWrapper;
   let dragging = false;
-
-  const update = (cx) => {
+  const update = cx => {
     const r = wrapper.getBoundingClientRect();
-    let p = (cx - r.left) / r.width;
+    let p = (cx - r.left)/r.width;
     p = Math.max(0, Math.min(1, p));
     State.comparePos = p;
-    handle.style.left = (p * 100) + '%';
-    DOM.compareAfterWrap.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
+    handle.style.left = (p*100) + '%';
+    DOM.compareAfterWrap.style.clipPath = `inset(0 ${(1-p)*100}% 0 0)`;
   };
-
-  const start = (e) => {
+  const start = e => {
     e.preventDefault();
     dragging = true;
     update(e.touches ? e.touches[0].clientX : e.clientX);
   };
-  const move = (e) => {
-    if (!dragging) return;
+  const move = e => {
+    if(!dragging) return;
     e.preventDefault();
     update(e.touches ? e.touches[0].clientX : e.clientX);
   };
   const end = () => { dragging = false; };
-
   handle.addEventListener('mousedown', start);
   wrapper.addEventListener('mousemove', move);
   document.addEventListener('mouseup', end);
-  handle.addEventListener('touchstart', start, { passive: false });
-  wrapper.addEventListener('touchmove', move, { passive: false });
+  handle.addEventListener('touchstart', start, {passive:false});
+  wrapper.addEventListener('touchmove', move, {passive:false});
   document.addEventListener('touchend', end);
-
-  const r = wrapper.getBoundingClientRect();
-  update(r.left + r.width / 2);
+  setTimeout(() => {
+    const r = wrapper.getBoundingClientRect();
+    if(r.width) update(r.left + r.width/2);
+  }, 100);
 }
 
-// ============ BATCH ============
-function addToBatch(files) {
+function addToBatch(files){
   const valid = Array.from(files).filter(f => ['image/jpeg','image/jpg','image/png','image/webp'].includes(f.type));
-  if (!valid.length) return;
-  valid.forEach(file => State.batchQueue.push({ file, id: Date.now() + Math.random(), status: 'pending', resultCanvas: null }));
+  if(!valid.length) return;
+  valid.forEach(file => State.batchQueue.push({file, id:Date.now()+Math.random(), status:'pending', resultCanvas:null}));
   DOM.batchSection.classList.remove('hidden');
   renderBatchList();
   toast(`Added ${valid.length} image(s)`, 'info');
 }
 
-function renderBatchList() {
-  DOM.batchList.innerHTML = State.batchQueue.map((it, i) => `
-    <div class="batch-item">
-      <img class="batch-thumb" src="${URL.createObjectURL(it.file)}" alt="thumb">
-      <div class="batch-info">
-        <div class="batch-name">${it.file.name}</div>
-        <div class="batch-status ${it.status === 'done' ? 'done' : it.status === 'error' ? 'error' : ''}">
+function renderBatchList(){
+  DOM.batchList.innerHTML = State.batchQueue.map((it,i) => `
+    <div class="batch-item" style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px">
+      <img src="${URL.createObjectURL(it.file)}" style="width:48px;height:48px;border-radius:8px;object-fit:cover" alt="thumb">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.file.name}</div>
+        <div style="font-size:.7rem;color:${it.status === 'done' ? 'var(--success)' : it.status === 'error' ? 'var(--danger)' : 'var(--text-dim)'}">
           ${it.status === 'pending' ? '⏳ Pending' : it.status === 'processing' ? '⚙️ Processing...' : it.status === 'done' ? '✅ Done' : '❌ Error'}
         </div>
       </div>
@@ -1128,10 +1035,9 @@ function renderBatchList() {
       <button class="btn btn-sm btn-danger" data-rm="${i}">×</button>
     </div>
   `).join('');
-
   DOM.batchList.querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => {
     const it = State.batchQueue[parseInt(b.dataset.dl)];
-    if (it.resultCanvas) {
+    if(it.resultCanvas){
       it.resultCanvas.toBlob(blob => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1142,20 +1048,19 @@ function renderBatchList() {
       });
     }
   }));
-
   DOM.batchList.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
     State.batchQueue.splice(parseInt(b.dataset.rm), 1);
     renderBatchList();
-    if (!State.batchQueue.length) DOM.batchSection.classList.add('hidden');
+    if(!State.batchQueue.length) DOM.batchSection.classList.add('hidden');
   }));
 }
 
-async function processBatchQueue() {
-  if (State.batchProcessing) return;
+async function processBatchQueue(){
+  if(State.batchProcessing) return;
   State.batchProcessing = true;
-  for (let i = 0; i < State.batchQueue.length; i++) {
+  for(let i=0;i<State.batchQueue.length;i++){
     const it = State.batchQueue[i];
-    if (it.status === 'done' || it.status === 'error') continue;
+    if(it.status === 'done' || it.status === 'error') continue;
     it.status = 'processing';
     renderBatchList();
     try {
@@ -1168,15 +1073,13 @@ async function processBatchQueue() {
       });
       State.originalFile = it.file;
       State.originalImage = img;
-      State.originalWidth = img.naturalWidth;
-      State.originalHeight = img.naturalHeight;
       const savedBatch = State.batchQueue;
       State.batchQueue = [];
-      await processImageForBatch(img);
+      await processImage();
       State.batchQueue = savedBatch;
       it.resultCanvas = State.resultCanvas;
       it.status = 'done';
-    } catch (e) {
+    } catch(e){
       console.error(e);
       it.status = 'error';
     }
@@ -1187,46 +1090,15 @@ async function processBatchQueue() {
   toast('✅ Batch complete!', 'success');
 }
 
-async function processImageForBatch(img) {
-  const w = img.naturalWidth, h = img.naturalHeight;
-  let bmp;
-  try { bmp = await createImageBitmap(img); }
-  catch (e) {
-    const c = document.createElement('canvas');
-    c.width = w; c.height = h;
-    c.getContext('2d').drawImage(img, 0, 0);
-    bmp = await createImageBitmap(c);
-  }
-  const session = await loadModel();
-  const tensor = preprocessImage(bmp, MODEL_INPUT_SIZE);
-  const feeds = {};
-  feeds[session.inputNames[0]] = tensor;
-  const res = await session.run(feeds);
-  const output = res[session.outputNames[0]];
-  const mask = postprocessMask(output, MODEL_INPUT_SIZE, MODEL_INPUT_SIZE, w, h);
-  const processed = applyMaskToOriginal(bmp, mask);
-  State.processedCanvas = processed;
-  State.processedCtx = processed.getContext('2d', { willReadFrequently: true });
-  State.maskCanvas = mask;
-  State.maskCtx = mask.getContext('2d', { willReadFrequently: true });
-  State.resultCanvas = document.createElement('canvas');
-  State.resultCanvas.width = w;
-  State.resultCanvas.height = h;
-  State.resultCtx = State.resultCanvas.getContext('2d', { willReadFrequently: true });
-  State.bgType = 'transparent';
-  await renderResult();
-}
-
-// ============ EXPORT ============
-function downloadResult() {
-  if (!State.resultCanvas) { toast('No result', 'error'); return; }
+function downloadResult(){
+  if(!State.resultCanvas){ toast('No result', 'error'); return; }
   const fmt = $('#exportFormat').value;
-  const q = parseInt($('#exportQuality').value) / 100;
+  const q = parseInt($('#exportQuality').value)/100;
   let mime = 'image/png', ext = 'png';
-  if (fmt === 'jpeg') { mime = 'image/jpeg'; ext = 'jpg'; }
-  if (fmt === 'webp') { mime = 'image/webp'; ext = 'webp'; }
+  if(fmt === 'jpeg'){ mime = 'image/jpeg'; ext = 'jpg'; }
+  if(fmt === 'webp'){ mime = 'image/webp'; ext = 'webp'; }
   State.resultCanvas.toBlob(blob => {
-    if (!blob) { toast('Failed', 'error'); return; }
+    if(!blob){ toast('Failed', 'error'); return; }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1237,40 +1109,40 @@ function downloadResult() {
   }, mime, q);
 }
 
-function downloadPdf() {
-  if (!State.resultCanvas) { toast('No result', 'error'); return; }
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+function downloadPdf(){
+  if(!State.resultCanvas){ toast('No result', 'error'); return; }
+  const {jsPDF} = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
   const img = State.resultCanvas.toDataURL('image/png');
   const pw = 210, ph = 297, m = 15;
-  const mw = pw - m*2, mh = ph - m*2;
+  const mw = pw-m*2, mh = ph-m*2;
   const ratio = State.resultCanvas.width / State.resultCanvas.height;
-  let dw = mw, dh = dw / ratio;
-  if (dh > mh) { dh = mh; dw = dh * ratio; }
+  let dw = mw, dh = dw/ratio;
+  if(dh > mh){ dh = mh; dw = dh*ratio; }
   pdf.setFillColor(255,255,255);
-  pdf.rect(0, 0, pw, ph, 'F');
+  pdf.rect(0,0,pw,ph,'F');
   pdf.addImage(img, 'PNG', (pw-dw)/2, (ph-dh)/2, dw, dh);
   pdf.save(`qunvero-${Date.now()}.pdf`);
   toast('✅ PDF downloaded!', 'success');
 }
 
-function printResult() {
-  if (!State.resultCanvas) { toast('No result', 'error'); return; }
+function printResult(){
+  if(!State.resultCanvas){ toast('No result', 'error'); return; }
   const dataUrl = State.resultCanvas.toDataURL('image/png');
   const win = window.open('', '_blank');
   win.document.write(`<!DOCTYPE html><html><head><title>Print</title><style>body{margin:0;display:grid;place-items:center;min-height:100vh}img{max-width:100%;max-height:100vh}</style></head><body><img src="${dataUrl}" onload="window.print()"></body></html>`);
   win.document.close();
 }
 
-function downloadZip() {
+function downloadZip(){
   const items = State.batchQueue.filter(i => i.status === 'done' && i.resultCanvas);
-  if (!items.length) { toast('No results to ZIP', 'error'); return; }
+  if(!items.length){ toast('No results', 'error'); return; }
   const zip = new JSZip();
   items.forEach(it => {
     const b64 = it.resultCanvas.toDataURL('image/png').split(',')[1];
-    zip.file(it.file.name.replace(/\.[^.]+$/, '') + '-nobg.png', b64, { base64: true });
+    zip.file(it.file.name.replace(/\.[^.]+$/, '') + '-nobg.png', b64, {base64:true});
   });
-  zip.generateAsync({ type: 'blob' }).then(blob => {
+  zip.generateAsync({type:'blob'}).then(blob => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1281,35 +1153,31 @@ function downloadZip() {
   });
 }
 
-// ============ EVENT LISTENERS ============
-function setupEvents() {
+function setupEvents(){
   DOM.uploadZone.addEventListener('click', () => DOM.fileInput.click());
-  DOM.uploadZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); DOM.fileInput.click(); } });
+  DOM.uploadZone.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); DOM.fileInput.click(); }});
   DOM.fileInput.addEventListener('change', e => {
-    if (e.target.files.length > 1) addToBatch(e.target.files);
-    else if (e.target.files[0]) handleFile(e.target.files[0]);
+    if(e.target.files.length > 1) addToBatch(e.target.files);
+    else if(e.target.files[0]) handleFile(e.target.files[0]);
   });
-
   DOM.uploadZone.addEventListener('dragover', e => { e.preventDefault(); DOM.uploadZone.classList.add('dragover'); });
   DOM.uploadZone.addEventListener('dragleave', () => DOM.uploadZone.classList.remove('dragover'));
   DOM.uploadZone.addEventListener('drop', e => {
     e.preventDefault();
     DOM.uploadZone.classList.remove('dragover');
-    if (e.dataTransfer.files.length > 1) addToBatch(e.dataTransfer.files);
-    else if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    if(e.dataTransfer.files.length > 1) addToBatch(e.dataTransfer.files);
+    else if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
-
   document.addEventListener('paste', e => {
     const items = e.clipboardData?.items;
-    if (!items) return;
-    for (const it of items) {
-      if (it.type.startsWith('image/')) {
+    if(!items) return;
+    for(const it of items){
+      if(it.type.startsWith('image/')){
         const f = it.getAsFile();
-        if (f) { handleFile(f); break; }
+        if(f){ handleFile(f); break; }
       }
     }
   });
-
   DOM.removeBgBtn.addEventListener('click', processImage);
   DOM.clearImageBtn.addEventListener('click', () => { cleanup(); toast('Cleared', 'info'); });
   DOM.cancelBtn.addEventListener('click', () => { State.cancelRequested = true; DOM.cancelBtn.disabled = true; });
@@ -1319,8 +1187,8 @@ function setupEvents() {
     $$('.tab-panel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     const p = document.getElementById(t.dataset.tab);
-    if (p) p.classList.add('active');
-    if (t.dataset.tab === 'tabEdit') initEditorCanvas();
+    if(p) p.classList.add('active');
+    if(t.dataset.tab === 'tabEdit') initEditorCanvas();
   }));
 
   $('#toolEraser').addEventListener('click', () => {
@@ -1337,30 +1205,29 @@ function setupEvents() {
     $('#toolEraser').style.background = '';
     $('#toolEraser').style.color = '';
   });
-
   $('#brushSize').addEventListener('input', e => { State.brushSize = +e.target.value; $('#brushSizeVal').textContent = e.target.value; });
-  $('#brushSoftness').addEventListener('input', e => { State.brushSoftness = +e.target.value / 100; $('#brushSoftnessVal').textContent = e.target.value; });
+  $('#brushSoftness').addEventListener('input', e => { State.brushSoftness = +e.target.value/100; $('#brushSoftnessVal').textContent = e.target.value; });
 
   $('#undoBtn').addEventListener('click', () => {
-    if (!State.undoStack.length) return;
+    if(!State.undoStack.length) return;
     State.redoStack.push(DOM.editorCanvas.toDataURL());
     const prev = State.undoStack.pop();
     const im = new Image();
     im.onload = () => {
       const ctx = DOM.editorCanvas.getContext('2d');
-      ctx.clearRect(0, 0, DOM.editorCanvas.width, DOM.editorCanvas.height);
+      ctx.clearRect(0,0,DOM.editorCanvas.width,DOM.editorCanvas.height);
       ctx.drawImage(im, 0, 0);
     };
     im.src = prev;
   });
   $('#redoBtn').addEventListener('click', () => {
-    if (!State.redoStack.length) return;
+    if(!State.redoStack.length) return;
     State.undoStack.push(DOM.editorCanvas.toDataURL());
     const next = State.redoStack.pop();
     const im = new Image();
     im.onload = () => {
       const ctx = DOM.editorCanvas.getContext('2d');
-      ctx.clearRect(0, 0, DOM.editorCanvas.width, DOM.editorCanvas.height);
+      ctx.clearRect(0,0,DOM.editorCanvas.width,DOM.editorCanvas.height);
       ctx.drawImage(im, 0, 0);
     };
     im.src = next;
@@ -1375,9 +1242,9 @@ function setupEvents() {
     $('#bgColorPanel').classList.add('hidden');
     $('#bgGradientPanel').classList.add('hidden');
     $('#bgImagePanel').classList.add('hidden');
-    if (State.bgType === 'color') $('#bgColorPanel').classList.remove('hidden');
-    if (State.bgType === 'gradient') $('#bgGradientPanel').classList.remove('hidden');
-    if (State.bgType === 'image') $('#bgImagePanel').classList.remove('hidden');
+    if(State.bgType === 'color') $('#bgColorPanel').classList.remove('hidden');
+    if(State.bgType === 'gradient') $('#bgGradientPanel').classList.remove('hidden');
+    if(State.bgType === 'image') $('#bgImagePanel').classList.remove('hidden');
     await renderResult();
   }));
 
@@ -1395,14 +1262,14 @@ function setupEvents() {
   $('#uploadBgImageBtn').addEventListener('click', () => $('#bgImageInput').click());
   $('#bgImageInput').addEventListener('change', e => {
     const f = e.target.files[0];
-    if (!f) return;
+    if(!f) return;
     const im = new Image();
     im.onload = async () => { State.bgImage = im; await renderResult(); };
     im.src = URL.createObjectURL(f);
   });
 
   $('#shadowToggle').addEventListener('change', async e => { State.shadowEnabled = e.target.checked; await renderResult(); });
-  $('#shadowOpacity').addEventListener('input', async e => { State.shadowOpacity = +e.target.value / 100; $('#shadowOpacityVal').textContent = e.target.value; await renderResult(); });
+  $('#shadowOpacity').addEventListener('input', async e => { State.shadowOpacity = +e.target.value/100; $('#shadowOpacityVal').textContent = e.target.value; await renderResult(); });
   $('#shadowBlur').addEventListener('input', async e => { State.shadowBlur = +e.target.value; $('#shadowBlurVal').textContent = e.target.value; await renderResult(); });
   $('#shadowDistance').addEventListener('input', async e => { State.shadowDistance = +e.target.value; $('#shadowDistanceVal').textContent = e.target.value; await renderResult(); });
   $('#shadowAngle').addEventListener('input', async e => { State.shadowAngle = +e.target.value; $('#shadowAngleVal').textContent = e.target.value + '°'; await renderResult(); });
@@ -1413,8 +1280,11 @@ function setupEvents() {
   $('#enhBrightness').addEventListener('input', async e => { State.enhance.brightness = +e.target.value; $('#enhBrightnessVal').textContent = e.target.value; await renderResult(); });
   $('#enhSaturation').addEventListener('input', async e => { State.enhance.saturation = +e.target.value; $('#enhSaturationVal').textContent = e.target.value; await renderResult(); });
   $('#resetEnhanceBtn').addEventListener('click', async () => {
-    State.enhance = { sharpness: 0, contrast: 0, brightness: 0, saturation: 0 };
-    ['sharpness','contrast','brightness','saturation'].forEach(k => { $('#enh' + k.charAt(0).toUpperCase() + k.slice(1)).value = 0; $('#enh' + k.charAt(0).toUpperCase() + k.slice(1) + 'Val').textContent = '0'; });
+    State.enhance = {sharpness:0,contrast:0,brightness:0,saturation:0};
+    ['Sharpness','Contrast','Brightness','Saturation'].forEach(k => {
+      $('#enh'+k).value = 0;
+      $('#enh'+k+'Val').textContent = '0';
+    });
     await renderResult();
   });
 
@@ -1433,20 +1303,20 @@ function setupEvents() {
   $('#clearBatchBtn').addEventListener('click', () => { State.batchQueue = []; renderBatchList(); DOM.batchSection.classList.add('hidden'); });
 }
 
-// ============ INIT ============
-async function init() {
+async function init(){
   setupEvents();
   setupCompareSlider();
   await detectDevice();
   console.log('🎨 Qunvero initialized');
   console.log('Device:', State.deviceInfo);
+  console.log('ORT Version:', ort?.env?.versions?.web || 'unknown');
   loadModel().catch(e => console.warn('Preload:', e.message));
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
 
-window.addEventListener('error', e => { if (!/ResizeObserver/.test(e.message)) console.error(e); });
+window.addEventListener('error', e => { if(!/ResizeObserver/.test(e.message)) console.error(e); });
 </script>
 </body>
 </html>
