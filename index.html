@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0b0f" />
+<title>Qunvero — Background Remover</title>
+<meta name="description" content="Remove image backgrounds instantly with AI. Free, private, no watermark." />
+
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<style>
+:root{
+  --bg-0:#0a0b0f;--bg-1:#12131a;--bg-2:#191b24;--bg-3:#22242f;
+  --border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.14);
+  --text-0:#fff;--text-1:#c8cad3;--text-2:#8a8d9a;
+  --accent:#6d5efc;--accent-2:#8b7dff;--accent-glow:rgba(109,94,252,.35);
+  --radius-lg:20px;--shadow:0 20px 60px -20px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  background:radial-gradient(1200px 600px at 10% -10%,rgba(109,94,252,.18),transparent 60%),
+             radial-gradient(1000px 500px at 90% 0%,rgba(139,125,255,.12),transparent 55%),
+             var(--bg-0);
+  color:var(--text-0);min-height:100vh;line-height:1.5;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(10,11,15,.72);border-bottom:1px solid var(--border)}
+.header-inner{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px;min-width:0}
+.logo{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;box-shadow:0 8px 24px -8px var(--accent-glow);font-weight:800;font-size:16px;color:#fff}
+.brand-text{display:flex;flex-direction:column;min-width:0}
+.brand-text span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-text small{font-size:10px;color:var(--text-2);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.nav-cta{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:8px 14px;border-radius:9px}
+main{max-width:1240px;margin:0 auto;padding:24px 20px 80px}
+.hero{text-align:center;margin:20px 0 32px}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.12;background:linear-gradient(180deg,#fff,#b9b6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:12px;color:var(--text-1);font-size:15px;max-width:620px;margin-left:auto;margin-right:auto;padding:0 8px}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:12px;color:var(--text-1);background:var(--bg-2);border:1px solid var(--border);padding:6px 12px;border-radius:999px;white-space:nowrap}
+.drop{position:relative;border:2px dashed var(--border-strong);border-radius:var(--radius-lg);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));padding:56px 20px;text-align:center;cursor:pointer;transition:.25s;overflow:hidden;user-select:none}
+.drop::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 50% 0%,var(--accent-glow),transparent 70%);opacity:0;transition:.3s;pointer-events:none}
+.drop:hover{border-color:var(--accent);transform:translateY(-2px)}
+.drop:hover::before{opacity:1}
+.drop.drag{border-color:var(--accent);background:rgba(109,94,252,.08)}
+.drop-icon{width:64px;height:64px;margin:0 auto 18px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;box-shadow:0 14px 40px -12px var(--accent-glow);pointer-events:none}
+.drop-icon svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.drop h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.drop p{color:var(--text-2);font-size:14px}
+.formats{margin-top:14px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.chip{font-size:11px;color:var(--text-1);background:var(--bg-3);border:1px solid var(--border);padding:4px 9px;border-radius:7px;font-weight:600}
+.workspace{display:none;grid-template-columns:1fr;gap:20px}
+.workspace.active{display:grid}
+.card{background:linear-gradient(180deg,var(--bg-1),var(--bg-0));border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
+.card-head h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+.head-actions{display:flex;gap:6px}
+.compare{position:relative;width:100%;aspect-ratio:1/1;max-height:70vh;background:linear-gradient(45deg,#1a1c26 25%,transparent 25%),linear-gradient(-45deg,#1a1c26 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#1a1c26 75%),linear-gradient(-45deg,transparent 75%,#1a1c26 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;background-color:var(--bg-2);overflow:hidden;user-select:none;touch-action:pan-y}
+.layer{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
+.layer img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;user-select:none;transition:transform .2s;-webkit-user-drag:none}
+.layer.after{clip-path:inset(0 0 0 50%)}
+.handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,transparent,#fff,transparent);transform:translateX(-1px);pointer-events:none;z-index:5}
+.handle::after{content:"";position:absolute;top:50%;left:50%;width:40px;height:40px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 6px 24px rgba(0,0,0,.5);background-image:linear-gradient(90deg,transparent 44%,#333 44%,#333 56%,transparent 56%)}
+.tag{position:absolute;top:12px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,0,0,.65);color:#fff;padding:5px 10px;border-radius:7px;z-index:6;pointer-events:none}
+.tag.left{left:12px}
+.tag.right{right:12px;background:rgba(109,94,252,.85)}
+.loading{position:absolute;inset:0;z-index:20;background:rgba(10,11,15,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:none;place-items:center;text-align:center;padding:20px}
+.loading.active{display:grid}
+.loading h4{font-size:15px;margin-bottom:6px}
+.loading p{color:var(--text-2);font-size:12.5px;margin-bottom:16px;padding:0 10px}
+.progress{width:min(300px,80vw);height:6px;background:var(--bg-3);border-radius:99px;overflow:hidden;margin:0 auto}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:99px;transition:width .25s;box-shadow:0 0 14px var(--accent-glow)}
+.spinner{width:42px;height:42px;border:3px solid var(--bg-3);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-sub{margin-top:10px;font-size:11px;color:var(--text-2)}
+.toolbar{display:flex;gap:6px;padding:10px 12px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--border);background:var(--bg-1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:10px;background:var(--bg-2);color:var(--text-1);border:1px solid var(--border);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.18s;white-space:nowrap;user-select:none}
+.btn:hover{background:var(--bg-3);color:#fff;border-color:var(--border-strong);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.ghost{background:transparent}
+.zoom-val{min-width:52px;text-align:center;font-size:12.5px;font-weight:600;color:var(--accent-2);padding:0 4px}
+.side{display:flex;flex-direction:column;gap:16px}
+.section{padding:16px 18px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section h4{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2);margin-bottom:12px}
+.control{margin-bottom:12px}
+.control:last-child{margin-bottom:0}
+.control label{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-1);margin-bottom:7px;font-weight:500}
+.control label span{color:var(--accent-2);font-weight:600}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;background:var(--bg-3);border-radius:99px;outline:none;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));cursor:pointer;box-shadow:0 0 0 4px rgba(109,94,252,.18);border:none}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:none;background:var(--accent);cursor:pointer}
+.color-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.swatch{aspect-ratio:1;border-radius:9px;cursor:pointer;border:2px solid transparent;transition:.15s;background-size:cover;background-position:center;user-select:none}
+.swatch:hover{transform:scale(1.06)}
+.swatch:active{transform:scale(.95)}
+.swatch.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(109,94,252,.25)}
+.swatch.white{background:#fff}
+.swatch.black{background:#000}
+.swatch.transparent{background:linear-gradient(45deg,#333 25%,transparent 25%),linear-gradient(-45deg,#333 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#333 75%),linear-gradient(-45deg,transparent 75%,#333 75%);background-size:10px 10px;background-position:0 0,0 5px,5px -5px,-5px 0;background-color:#1a1c26}
+.upload-bg{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;border:1px dashed var(--border-strong);background:var(--bg-2);color:var(--text-1);font-size:12.5px;font-weight:600;cursor:pointer;transition:.18s;user-select:none}
+.upload-bg:hover{border-color:var(--accent);color:#fff;background:var(--bg-3)}
+.dl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.dl-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:11px;background:var(--bg-2);border:1px solid var(--border);color:var(--text-1);cursor:pointer;transition:.18s;font-family:inherit;user-select:none}
+.dl-btn:hover{background:var(--bg-3);color:#fff;border-color:var(--accent);transform:translateY(-2px)}
+.dl-btn:active{transform:translateY(0)}
+.dl-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dl-btn strong{font-size:12px;font-weight:700}
+.dl-btn small{font-size:10px;color:var(--text-2)}
+.dl-btn.full{grid-column:span 2}
+.history{display:none;gap:8px;padding:12px 14px;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg-1);margin-top:16px;scrollbar-width:thin}
+.history.show{display:flex}
+.history::-webkit-scrollbar{height:6px}
+.history::-webkit-scrollbar-thumb{background:var(--bg-3);border-radius:99px}
+.hist-item{flex:0 0 auto;width:54px;height:54px;border-radius:9px;border:2px solid transparent;cursor:pointer;overflow:hidden;background:var(--bg-3);transition:.15s;padding:0;display:grid;place-items:center}
+.hist-item:hover{border-color:var(--border-strong)}
+.hist-item.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(109,94,252,.2)}
+.hist-item canvas{max-width:100%;max-height:100%;display:block}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,140%);background:var(--bg-3);color:#fff;padding:12px 20px;border-radius:11px;font-size:13px;font-weight:500;box-shadow:0 16px 40px rgba(0,0,0,.5);z-index:999;border:1px solid var(--border-strong);transition:.3s cubic-bezier(.2,.9,.3,1.2);display:flex;align-items:center;gap:9px;max-width:92vw;pointer-events:none}
+.toast.show{transform:translate(-50%,0)}
+.toast.success{border-color:rgba(34,197,94,.4)}
+.toast.error{border-color:rgba(239,68,68,.4)}
+.toast svg{width:16px;height:16px;flex-shrink:0}
+footer{text-align:center;padding:28px 20px;color:var(--text-2);font-size:12px;border-top:1px solid var(--border);margin-top:36px}
+footer a{color:var(--accent-2);text-decoration:none}
+@media (min-width:960px){
+  .workspace.active{grid-template-columns:minmax(0,1fr) 340px}
+  .compare{aspect-ratio:16/11;max-height:66vh}
+}
+@media (max-width:640px){
+  .header-inner{padding:12px 14px}
+  .brand{font-size:14px}
+  .logo{width:32px;height:32px;font-size:14px}
+  main{padding:18px 14px 60px}
+  .hero{margin:12px 0 22px}
+  .drop{padding:42px 16px}
+  .drop h3{font-size:17px}
+  .drop p{font-size:13px}
+  .toolbar{padding:8px 10px;gap:5px}
+  .btn{padding:8px 10px;font-size:12px}
+  .section{padding:14px 15px}
+  .compare{aspect-ratio:4/5}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo">Q</div>
+      <div class="brand-text">
+        <span>Background Remover</span>
+        <small>by Qunvero</small>
+      </div>
+    </div>
+    <a href="#" class="nav-cta">Get Pro</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Remove Backgrounds<br>in One Click</h1>
+    <p>AI-powered precision. 100% private — everything runs in your browser. No uploads, no servers, no watermark.</p>
+    <div class="badges">
+      <span class="badge">⚡ Fast AI</span>
+      <span class="badge">🔒 Fully Private</span>
+      <span class="badge">🎯 Original Quality</span>
+      <span class="badge">📱 Mobile Ready</span>
+    </div>
+  </section>
+
+  <div id="drop" class="drop" role="button" tabindex="0" aria-label="Upload image">
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <h3>Drop your image here</h3>
+    <p>or click to browse — JPG, PNG, WEBP up to 20MB</p>
+    <div class="formats">
+      <span class="chip">JPG</span>
+      <span class="chip">PNG</span>
+      <span class="chip">WEBP</span>
+    </div>
+    <input type="file" id="file" accept="image/jpeg,image/png,image/webp" hidden />
+  </div>
+
+  <div id="workspace" class="workspace">
+    <div>
+      <div class="card">
+        <div class="card-head">
+          <h3><span class="dot"></span> Preview</h3>
+          <div class="head-actions">
+            <button class="btn ghost" id="clearBtn">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+              <span>Clear</span>
+            </button>
+            <button class="btn ghost" id="reuploadBtn">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>New</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="compare" id="compare">
+          <div class="layer"><img id="beforeImg" alt="original" /></div>
+          <div class="layer after" id="afterLayer"><img id="afterImg" alt="result" /></div>
+          <div class="tag left">Original</div>
+          <div class="tag right">Removed</div>
+          <div class="handle" id="handle"></div>
+          <div class="loading" id="loading">
+            <div>
+              <div class="spinner"></div>
+              <h4 id="loadingTitle">Loading AI model…</h4>
+              <p id="loadingMsg">First run downloads ~44MB, then it's cached</p>
+              <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+              <div class="loading-sub" id="loadingSub">Preparing…</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn" id="undoBtn" disabled>
+            <svg viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+            <span>Undo</span>
+          </button>
+          <button class="btn" id="redoBtn" disabled>
+            <svg viewBox="0 0 24 24"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
+            <span>Redo</span>
+          </button>
+          <button class="btn" id="zoomOutBtn">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+          <span class="zoom-val" id="zoomVal">100%</span>
+          <button class="btn" id="zoomInBtn">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="history" id="history"></div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <div class="section">
+          <h4>Background</h4>
+          <div class="color-grid">
+            <div class="swatch transparent active" data-bg="transparent"></div>
+            <div class="swatch white" data-bg="#ffffff"></div>
+            <div class="swatch black" data-bg="#000000"></div>
+            <div class="swatch" data-bg="#6d5efc" style="background:#6d5efc"></div>
+            <div class="swatch" data-bg="#0ea5e9" style="background:#0ea5e9"></div>
+            <div class="swatch" data-bg="#22c55e" style="background:#22c55e"></div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:stretch">
+            <input type="color" id="customColor" value="#ff6b6b" style="width:46px;border:none;border-radius:9px;background:transparent;cursor:pointer;padding:0;flex-shrink:0" />
+            <label class="upload-bg" style="flex:1;margin:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Custom BG</span>
+              <input type="file" id="bgUpload" accept="image/*" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div class="section">
+          <h4>Refinement</h4>
+          <div class="control">
+            <label>Edge Smoothing <span id="smoothVal">1</span></label>
+            <input type="range" id="smooth" min="0" max="4" step="1" value="1" />
+          </div>
+          <div class="control">
+            <label>Feather Edges <span id="featherVal">0</span></label>
+            <input type="range" id="feather" min="0" max="5" step="1" value="0" />
+          </div>
+          <div class="control">
+            <label>Hair Refinement <span id="hairVal">0</span></label>
+            <input type="range" id="hair" min="0" max="5" step="1" value="0" />
+          </div>
+        </div>
+
+        <div class="section">
+          <h4>Download</h4>
+          <div class="dl-grid">
+            <button class="dl-btn" data-format="png">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <strong>PNG</strong><small>Lossless</small>
+            </button>
+            <button class="dl-btn" data-format="jpg">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <strong>JPG</strong><small>Compact</small>
+            </button>
+            <button class="dl-btn" data-format="webp">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <strong>WEBP</strong><small>Modern</small>
+            </button>
+            <button class="dl-btn" data-format="pdf">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <strong>PDF</strong><small>Document</small>
+            </button>
+            <button class="dl-btn full" data-format="print">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <strong>Print</strong><small>Open print dialog</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>Built with ❤️ for <strong>Qunvero</strong> · AI runs 100% client-side</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const MODEL_URL='https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model_quantized.onnx';
+const SIZE=1024, MAX_MB=20, ACCEPTED=['image/jpeg','image/png','image/webp'];
+
+const S={originalBitmap:null,originalName:'image',rawMask:null,maskCanvas:null,cutoutCanvas:null,rendered:null,background:'transparent',backgroundImage:null,history:[],future:[],zoom:1,session:null,modelLoading:null,busy:false,edgeParams:{smooth:1,feather:0,hair:0}};
+
+const $=id=>document.getElementById(id);
+const drop=$('drop'),fileInput=$('file'),workspace=$('workspace'),beforeImg=$('beforeImg'),afterImg=$('afterImg'),afterLayer=$('afterLayer'),compare=$('compare'),handle=$('handle'),loading=$('loading'),loadingTitle=$('loadingTitle'),loadingMsg=$('loadingMsg'),loadingSub=$('loadingSub'),progressBar=$('progressBar'),historyStrip=$('history'),zoomVal=$('zoomVal');
+
+let toastTimer;
+function toast(msg,type){
+  type=type||'info';
+  const el=$('toast');
+  const icons={
+    success:'<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="#8b7dff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+  el.innerHTML=(icons[type]||icons.info)+'<span>'+msg+'</span>';
+  el.className='toast show '+type;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+function showLoading(t,m,s){loadingTitle.textContent=t;loadingMsg.textContent=m;loadingSub.textContent=s||'';progressBar.style.width='0%';loading.classList.add('active')}
+function setProgress(p,s){progressBar.style.width=Math.max(0,Math.min(100,p))+'%';if(s)loadingSub.textContent=s}
+function hideLoading(){loading.classList.remove('active')}
+
+async function loadModel(){
+  if(S.session)return S.session;
+  if(S.modelLoading)return S.modelLoading;
+  S.modelLoading=(async()=>{
+    try{
+      ort.env.wasm.wasmPaths='https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/';
+      ort.env.wasm.numThreads=Math.min(4,navigator.hardwareConcurrency||2);
+      ort.env.wasm.simd=true;
+      showLoading('Loading AI model…','First run downloads ~44MB, then it\'s cached','Fetching…');
+      const resp=await fetch(MODEL_URL);
+      if(!resp.ok)throw new Error('Model download failed: '+resp.status);
+      const total=+resp.headers.get('content-length')||44*1024*1024;
+      const reader=resp.body.getReader();
+      const chunks=[];let received=0;
+      while(true){
+        const {done,value}=await reader.read();
+        if(done)break;
+        chunks.push(value);received+=value.length;
+        const pct=5+(received/total)*75;
+        setProgress(pct,'Downloading… '+(received/1048576).toFixed(1)+' / '+(total/1048576).toFixed(1)+' MB');
+      }
+      const buffer=new Uint8Array(received);let offset=0;
+      for(const c of chunks){buffer.set(c,offset);offset+=c.length}
+      setProgress(82,'Initializing…');
+      await new Promise(r=>setTimeout(r,30));
+      const session=await ort.InferenceSession.create(buffer,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
+      S.session=session;setProgress(100,'Ready');
+      return session;
+    }catch(e){S.modelLoading=null;throw e}
+  })();
+  return S.modelLoading;
+}
+
+function preprocess(src){
+  const c=document.createElement('canvas');c.width=SIZE;c.height=SIZE;
+  const ctx=c.getContext('2d');ctx.imageSmoothingQuality='high';
+  const sw=src.width,sh=src.height;
+  const scale=Math.min(SIZE/sw,SIZE/sh);
+  const dw=Math.round(sw*scale),dh=Math.round(sh*scale);
+  const dx=Math.floor((SIZE-dw)/2),dy=Math.floor((SIZE-dh)/2);
+  ctx.fillStyle='#808080';ctx.fillRect(0,0,SIZE,SIZE);
+  ctx.drawImage(src,dx,dy,dw,dh);
+  const data=ctx.getImageData(0,0,SIZE,SIZE).data;
+  const f=new Float32Array(SIZE*SIZE*3);
+  for(let i=0,j=0;i<data.length;i+=4,j+=3){f[j]=data[i]/255;f[j+1]=data[i+1]/255;f[j+2]=data[i+2]/255}
+  return {tensor:new ort.Tensor('float32',f,[1,3,SIZE,SIZE]),layout:{dx,dy,dw,dh,size:SIZE}};
+}
+
+async function postprocess(output,layout,tw,th){
+  const out=output.data,size=layout.size;
+  let mn=Infinity,mx=-Infinity;
+  for(let i=0;i<out.length;i++){if(out[i]<mn)mn=out[i];if(out[i]>mx)mx=out[i]}
+  const range=mx-mn||1;
+  const mc=document.createElement('canvas');mc.width=size;mc.height=size;
+  const mctx=mc.getContext('2d');
+  const md=mctx.createImageData(size,size);
+  for(let i=0;i<size*size;i++){
+    let v=(out[i]-mn)/range;
+    v=1/(1+Math.exp(-(v-0.5)*12));
+    const a=Math.round(v*255);
+    md.data[i*4]=255;md.data[i*4+1]=255;md.data[i*4+2]=255;md.data[i*4+3]=a;
+  }
+  mctx.putImageData(md,0,0);
+  const cr=document.createElement('canvas');cr.width=layout.dw;cr.height=layout.dh;
+  cr.getContext('2d').drawImage(mc,layout.dx,layout.dy,layout.dw,layout.dh,0,0,layout.dw,layout.dh);
+  const full=document.createElement('canvas');full.width=tw;full.height=th;
+  const fctx=full.getContext('2d');fctx.imageSmoothingQuality='high';
+  fctx.drawImage(cr,0,0,tw,th);
+  return full;
+}
+
+function refineMask(mask,params){
+  const {smooth,feather,hair}=params;
+  if(!smooth&&!feather&&!hair)return mask;
+  const w=mask.width,h=mask.height;
+  const ctx=mask.getContext('2d');
+  const img=ctx.getImageData(0,0,w,h),d=img.data;
+  if(smooth>0){
+    for(let p=0;p<smooth;p++){
+      const copy=new Uint8ClampedArray(d.length);copy.set(d);
+      for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+        const i=(y*w+x)*4+3;let sum=0;
+        for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)sum+=copy[i+(dy*w+dx)*4];
+        d[i]=sum/9;
+      }
+    }
+  }
+  if(feather>0){
+    const r=feather;
+    const copy=new Uint8ClampedArray(d.length);copy.set(d);
+    for(let y=r;y<h-r;y++)for(let x=r;x<w-r;x++){
+      const i=(y*w+x)*4+3,a=copy[i];
+      if(a>40&&a<215){
+        let sum=0,count=0;
+        for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){sum+=copy[i+(dy*w+dx)*4];count++}
+        d[i]=sum/count;
+      }
+    }
+  }
+  if(hair>0){
+    const st=hair/5;
+    for(let i=3;i<d.length;i+=4){
+      let a=d[i]/255;a=a*a*(3-2*a);
+      d[i]=Math.round((a*(1-st)+(d[i]/255)*st)*255);
+    }
+  }
+  ctx.putImageData(img,0,0);
+  return mask;
+}
+
+function applyMask(bitmap,mask){
+  const w=bitmap.width,h=bitmap.height;
+  const out=document.createElement('canvas');out.width=w;out.height=h;
+  const ctx=out.getContext('2d');
+  ctx.drawImage(bitmap,0,0,w,h);
+  const t=document.createElement('canvas');t.width=w;t.height=h;
+  t.getContext('2d').drawImage(mask,0,0,w,h);
+  ctx.globalCompositeOperation='destination-in';
+  ctx.drawImage(t,0,0,w,h);
+  ctx.globalCompositeOperation='source-over';
+  return out;
+}
+
+function composeFinal(cutout,bg,bgImg){
+  const w=cutout.width,h=cutout.height;
+  const out=document.createElement('canvas');out.width=w;out.height=h;
+  const ctx=out.getContext('2d');
+  if(bg==='transparent'&&!bgImg){ctx.drawImage(cutout,0,0);return out}
+  if(bgImg){
+    const iw=bgImg.naturalWidth||bgImg.width,ih=bgImg.naturalHeight||bgImg.height;
+    const scale=Math.max(w/iw,h/ih),dw=iw*scale,dh=ih*scale;
+    ctx.drawImage(bgImg,(w-dw)/2,(h-dh)/2,dw,dh);
+  }else if(bg!=='transparent'){ctx.fillStyle=bg;ctx.fillRect(0,0,w,h)}
+  ctx.drawImage(cutout,0,0);
+  return out;
+}
+
+async function processImage(bitmap){
+  if(S.busy)return;
+  S.busy=true;
+  try{
+    const session=await loadModel();
+    showLoading('Removing background…','Analyzing image with AI','Preparing…');
+    setProgress(10,'Preparing…');
+    await new Promise(r=>setTimeout(r,30));
+    const src=document.createElement('canvas');src.width=bitmap.width;src.height=bitmap.height;
+    src.getContext('2d').drawImage(bitmap,0,0);
+    setProgress(20,'Resizing for AI…');
+    const {tensor,layout}=preprocess(src);
+    setProgress(40,'Running AI model…');
+    await new Promise(r=>setTimeout(r,20));
+    const inputName=session.inputNames[0];
+    const results=await session.run({[inputName]:tensor});
+    setProgress(75,'Generating mask…');
+    const output=results[session.outputNames[0]];
+    const raw=await postprocess(output,layout,bitmap.width,bitmap.height);
+    S.rawMask=raw;
+    setProgress(85,'Refining edges…');
+    const mask=refineMask(cloneCanvas(raw),S.edgeParams);
+    S.maskCanvas=mask;
+    setProgress(92,'Compositing…');
+    S.cutoutCanvas=applyMask(bitmap,mask);
+    renderResult();
+    pushHistory();
+    setProgress(100,'Done');
+    await new Promise(r=>setTimeout(r,250));
+    hideLoading();
+    toast('Background removed successfully','success');
+  }catch(err){
+    console.error(err);
+    hideLoading();
+    toast('Processing failed: '+(err.message||'unknown'),'error');
+  }finally{S.busy=false}
+}
+
+function renderResult(){
+  if(!S.cutoutCanvas)return;
+  const final=composeFinal(S.cutoutCanvas,S.background,S.backgroundImage);
+  S.rendered=final;
+  final.toBlob(function(blob){
+    const url=URL.createObjectURL(blob);
+    if(afterImg.dataset.url)URL.revokeObjectURL(afterImg.dataset.url);
+    afterImg.dataset.url=url;
+    afterImg.src=url;
+  },'image/png');
+}
+
+function cloneCanvas(src){const c=document.createElement('canvas');c.width=src.width;c.height=src.height;c.getContext('2d').drawImage(src,0,0);return c}
+
+function pushHistory(){
+  const snap=cloneCanvas(S.cutoutCanvas);
+  S.history.push({cutout:snap,bg:S.background,bgImg:S.backgroundImage,edge:Object.assign({},S.edgeParams)});
+  if(S.history.length>12)S.history.shift();
+  S.future.length=0;
+  updateHistoryUI();updateUndoRedo();
+}
+
+function updateHistoryUI(){
+  if(S.history.length<2){historyStrip.classList.remove('show');return}
+  historyStrip.classList.add('show');
+  historyStrip.innerHTML='';
+  S.history.forEach(function(h,idx){
+    const div=document.createElement('div');
+    div.className='hist-item'+(idx===S.history.length-1?' active':'');
+    const thumb=document.createElement('canvas');
+    const size=54;thumb.width=size;thumb.height=size;
+    const tctx=thumb.getContext('2d');
+    const ar=h.cutout.width/h.cutout.height;
+    let dw,dh;
+    if(ar>1){dw=size;dh=size/ar}else{dh=size;dw=size*ar}
+    tctx.drawImage(h.cutout,(size-dw)/2,(size-dh)/2,dw,dh);
+    div.appendChild(thumb);
+    div.onclick=function(){restoreHistory(idx)};
+    historyStrip.appendChild(div);
+  });
+}
+
+function restoreHistory(idx){
+  const h=S.history[idx];if(!h)return;
+  S.cutoutCanvas=h.cutout;S.background=h.bg;S.backgroundImage=h.bgImg;S.edgeParams=Object.assign({},h.edge);
+  document.querySelectorAll('.swatch').forEach(function(s){s.classList.toggle('active',s.dataset.bg===h.bg)});
+  $('smooth').value=h.edge.smooth;$('smoothVal').textContent=h.edge.smooth;
+  $('feather').value=h.edge.feather;$('featherVal').textContent=h.edge.feather;
+  $('hair').value=h.edge.hair;$('hairVal').textContent=h.edge.hair;
+  renderResult();updateHistoryUI();updateUndoRedo();
+}
+
+function updateUndoRedo(){
+  $('undoBtn').disabled=S.history.length<2;
+  $('redoBtn').disabled=S.future.length===0;
+}
+
+async function handleFile(file){
+  if(!file)return;
+  if(ACCEPTED.indexOf(file.type)===-1){toast('Unsupported format. Use JPG, PNG, or WEBP.','error');return}
+  if(file.size>MAX_MB*1024*1024){toast('File too large (max '+MAX_MB+'MB)','error');return}
+  try{
+    S.originalName=(file.name||'image').replace(/\.[^.]+$/,'');
+    const bitmap=await createImageBitmap(file);
+    S.originalBitmap=bitmap;
+    const srcUrl=URL.createObjectURL(file);
+    if(beforeImg.dataset.url)URL.revokeObjectURL(beforeImg.dataset.url);
+    beforeImg.dataset.url=srcUrl;
+    beforeImg.src=srcUrl;
+    S.history.length=0;S.future.length=0;S.background='transparent';S.backgroundImage=null;S.zoom=1;
+    applyZoom();
+    document.querySelectorAll('.swatch').forEach(function(s){s.classList.toggle('active',s.dataset.bg==='transparent')});
+    drop.style.display='none';
+    workspace.classList.add('active');
+    historyStrip.classList.remove('show');
+    await processImage(bitmap);
+  }catch(e){console.error(e);toast('Failed to load image','error')}
+}
+
+let dragging=false;
+function setSlider(x){
+  const rect=compare.getBoundingClientRect();
+  let pct=((x-rect.left)/rect.width)*100;
+  pct=Math.max(0,Math.min(100,pct));
+  afterLayer.style.clipPath='inset(0 0 0 '+pct+'%)';
+  handle.style.left=pct+'%';
+}
+function onDown(e){dragging=true;const p=e.touches?e.touches[0]:e;setSlider(p.clientX)}
+function onMove(e){if(!dragging)return;const p=e.touches?e.touches[0]:e;setSlider(p.clientX);if(e.cancelable&&e.touches)e.preventDefault()}
+function onUp(){dragging=false}
+compare.addEventListener('mousedown',onDown);
+compare.addEventListener('touchstart',onDown,{passive:true});
+window.addEventListener('mousemove',onMove);
+window.addEventListener('touchmove',onMove,{passive:false});
+window.addEventListener('mouseup',onUp);
+window.addEventListener('touchend',onUp);
+
+function applyZoom(){
+  const scale=S.zoom;
+  beforeImg.style.transform='scale('+scale+')';
+  afterImg.style.transform='scale('+scale+')';
+  zoomVal.textContent=Math.round(scale*100)+'%';
+}
+$('zoomInBtn').onclick=function(){S.zoom=Math.min(4,S.zoom+0.25);applyZoom()};
+$('zoomOutBtn').onclick=function(){S.zoom=Math.max(0.25,S.zoom-0.25);applyZoom()};
+
+document.querySelectorAll('.swatch').forEach(function(sw){
+  sw.onclick=function(){
+    document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('active')});
+    sw.classList.add('active');
+    S.background=sw.dataset.bg;S.backgroundImage=null;renderResult();
+  };
+});
+$('customColor').oninput=function(e){
+  S.background=e.target.value;S.backgroundImage=null;
+  document.querySelectorAll('.swatch').forEach(function(s){s.classList.remove('active')});
+  renderResult();
+};
+$('bgUpload').onchange=function(e){
+  const f=e.target.files[0];if(!f)return;
+  const img=new Image();
+  img.onload=function(){S.backgroundImage=img;renderResult();toast('Custom background applied','success')};
+  img.onerror=function(){toast('Failed to load background','error')};
+  img.src=URL.createObjectURL(f);
+};
+
+function bindSlider(id,valId,key){
+  const el=$(id),val=$(valId);
+  el.oninput=function(){val.textContent=el.value;S.edgeParams[key]=+el.value};
+  el.onchange=function(){
+    if(!S.rawMask||!S.originalBitmap)return;
+    const refined=refineMask(cloneCanvas(S.rawMask),S.edgeParams);
+    S.maskCanvas=refined;
+    S.cutoutCanvas=applyMask(S.originalBitmap,refined);
+    renderResult();
+  };
+}
+bindSlider('smooth','smoothVal','smooth');
+bindSlider('feather','featherVal','feather');
+bindSlider('hair','hairVal','hair');
+
+$('undoBtn').onclick=function(){
+  if(S.history.length<2)return;
+  const cur=S.history.pop();S.future.push(cur);
+  restoreHistory(S.history.length-1);updateUndoRedo();
+};
+$('redoBtn').onclick=function(){
+  if(!S.future.length)return;
+  const next=S.future.pop();S.history.push(next);
+  restoreHistory(S.history.length-1);updateUndoRedo();
+};
+
+function clearAll(){
+  S.originalBitmap=null;S.rawMask=null;S.maskCanvas=null;S.cutoutCanvas=null;S.rendered=null;
+  S.history.length=0;S.future.length=0;
+  beforeImg.removeAttribute('src');afterImg.removeAttribute('src');
+  if(beforeImg.dataset.url)URL.revokeObjectURL(beforeImg.dataset.url);
+  if(afterImg.dataset.url)URL.revokeObjectURL(afterImg.dataset.url);
+  workspace.classList.remove('active');
+  drop.style.display='';
+  fileInput.value='';
+  historyStrip.classList.remove('show');
+  toast('Cleared','info');
+}
+$('clearBtn').onclick=clearAll;
+$('reuploadBtn').onclick=clearAll;
+
+drop.onclick=function(){fileInput.click()};
+drop.onkeydown=function(e){if(e.key==='Enter'||e.key===' ')fileInput.click()};
+fileInput.onchange=function(e){handleFile(e.target.files[0])};
+
+['dragenter','dragover'].forEach(function(ev){
+  drop.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();drop.classList.add('drag')});
+});
+['dragleave','drop'].forEach(function(ev){
+  drop.addEventListener(ev,function(e){
+    e.preventDefault();e.stopPropagation();
+    if(ev==='dragleave'&&drop.contains(e.relatedTarget))return;
+    drop.classList.remove('drag');
+  });
+});
+drop.addEventListener('drop',function(e){const f=e.dataTransfer.files[0];if(f)handleFile(f)});
+workspace.addEventListener('dragover',function(e){e.preventDefault()});
+workspace.addEventListener('drop',function(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)handleFile(f)});
+
+document.querySelectorAll('.dl-btn').forEach(function(btn){
+  btn.onclick=function(){download(btn.dataset.format)};
+});
+
+function flattenOn(canvas,color){
+  const c=document.createElement('canvas');c.width=canvas.width;c.height=canvas.height;
+  const ctx=c.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(canvas,0,0);return c;
+}
+function saveBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(url)},1000);
+  toast('Downloaded '+filename,'success');
+}
+async function download(format){
+  if(!S.rendered){toast('No image to download','error');return}
+  const canvas=S.rendered;
+  const name=S.originalName+'-qunvero';
+  try{
+    if(format==='png'){canvas.toBlob(function(b){saveBlob(b,name+'.png')},'image/png')}
+    else if(format==='jpg'){const flat=flattenOn(canvas,'#ffffff');flat.toBlob(function(b){saveBlob(b,name+'.jpg')},'image/jpeg',0.95)}
+    else if(format==='webp'){canvas.toBlob(function(b){saveBlob(b,name+'.webp')},'image/webp',0.95)}
+    else if(format==='pdf'){
+      const jsPDF=window.jspdf.jsPDF;
+      const orientation=canvas.width>canvas.height?'l':'p';
+      const pdf=new jsPDF({orientation:orientation,unit:'px',format:[canvas.width,canvas.height],hotfixes:['px_scaling']});
+      const dataUrl=canvas.toDataURL('image/png');
+      pdf.addImage(dataUrl,'PNG',0,0,canvas.width,canvas.height);
+      pdf.save(name+'.pdf');
+      toast('PDF downloaded','success');
+    }else if(format==='print'){
+      const dataUrl=canvas.toDataURL('image/png');
+      const win=window.open('','_blank');
+      if(!win){toast('Popup blocked','error');return}
+      win.document.write('<!DOCTYPE html><html><head><title>Print</title><style>body{margin:0;display:grid;place-items:center;min-height:100vh;background:#fff}img{max-width:100%;max-height:100vh;display:block}</style></head><body><img src="'+dataUrl+'" onload="setTimeout(function(){window.print()},200)" /></body></html>');
+      win.document.close();
+    }
+  }catch(e){console.error(e);toast('Download failed: '+e.message,'error')}
+}
+
+document.addEventListener('keydown',function(e){
+  if(!workspace.classList.contains('active'))return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea')return;
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();$('undoBtn').click()}
+  else if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();$('redoBtn').click()}
+  else if(e.key==='+'||e.key==='='){$('zoomInBtn').click()}
+  else if(e.key==='-'){$('zoomOutBtn').click()}
+});
+
+if('requestIdleCallback' in window){requestIdleCallback(function(){loadModel().catch(function(){})},{timeout:8000})}
+else{setTimeout(function(){loadModel().catch(function(){})},5000)}
+
+console.log('%cQunvero Background Remover ready','color:#8b7dff;font-weight:bold;font-size:14px');
+})();
+</script>
+</body>
+</html>
