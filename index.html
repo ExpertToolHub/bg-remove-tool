@@ -131,7 +131,7 @@
   </div>
   <div class="upload-bar" id="uploadBar"><div class="fill" id="uploadFill"></div></div>
   <div class="messages" id="messages">
-    <div class="sys-msg">🔒 Room 6266 · Prototype</div>
+    <div class="sys-msg">🔒 Room 6260 · Prototype</div>
   </div>
   <div class="composer">
     <button id="emojiBtn" title="Emoji">😊</button>
@@ -292,7 +292,7 @@ async function enterChat(){
   const msgsCol = collection(db, NAMESPACE, ROOM_CODE, "messages");
   const q = query(msgsCol, orderBy("createdAt", "asc"));
   unsubMessages = onSnapshot(q, (snap) => {
-    msgBox.innerHTML = '<div class="sys-msg">🔒 Room 6266 · Prototype</div>';
+    msgBox.innerHTML = '<div class="sys-msg">🔒 Room 6260 · Prototype</div>';
     snap.forEach(d => renderMessage({ id: d.id, ...d.data() }));
     scrollBottom(true);
   });
