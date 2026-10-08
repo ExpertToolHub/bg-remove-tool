@@ -124,14 +124,14 @@
     <button class="back" id="backBtn">←</button>
     <div class="avatar" id="peerAvatar">U</div>
     <div class="info">
-      <div class="name">Private Room · 1234</div>
+      <div class="name">Private Room · 6266</div>
       <div class="status" id="peerStatus">Connecting…</div>
     </div>
     <button class="menu" title="Menu">⋮</button>
   </div>
   <div class="upload-bar" id="uploadBar"><div class="fill" id="uploadFill"></div></div>
   <div class="messages" id="messages">
-    <div class="sys-msg">🔒 Room 1234 · Prototype</div>
+    <div class="sys-msg">🔒 Room 6266 · Prototype</div>
   </div>
   <div class="composer">
     <button id="emojiBtn" title="Emoji">😊</button>
@@ -171,7 +171,7 @@ const firebaseConfig = {
   appId: "1:971243140885:web:407ce3f1dc642635e1db1c"
 };
 
-const ROOM_CODE = "1234";
+const ROOM_CODE = "6266";
 const MAX_IMAGE_KB = 700;   // Firestore per-doc limit ~1MB, so 700KB safe
 const NAMESPACE = "chat_test_rooms";
 
@@ -292,7 +292,7 @@ async function enterChat(){
   const msgsCol = collection(db, NAMESPACE, ROOM_CODE, "messages");
   const q = query(msgsCol, orderBy("createdAt", "asc"));
   unsubMessages = onSnapshot(q, (snap) => {
-    msgBox.innerHTML = '<div class="sys-msg">🔒 Room 1234 · Prototype</div>';
+    msgBox.innerHTML = '<div class="sys-msg">🔒 Room 6266 · Prototype</div>';
     snap.forEach(d => renderMessage({ id: d.id, ...d.data() }));
     scrollBottom(true);
   });
