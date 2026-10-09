@@ -1,6 +1,5 @@
 /* ============================================
    SmartSheet Studio — App Bootstrap
-   Wires up the grid, handles input events.
    ============================================ */
 
 (function (global) {
@@ -10,21 +9,17 @@
     init() {
       const Grid = global.Grid;
 
-      // Render initial grid
       Grid.render();
       Grid.updateSelection();
       Grid.setStatus("Ready — tap a cell to edit");
 
-      // --- Click/tap on cells ---
       document.getElementById("sheetGrid").addEventListener("click", (e) => {
         const cell = e.target.closest(".data-cell");
         if (!cell) return;
-        if (global.SmartState.editingCell) return; // ignore during edit
-
+        if (global.SmartState.editingCell) return;
         Grid.selectCell(cell.dataset.ref);
       });
 
-      // --- Double-tap/double-click enters edit mode ---
       document.getElementById("sheetGrid").addEventListener("dblclick", (e) => {
         const cell = e.target.closest(".data-cell");
         if (!cell) return;
@@ -32,9 +27,8 @@
         Grid.startEdit();
       });
 
-      // --- Keyboard navigation (desktop / hardware keyboard) ---
       document.addEventListener("keydown", (e) => {
-        if (global.SmartState.editingCell) return; // editor handles its own keys
+        if (global.SmartState.editingCell) return;
 
         switch (e.key) {
           case "ArrowUp":    e.preventDefault(); Grid.moveSelection(-1, 0); break;
@@ -52,7 +46,6 @@
             Grid.setStatus("Cell cleared");
             break;
           default:
-            // Any printable character starts edit with that character
             if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
               e.preventDefault();
               Grid.startEdit(e.key);
@@ -60,7 +53,6 @@
         }
       });
 
-      // Prevent accidental zoom on double-tap in mobile browsers
       document.addEventListener("dblclick", (e) => {
         if (e.target.closest(".sheet-grid")) e.preventDefault();
       }, { passive: false });
@@ -69,7 +61,6 @@
     }
   };
 
-  // Boot when DOM is ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => App.init());
   } else {
