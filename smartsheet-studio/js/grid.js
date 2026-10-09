@@ -1,16 +1,11 @@
 /* ============================================
    SmartSheet Studio — Grid Module
-   Renders the spreadsheet grid and handles
-   cell selection + editing (Phase 1).
    ============================================ */
 
 (function (global) {
   "use strict";
 
   const Grid = {
-    /**
-     * Convert column index (0-based) to letter (A, B, ..., Z, AA...).
-     */
     colLetter(index) {
       let letter = "";
       let n = index;
@@ -21,16 +16,18 @@
       return letter;
     },
 
-    /**
-     * Build A1 reference from row/col (0-based).
-     */
     toRef(row, col) {
       return this.colLetter(col) + (row + 1);
     },
 
-    /**
-     * Render the entire grid into the table element.
-     */
+    colIndex(letter) {
+      let idx = 0;
+      for (let i = 0; i < letter.length; i++) {
+        idx = idx * 26 + (letter.charCodeAt(i) - 64);
+      }
+      return idx - 1;
+    },
+
     render() {
       const state = global.SmartState;
       const table = document.getElementById("sheetGrid");
@@ -38,7 +35,6 @@
 
       table.innerHTML = "";
 
-      // --- Header row ---
       const thead = document.createElement("thead");
       const headerRow = document.createElement("tr");
 
@@ -55,19 +51,16 @@
       thead.appendChild(headerRow);
       table.appendChild(thead);
 
-      // --- Body rows ---
       const tbody = document.createElement("tbody");
 
       for (let r = 0; r < state.rowCount; r++) {
         const tr = document.createElement("tr");
 
-        // Row number header
         const rowHead = document.createElement("th");
         rowHead.className = "row-header";
         rowHead.textContent = r + 1;
         tr.appendChild(rowHead);
 
-        // Data cells
         for (let c = 0; c < state.colCount; c++) {
           const ref = this.toRef(r, c);
           const td = document.createElement("td");
@@ -88,45 +81,32 @@
       table.appendChild(tbody);
     },
 
-    /**
-     * Highlight the currently selected cell and update UI.
-     */
     updateSelection() {
       const state = global.SmartState;
 
-      // Remove old selection
       document.querySelectorAll(".data-cell.selected").forEach(el => {
         el.classList.remove("selected");
       });
 
-      // Add new selection
       const cell = document.querySelector(
         '.data-cell[data-ref="' + state.selectedCell + '"]'
       );
       if (cell) {
         cell.classList.add("selected");
 
-        // Update formula bar (cell reference + value)
         document.getElementById("cellRef").textContent = state.selectedCell;
         document.getElementById("formulaInput").textContent =
           state.getCell(state.selectedCell) || "—";
 
-        // Update status bar
         document.getElementById("statusCell").textContent = state.selectedCell;
       }
     },
 
-    /**
-     * Select a cell by reference.
-     */
     selectCell(ref) {
       global.SmartState.selectedCell = ref;
       this.updateSelection();
     },
 
-    /**
-     * Move selection by delta (row/col).
-     */
     moveSelection(dRow, dCol) {
       const state = global.SmartState;
       const current = state.selectedCell;
@@ -143,20 +123,6 @@
       this.scrollCellIntoView(newRow, newCol);
     },
 
-    /**
-     * Column letter → index (A→0, B→1, AA→26...).
-     */
-    colIndex(letter) {
-      let idx = 0;
-      for (let i = 0; i < letter.length; i++) {
-        idx = idx * 26 + (letter.charCodeAt(i) - 64);
-      }
-      return idx - 1;
-    },
-
-    /**
-     * Scroll the selected cell into view.
-     */
     scrollCellIntoView(row, col) {
       const cell = document.querySelector(
         '.data-cell[data-ref="' + this.toRef(row, col) + '"]'
@@ -166,9 +132,6 @@
       }
     },
 
-    /**
-     * Begin editing the selected cell.
-     */
     startEdit(initialChar) {
       const state = global.SmartState;
       if (state.editingCell) return;
@@ -190,14 +153,12 @@
       cell.appendChild(input);
       input.focus();
 
-      // Place cursor at end (or replace if initial char given)
       if (initialChar !== undefined) {
         input.setSelectionRange(input.value.length, input.value.length);
       } else {
         input.select();
       }
 
-      // --- Input handlers ---
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
@@ -220,9 +181,6 @@
       });
     },
 
-    /**
-     * Commit the edited value.
-     */
     commitEdit(value) {
       const state = global.SmartState;
       const ref = state.editingCell;
@@ -237,15 +195,11 @@
         cell.textContent = state.getCell(ref);
       }
 
-      // Restore selection & update bars
       state.selectedCell = ref;
       this.updateSelection();
       this.setStatus("Saved: " + ref);
     },
 
-    /**
-     * Cancel current edit.
-     */
     cancelEdit() {
       const state = global.SmartState;
       const ref = state.editingCell;
@@ -263,16 +217,12 @@
       this.setStatus("Edit cancelled");
     },
 
-    /**
-     * Update status bar message.
-     */
     setStatus(msg) {
       const el = document.getElementById("statusMessage");
       if (el) el.textContent = msg;
     }
   };
 
-  // Expose globally
   global.Grid = Grid;
 
 })(window);
