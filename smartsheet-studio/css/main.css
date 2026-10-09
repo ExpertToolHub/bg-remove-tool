@@ -1,0 +1,218 @@
+/* ============================================
+   SmartSheet Studio — Phase 1 Styles
+   ============================================ */
+
+/* --- Reset & Base --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  background: #f5f6f8;
+  color: #1f2937;
+}
+
+/* --- App Header --- */
+.app-header {
+  background: #1e6f5c;
+  color: #ffffff;
+  padding: 10px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.app-subtitle {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* --- Formula Bar --- */
+.formula-bar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #d1d5db;
+  height: 36px;
+}
+
+.cell-ref {
+  width: 72px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #1e6f5c;
+  border-right: 1px solid #d1d5db;
+  line-height: 36px;
+}
+
+.formula-input {
+  flex: 1;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 36px;
+}
+
+/* --- Grid Container --- */
+.grid-container {
+  position: absolute;
+  top: 100px;    /* header + formula bar */
+  bottom: 28px;  /* status bar */
+  left: 0;
+  right: 0;
+  overflow: auto;
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.grid-wrapper {
+  display: inline-block;
+  min-width: 100%;
+}
+
+/* --- Spreadsheet Table --- */
+.sheet-grid {
+  border-collapse: collapse;
+  table-layout: fixed;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sheet-grid th,
+.sheet-grid td {
+  border: 1px solid #e5e7eb;
+  height: 34px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 400;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Corner cell (top-left) */
+.corner-cell {
+  width: 44px;
+  min-width: 44px;
+  background: #f3f4f6;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+/* Column headers */
+.col-header {
+  width: 90px;
+  min-width: 90px;
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  color: #4b5563;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Row headers */
+.row-header {
+  width: 44px;
+  min-width: 44px;
+  background: #f3f4f6;
+  text-align: center;
+  font-weight: 600;
+  color: #4b5563;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* Data cells */
+.data-cell {
+  width: 90px;
+  min-width: 90px;
+  padding: 0 6px;
+  color: #1f2937;
+  cursor: cell;
+  outline: none;
+}
+
+.data-cell.selected {
+  background: #e0f2ec;
+  box-shadow: inset 0 0 0 2px #1e6f5c;
+}
+
+.data-cell.editing {
+  padding: 0;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #1e6f5c;
+}
+
+/* Cell edit input */
+.cell-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: transparent;
+  color: #1f2937;
+}
+
+/* --- Status Bar --- */
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: #1e6f5c;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+/* --- Scrollbar (subtle) --- */
+.grid-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.grid-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.grid-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 480px) {
+  .app-title { font-size: 15px; }
+  .col-header, .data-cell { width: 80px; min-width: 80px; }
+  .cell-ref { width: 64px; font-size: 11px; }
+}
