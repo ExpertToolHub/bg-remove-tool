@@ -1,5 +1,5 @@
 /* ============================================
-   SmartSheet Studio — Grid Module
+   SmartSheet Studio — Grid Module (Phase 2)
    ============================================ */
 
 (function (global) {
