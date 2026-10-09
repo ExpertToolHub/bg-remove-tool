@@ -1,5 +1,5 @@
 /* ============================================
-   SmartSheet Studio — App Bootstrap
+   SmartSheet Studio — App Bootstrap (Phase 2)
    ============================================ */
 
 (function (global) {
@@ -8,11 +8,22 @@
   const App = {
     init() {
       const Grid = global.Grid;
+      const Workbook = global.Workbook;
+      const SheetsUI = global.SheetsUI;
 
+      // 1. Initialize workbook (creates Sheet1)
+      Workbook.init();
+
+      // 2. Render grid
       Grid.render();
       Grid.updateSelection();
       Grid.setStatus("Ready — tap a cell to edit");
 
+      // 3. Render sheet tabs + setup events
+      SheetsUI.render();
+      SheetsUI.setupEvents();
+
+      // 4. Cell click/tap → select
       document.getElementById("sheetGrid").addEventListener("click", (e) => {
         const cell = e.target.closest(".data-cell");
         if (!cell) return;
@@ -20,6 +31,7 @@
         Grid.selectCell(cell.dataset.ref);
       });
 
+      // 5. Double-click → edit
       document.getElementById("sheetGrid").addEventListener("dblclick", (e) => {
         const cell = e.target.closest(".data-cell");
         if (!cell) return;
@@ -27,6 +39,7 @@
         Grid.startEdit();
       });
 
+      // 6. Keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (global.SmartState.editingCell) return;
 
@@ -53,11 +66,12 @@
         }
       });
 
+      // 7. Prevent double-tap zoom on grid
       document.addEventListener("dblclick", (e) => {
         if (e.target.closest(".sheet-grid")) e.preventDefault();
       }, { passive: false });
 
-      console.log("[SmartSheet Studio] Phase 1 initialized.");
+      console.log("[SmartSheet Studio] Phase 2 initialized.");
     }
   };
 
