@@ -10,7 +10,7 @@
 
   <header class="app-header">
     <div class="app-title">SmartSheet Studio</div>
-    <div class="app-subtitle">Phase 1 — Grid Foundation</div>
+    <div class="app-subtitle">Phase 2 — Multiple Sheets</div>
   </header>
 
   <div class="formula-bar">
@@ -24,13 +24,21 @@
     </div>
   </main>
 
+  <!-- Sheet tabs bar (NEW in Phase 2) -->
+  <div class="sheet-tabs-bar">
+    <div class="sheet-tabs" id="sheetTabs"></div>
+  </div>
+
   <footer class="status-bar">
     <span id="statusMessage">Ready</span>
     <span id="statusCell">A1</span>
   </footer>
 
+  <!-- Scripts (order matters!) -->
+  <script src="smartsheet-studio/workbook.js"></script>
   <script src="smartsheet-studio/state.js"></script>
   <script src="smartsheet-studio/grid.js"></script>
+  <script src="smartsheet-studio/sheets.js"></script>
   <script src="smartsheet-studio/app.js"></script>
 </body>
 </html>
