@@ -1,44 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SmartSheet Studio</title>
-  <link rel="stylesheet" href="smartsheet-studio/main.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Report Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--bg:#0b0d14;--panel:#12151f;--line:#232838;--text:#eceef5;--muted:#8d93a8;--accent:#4f8cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,13,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.top h1{font-size:1.05rem;font-weight:600;margin-right:auto}
+.top h1 span{color:var(--accent)}
+.btn{border:1px solid var(--line);background:#1a1e2c;color:var(--text);padding:10px 16px;border-radius:10px;font-size:.88rem;font-family:inherit;cursor:pointer;transition:.2s;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:linear-gradient(135deg,#4f8cff,#6a5cff);border:0;color:#fff}
+.btn.pri:hover{filter:brightness(1.12)}
+.btn.sm{padding:7px 12px;font-size:.8rem}
+select,input,textarea{font-family:inherit}
+.top select{background:#1a1e2c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.85rem}
+.layout{display:grid;grid-template-columns:400px 1fr;gap:18px;padding:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.form{max-height:calc(100vh - 100px);overflow:auto;position:sticky;top:78px}
+.form h3{font-size:.95rem;margin:4px 0 12px;color:var(--accent)}
+.form .sec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
+.f{display:block;margin-bottom:10px}
+.f span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.f input,.f select,.f textarea,.row2 input,.row2 select{width:100%;background:#0c0f18;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 10px;font-size:.88rem;outline:0}
+.f input:focus,.f select:focus,.f textarea:focus,.row2 input:focus,.row2 select:focus{border-color:var(--accent)}
+.f input[type=color]{height:38px;padding:3px;cursor:pointer}
+.f input[readonly]{color:#7fd6a0;background:#0a1410;border-style:dashed}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:8px;margin-bottom:8px}
+.sub{font-size:.72rem;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+.chk{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:6px 0 10px;color:var(--text)}
+.chk input{width:auto}
+.hint{font-size:.74rem;color:var(--muted);margin:2px 0 8px}
+.prev{overflow:hidden}
+.prev .cap{font-size:.78rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+#wrap{width:100%;overflow:hidden;background:#fff;border-radius:4px}
+#stage{transform-origin:0 0}
+
+/* ===== REPORT (exported area — sirf itna hi image me aayega) ===== */
+.report{width:897px;background:#fff;padding:1px;font-family:'Carlito',Calibri,Arial,sans-serif;color:#000}
+.report table{border-collapse:collapse;table-layout:fixed;width:895px}
+.report td{border:1px solid #2b2b2b;height:17px;padding:0 3px;font-size:12.5px;line-height:15px;white-space:nowrap;overflow:hidden;background:#fff}
+.report td.hd{background:#a9c8ea;font-weight:700;text-align:center;line-height:1.1;padding:0 3px}
+.report td.sh{font-size:16px}
+.report td.gl{background:#92d36e;font-weight:700;text-align:center}
+.report td.g{background:#4cd05e;font-weight:700}
+.report td.b{background:#a9c8ea;font-weight:700;text-align:center}
+.report td.c{font-weight:700;text-align:center}
+.report td.lb{font-weight:700}
+.report td.red{color:#e32424}
+.report td.ok{background:#4cd05e;font-weight:700;text-align:center}
+.report td.run{background:#ffd966;font-weight:700;text-align:center}
+.report td.pen{background:#f4b183;font-weight:700;text-align:center}
+.report td.hold{background:#ff7c80;font-weight:700;text-align:center}
+.report td.wrap{white-space:normal;height:auto;min-height:17px}
+.report td.ch{position:relative;padding:0;background:#fff}
+.cw{position:absolute;inset:0}
+.ctitle{position:absolute;top:10px;left:0;right:0;text-align:center;font-weight:700;font-size:11.5px;color:#2ab4d6;font-family:'Inter',Arial,sans-serif}
+.plot{position:absolute;left:70px;right:44px;top:36px;bottom:16px}
+.gl2{position:absolute;left:0;right:0;height:1px;background:#e4e4e4}
+.yl{position:absolute;right:calc(100% + 8px);transform:translateY(50%);font-size:10px;color:#666;font-family:'Inter',Arial,sans-serif;white-space:nowrap}
+.bar{position:absolute;bottom:0}
+.vl{position:absolute;width:70px;transform:translateX(-50%);text-align:center;font-size:9.5px;color:#666;font-family:'Inter',Arial,sans-serif}
+
+@media(max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .form{position:static;max-height:none}
+}
+</style>
 </head>
 <body>
 
-  <header class="app-header">
-    <div class="app-title">SmartSheet Studio</div>
-    <div class="app-subtitle">Phase 2 — Multiple Sheets</div>
-  </header>
+<div class="top">
+  <h1>📊 Production <span>Report</span> Generator</h1>
+  <select id="scale" title="Image quality">
+    <option value="max" selected>Ultra HD — Max (auto)</option>
+    <option value="8">8x</option>
+    <option value="6">6x</option>
+    <option value="4">4x</option>
+    <option value="3">3x</option>
+    <option value="2">2x (HD)</option>
+  </select>
+  <button class="btn pri" id="dlPng">⬇ Download PNG</button>
+  <button class="btn" id="dlJpg">⬇ JPG</button>
+</div>
 
-  <div class="formula-bar">
-    <div class="cell-ref" id="cellRef">A1</div>
-    <div class="formula-input" id="formulaInput">—</div>
+<div class="layout">
+  <div class="panel form" id="form"></div>
+  <div class="panel prev">
+    <div class="cap"><span>Live Preview — jo yaha dikh raha hai wahi image me export hoga</span><span id="status"></span></div>
+    <div id="wrap"><div id="stage"><div class="report" id="report"></div></div></div>
   </div>
+</div>
 
-  <main class="grid-container">
-    <div class="grid-wrapper" id="gridWrapper">
-      <table class="sheet-grid" id="sheetGrid"></table>
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY = 'prodReportV2';
+const STATUS = ['', 'Completed', 'Running', 'Pending', 'Hold'];
+
+const blankLots = () => Array.from({length:8}, () => ['','']);
+const blankLoss = () => Array.from({length:5}, () => ['','']);
+
+function newSec(title, tag){
+  return {title, tag, tagText:'', tagColor:'#000000', tagSize:'16', barW1:'33', barW2:'37', barC1:'#ffb953', barC2:'#00b050', titleColor:'#000000', hdBg:'#a9c8ea', titleSize:'18', hh:'28',
+    daily:'10512', prod:'2563', ng:'0', ngIncl:true, pa:'', pb:'', pc:'',
+    lots:blankLots(), loss:blankLoss(), obs:''};
+}
+function defaults(){
+  const a = newSec('Final Inspection Process', true); a.tagText = 'Shift - A';
+  a.lots[0] = ['PBAG26817','Completed']; a.lots[1] = ['PBAG26813','Completed'];
+  a.loss[0] = ['Loss due to pre-process waiting','110'];
+  const b = newSec('Cell Registration Process', false);
+  b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
+  return {date:'2026-09-03', shift:'A', gap:'24', axisMin:'', axisMax:'', secs:[a,b]};
+}
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+if(!S || !S.secs) S = defaults();
+S.secs.forEach(s => {
+  if(s.tagText === undefined) s.tagText = s.tag ? 'Shift - ' + (S.shift||'A') : '';
+  if(!s.tagColor) s.tagColor = '#000000';
+  if(!s.tagSize) s.tagSize = '16';
+  if(!s.barW1) s.barW1 = '33';
+  if(!s.barW2) s.barW2 = '37';
+  if(!s.barC1) s.barC1 = '#ffb953';
+  if(!s.barC2) s.barC2 = '#00b050';
+});
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+/* ---------- FORM ---------- */
+const fld = (label, path, val, type='text', extra='') =>
+  `<label class="f"><span>${label}</span><input type="${type}" data-p="${path}" value="${esc(val)}" ${extra}></label>`;
+
+function buildForm(){
+  let h = `<h3>General</h3>
+  ${fld('Date','date',S.date,'date')}
+  <div class="g3">
+    ${fld('Gap between sections (px)','gap',S.gap,'number','min="0" max="80"')}
+    ${fld('Chart axis min','axisMin',S.axisMin,'number','placeholder="Auto"')}
+    ${fld('Chart axis max','axisMax',S.axisMax,'number','placeholder="Auto"')}
+  </div>`;
+
+  S.secs.forEach((s,i)=>{
+    h += `<div class="sec"><h3>Section ${i+1}</h3>
+    ${fld('Process name',`secs.${i}.title`,s.title)}
+    <div class="g2">
+      <label class="f"><span>Text color</span><input type="color" data-p="secs.${i}.titleColor" value="${s.titleColor}"></label>
+      <label class="f"><span>Header background</span><input type="color" data-p="secs.${i}.hdBg" value="${s.hdBg}"></label>
     </div>
-  </main>
+    <div class="g2">
+      ${fld('Title font size (px)',`secs.${i}.titleSize`,s.titleSize,'number','min="8" max="40"')}
+      ${fld('Header row height (px)',`secs.${i}.hh`,s.hh,'number','min="14" max="90"')}
+    </div>
+    <div class="sub">Header right cell (jaise "Shift - A")</div>
+    ${fld('Text (khali = hide)',`secs.${i}.tagText`,s.tagText,'text','placeholder="e.g. Shift - A"')}
+    <div class="g2">
+      <label class="f"><span>Text color</span><input type="color" data-p="secs.${i}.tagColor" value="${s.tagColor}"></label>
+      ${fld('Font size (px)',`secs.${i}.tagSize`,s.tagSize,'number','min="8" max="40"')}
+    </div>
 
-  <!-- Sheet tabs bar (NEW in Phase 2) -->
-  <div class="sheet-tabs-bar">
-    <div class="sheet-tabs" id="sheetTabs"></div>
-  </div>
+    <div class="sub">Graph — bar ki chaudai (px) &amp; color</div>
+    <div class="g2">
+      ${fld('Yellow bar (Daily Target) width',`secs.${i}.barW1`,s.barW1,'number','min="4" max="80"')}
+      ${fld('Green bar (Shift A+B+C) width',`secs.${i}.barW2`,s.barW2,'number','min="4" max="80"')}
+      <label class="f"><span>Yellow bar color</span><input type="color" data-p="secs.${i}.barC1" value="${s.barC1}"></label>
+      <label class="f"><span>Green bar color</span><input type="color" data-p="secs.${i}.barC2" value="${s.barC2}"></label>
+    </div>
 
-  <footer class="status-bar">
-    <span id="statusMessage">Ready</span>
-    <span id="statusCell">A1</span>
-  </footer>
+    <div class="sub">Production</div>
+    <div class="g2">
+      ${fld('Daily Target',`secs.${i}.daily`,s.daily,'number','inputmode="numeric"')}
+      <label class="f"><span>Shift Target (auto = Daily ÷ 2)</span><input readonly id="auto-${i}" value=""></label>
+      ${fld('Shift Production',`secs.${i}.prod`,s.prod,'number','inputmode="numeric"')}
+      ${fld('NG',`secs.${i}.ng`,s.ng,'number','inputmode="numeric"')}
+    </div>
+    <label class="chk"><input type="checkbox" data-p="secs.${i}.ngIncl" ${s.ngIncl?'checked':''}> NG, Shift Production ke andar included hai</label>
+    <div class="hint">Yield = (Production − NG) ÷ Production. Checkbox off karoge to: Production ÷ (Production + NG)</div>
 
-  <!-- Scripts (order matters!) -->
-  <script src="smartsheet-studio/workbook.js"></script>
-  <script src="smartsheet-studio/state.js"></script>
-  <script src="smartsheet-studio/grid.js"></script>
-  <script src="smartsheet-studio/sheets.js"></script>
-  <script src="smartsheet-studio/app.js"></script>
+    <div class="sub">Shift (A+B+C) total — optional</div>
+    <div class="g3">
+      ${fld('Shift A',`secs.${i}.pa`,s.pa,'number','inputmode="numeric"')}
+      ${fld('Shift B',`secs.${i}.pb`,s.pb,'number','inputmode="numeric"')}
+      ${fld('Shift C',`secs.${i}.pc`,s.pc,'number','inputmode="numeric"')}
+    </div>
+    <div class="hint">Khali chhodoge to Shift Production hi total maana jayega. Total: <b id="tot-${i}" style="color:#7fd6a0"></b></div>
+
+    <div class="sub">Running Lots (Lot No. / Status)</div>`;
+    s.lots.forEach((l,j)=>{
+      h += `<div class="row2"><input data-p="secs.${i}.lots.${j}.0" placeholder="Running Lot -${j+1}" value="${esc(l[0])}">
+      <select data-p="secs.${i}.lots.${j}.1">${STATUS.map(x=>`<option ${l[1]===x?'selected':''} value="${x}">${x||'— Status —'}</option>`).join('')}</select></div>`;
+    });
+    h += `<div class="sub">Production Loss (Problem / Minutes)</div>`;
+    s.loss.forEach((l,j)=>{
+      h += `<div class="row2"><input data-p="secs.${i}.loss.${j}.0" placeholder="Production Loss-${j+1}" value="${esc(l[0])}">
+      <input data-p="secs.${i}.loss.${j}.1" placeholder="Minutes" value="${esc(l[1])}"></div>`;
+    });
+    h += `<label class="f" style="margin-top:10px"><span>Observation</span><textarea rows="2" data-p="secs.${i}.obs">${esc(s.obs)}</textarea></label>`;
+    if(i===0) h += `<button class="btn sm" id="copy12">Section 1 → Section 2 copy karo</button>`;
+    h += `</div>`;
+  });
+  h += `<div class="sec"><button class="btn sm" id="reset">↺ Reset to sample data</button></div>`;
+  $('#form').innerHTML = h;
+  const c = $('#copy12');
+  if(c) c.onclick = () => {
+    const keep = {barW1:S.secs[1].barW1, barW2:S.secs[1].barW2, barC1:S.secs[1].barC1, barC2:S.secs[1].barC2, title:S.secs[1].title, tagText:S.secs[1].tagText, tagColor:S.secs[1].tagColor, tagSize:S.secs[1].tagSize, titleColor:S.secs[1].titleColor, hdBg:S.secs[1].hdBg, titleSize:S.secs[1].titleSize, hh:S.secs[1].hh};
+    S.secs[1] = Object.assign(JSON.parse(JSON.stringify(S.secs[0])), keep);
+    save(); buildForm(); render();
+  };
+  $('#reset').onclick = () => { if(confirm('Sab data reset kar du?')){ S = defaults(); save(); buildForm(); render(); } };
+}
+
+function setPath(path, val){
+  const k = path.split('.'); let o = S;
+  for(let i=0;i<k.length-1;i++) o = o[k[i]];
+  o[k[k.length-1]] = val;
+}
+function onEdit(e){
+  const p = e.target.dataset && e.target.dataset.p; if(!p) return;
+  setPath(p, e.target.type==='checkbox' ? e.target.checked : e.target.value);
+  save(); render();
+}
+document.addEventListener('input', onEdit);
+document.addEventListener('change', onEdit);
+
+/* ---------- CHART ---------- */
+const fmt = n => Number(n).toLocaleString('en-US');
+function axis(a, b){
+  const lo = Math.min(a,b), hi = Math.max(a,b);
+  const steps = []; for(let k=0;k<=7;k++) [1,2,5].forEach(m=>steps.push(m*10**k));
+  for(const st of steps){
+    let mn = S.axisMin!=='' ? +S.axisMin : Math.floor(lo/st)*st;
+    let mx = S.axisMax!=='' ? +S.axisMax : Math.ceil(hi/st)*st;
+    if(mx<=mn) mx = mn+st;
+    if((mx-mn)/st <= 5) return {mn,mx,st};
+  }
+  return {mn:0,mx:Math.max(hi,1),st:Math.max(hi,1)/5};
+}
+function chart(plan, act, s){
+  const {mn,mx,st} = axis(plan, act);
+  const pct = v => Math.max(0, Math.min(100, (v-mn)/(mx-mn)*100));
+  let h = `<div class="cw"><div class="ctitle">Plan vs Actual Trend</div><div class="plot">`;
+  for(let v=mn; v<=mx+1e-9; v+=st){
+    h += `<div class="gl2" style="bottom:${pct(v)}%"></div><div class="yl" style="bottom:${pct(v)}%">${fmt(v)}</div>`;
+  }
+  const bar = (v,center,w,col) => `<div class="bar" style="left:${center-w/2}px;width:${w}px;height:${pct(v)}%;background:${col}"></div>
+    <div class="vl" style="left:${center}px;bottom:calc(${pct(v)}% + 3px)">${fmt(v)}</div>`;
+  const w1 = Math.max(4, num(s.barW1)||33), w2 = Math.max(4, num(s.barW2)||37);
+  h += bar(plan,23.5,w1,esc(s.barC1)) + bar(act,148.5,w2,esc(s.barC2));
+  return h + `</div></div>`;
+}
+
+/* ---------- REPORT ---------- */
+const dmy = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}-${m}-${y}`; };
+const stCls = s => ({Completed:'ok',Running:'run',Pending:'pen',Hold:'hold'}[s]||'');
+const mins = t => { t = String(t||'').trim(); return /^\d+(\.\d+)?$/.test(t) ? t+' MIN' : t; };
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+
+function calc(s){
+  const daily = num(s.daily), prod = num(s.prod), ng = num(s.ng);
+  const tgt = Math.round(daily/2);
+  const hasPer = [s.pa,s.pb,s.pc].some(v => v!=='' && v!=null);
+  const total = hasPer ? num(s.pa)+num(s.pb)+num(s.pc) : prod;
+  const good = s.ngIncl ? Math.max(prod-ng,0) : prod;
+  const base = s.ngIncl ? prod : prod+ng;
+  const y = base>0 ? good/base*100 : 0;
+  return {daily,prod,ng,tgt,total,y};
+}
+
+function section(s, idx){
+  const c = calc(s);
+  const lossHas = s.loss.some(l=>l[0]||l[1]);
+  const rows = 1+1+8+6+(lossHas?1:0)+5+1;
+  const hh = Math.max(14, num(s.hh)||28);
+  const bg = `background:${esc(s.hdBg)};height:${hh}px`;
+  let r = '';
+  r += `<tr style="height:${hh}px"><td class="hd" style="${bg}"></td>
+    <td class="hd" style="${bg};color:${esc(s.titleColor)};font-size:${num(s.titleSize)||18}px">${esc(s.title)}</td>
+    <td class="hd sh" style="${bg};color:${esc(s.tagColor)};font-size:${num(s.tagSize)||16}px">${esc(s.tagText)}</td>
+    <td class="ch" rowspan="${rows}">${chart(c.daily,c.total,s)}</td></tr>`;
+  r += `<tr><td class="gl">Date</td><td class="c">${dmy(S.date)}</td><td class="gl">Status</td></tr>`;
+  s.lots.forEach((l,j)=>{
+    const has = l[0]||l[1];
+    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td class="${has?stCls(l[1]):''}">${has?esc(l[1]):''}</td></tr>`;
+  });
+  r += `<tr><td class="lb">Shift Target</td><td class="b">${c.tgt}</td><td></td></tr>`;
+  r += `<tr><td class="g">Shift Production</td><td class="b">${c.prod}</td><td></td></tr>`;
+  r += `<tr><td class="g red">NG</td><td class="c">${c.ng}</td><td></td></tr>`;
+  r += `<tr><td class="g">Yield</td><td class="c">${c.y.toFixed(2)}%</td><td></td></tr>`;
+  r += `<tr><td class="lb">Daily Target</td><td class="b">${c.daily}</td><td></td></tr>`;
+  r += `<tr><td class="g">Shift (A+B+C)</td><td class="b">${c.total}</td><td></td></tr>`;
+  if(lossHas) r += `<tr><td>Production Loss</td><td class="c">Problem</td><td class="c">Time Loss</td></tr>`;
+  s.loss.forEach((l,j)=>{
+    r += `<tr><td>Production Loss-${j+1}</td><td class="c">${esc(l[0])}</td><td class="c">${esc(mins(l[1]))}</td></tr>`;
+  });
+  r += `<tr><td>Observation</td><td class="c wrap">${esc(s.obs).replace(/\n/g,'<br>')}</td><td></td></tr>`;
+  return r;
+}
+
+function render(){
+  const g = Math.max(0, num(S.gap));
+  const gap = g>0 ? `<tr style="height:${g}px"><td style="height:${g}px"></td><td style="height:${g}px"></td><td style="height:${g}px"></td></tr>` : '';
+  $('#report').innerHTML = `<table><colgroup><col style="width:110px"><col style="width:414px"><col style="width:82px"><col style="width:289px"></colgroup>
+    ${section(S.secs[0],0)}${gap}${section(S.secs[1],1)}</table>`;
+  S.secs.forEach((s,i)=>{
+    const c = calc(s);
+    const a = $('#auto-'+i); if(a) a.value = c.tgt;
+    const t = $('#tot-'+i); if(t) t.textContent = c.total;
+  });
+  fit();
+}
+
+function fit(){
+  const wrap = $('#wrap'), st = $('#stage'), rep = $('#report');
+  const k = Math.min(1, wrap.clientWidth / rep.offsetWidth);
+  st.style.transform = `scale(${k})`;
+  st.style.width = rep.offsetWidth + 'px';
+  wrap.style.height = (rep.offsetHeight * k) + 'px';
+}
+addEventListener('resize', fit);
+
+/* ---------- EXPORT (content-only, max resolution) ---------- */
+function canvasOK(W,H){
+  if(W>32767 || H>32767 || W*H>268435456) return false;
+  try{
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'); if(!x) return false;
+    x.fillStyle = '#000'; x.fillRect(W-1,H-1,1,1);
+    const ok = x.getImageData(W-1,H-1,1,1).data[3] === 255;
+    c.width = c.height = 0; return ok;
+  }catch(e){ return false; }
+}
+async function renderAt(scale){
+  const rep = $('#report');
+  const W = Math.round(rep.offsetWidth*scale), H = Math.round(rep.offsetHeight*scale);
+  if(!canvasOK(W,H)) return null;
+  try{
+    const canvas = await html2canvas(rep, {
+      scale, backgroundColor:'#ffffff', useCORS:true, logging:false,
+      windowWidth:1400, scrollX:0, scrollY:-window.scrollY,
+      onclone: d => {
+        const s = d.getElementById('stage'); s.style.transform = 'none';
+        const w = d.getElementById('wrap'); w.style.height = 'auto'; w.style.overflow = 'visible';
+      }
+    });
+    const x = canvas.getContext('2d');
+    if(x.getImageData(canvas.width-1, canvas.height-1, 1, 1).data[3] !== 255) return null;
+    return canvas;
+  }catch(e){ console.warn('scale failed', scale, e); return null; }
+}
+async function exportImg(type){
+  const st = $('#status'); st.textContent = '⏳ Image ban rahi hai...';
+  try{
+    await document.fonts.ready;
+    const sel = $('#scale').value;
+    const list = sel==='max' ? [8,6,5,4,3,2] : [+sel,4,3,2].filter((v,i,a)=>a.indexOf(v)===i);
+    let canvas = null, used = 0;
+    for(const sc of list){
+      st.textContent = `⏳ ${sc}x try ho raha hai...`;
+      canvas = await renderAt(sc);
+      if(canvas){ used = sc; break; }
+    }
+    if(!canvas){ st.textContent = '⚠ Export fail — dusre browser (Chrome) me try karo.'; return; }
+    const mime = type==='jpg' ? 'image/jpeg' : 'image/png';
+    canvas.toBlob(b => {
+      if(!b){ st.textContent = '⚠ Image bahut badi hai — quality kam karo.'; return; }
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `Production-Report-${S.date||'report'}.${type}`;
+      document.body.appendChild(a); a.click(); a.remove();
+      st.textContent = `✅ Done — ${canvas.width}×${canvas.height}px (${used}x)`;
+    }, mime, 1);
+  }catch(err){
+    console.error(err);
+    st.textContent = '⚠ Export fail — quality kam karke try karo.';
+  }
+}
+$('#dlPng').onclick = () => exportImg('png');
+$('#dlJpg').onclick = () => exportImg('jpg');
+
+buildForm(); render();
+document.fonts && document.fonts.ready.then(fit);
+</script>
 </body>
 </html>
