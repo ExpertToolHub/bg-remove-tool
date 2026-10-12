@@ -25,16 +25,20 @@ select,input,textarea{font-family:inherit}
 .form{max-height:calc(100vh - 100px);overflow:auto;position:sticky;top:78px}
 .form h3{font-size:.95rem;margin:4px 0 12px;color:var(--accent)}
 .form .sec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
-.f{display:block;margin-bottom:10px}
-.f span{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
-.f input,.f select,.f textarea,.row2 input,.row2 select{width:100%;background:#0c0f18;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 10px;font-size:.88rem;outline:0}
-.f input:focus,.f select:focus,.f textarea:focus,.row2 input:focus,.row2 select:focus{border-color:var(--accent)}
+.f{display:block;margin-bottom:12px}
+.f span{display:block;font-size:.74rem;color:#b4b9cc;margin-bottom:6px;font-weight:500;letter-spacing:.02em}
+.f input,.f select,.f textarea,.row2 input,.row2 select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:12px 13px;font-size:.95rem;outline:0;transition:border-color .2s,box-shadow .2s}
+.f input:hover,.f select:hover,.f textarea:hover,.row2 input:hover,.row2 select:hover{border-color:#3a4260}
+.f input:focus,.f select:focus,.f textarea:focus,.row2 input:focus,.row2 select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
+.f input[type=number]{font-variant-numeric:tabular-nums}
+.f input[readonly]{font-weight:600;font-size:1rem}
+.f textarea{resize:vertical;font-family:inherit;line-height:1.4}
 .f input[type=color]{height:38px;padding:3px;cursor:pointer}
 .f input[readonly]{color:#7fd6a0;background:#0a1410;border-style:dashed}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:8px;margin-bottom:8px}
-.sub{font-size:.72rem;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-bottom:10px}
+.sub{font-size:.74rem;color:var(--accent);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;padding-bottom:6px;border-bottom:1px dashed #232838}
 .chk{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:6px 0 10px;color:var(--text)}
 .chk input{width:auto}
 .hint{font-size:.74rem;color:var(--muted);margin:2px 0 8px}
@@ -116,7 +120,7 @@ const blankLoss = () => Array.from({length:5}, () => ['','']);
 function newSec(title){
   return {title, hdTag:'', tagColor:'#000000', tagSize:'16', titleColor:'#000000', hdBg:'#a9c8ea', titleSize:'18', hh:'28',
     barW1:'33', barW2:'37', barC1:'#ffb953', barC2:'#00b050', lblColor:'#000000', lblSize:'11',
-    sa:'', sb:'', sc:'', ng:'0', ngIncl:true, lots:blankLots(), loss:blankLoss(), obs:''};
+    sa:'', sb:'', sc:'', ta:'', tb:'', tc:'', ng:'0', ngIncl:true, lots:blankLots(), loss:blankLoss(), obs:''};
 }
 function defaults(){
   const a = newSec('Final Inspection Process');
@@ -124,7 +128,9 @@ function defaults(){
   a.loss[0] = ['Loss due to pre-process waiting','110'];
   const b = newSec('Cell Registration Process');
   b.sa = '2563'; b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
-  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', gap:'24', colVal:'414', colSt:'82', axisMin:'', axisMax:'', secs:[a,b]};
+  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', gap:'24', colVal:'414', colSt:'82',
+    colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b',
+    axisMin:'', axisMax:'', secs:[a,b]};
 }
 
 let S;
@@ -160,10 +166,20 @@ function buildForm(){
   <div class="g2">
     ${fld('Daily Target','daily',S.daily,'number','inputmode="numeric"')}
     ${fld('Yellow bar label','lbl1',S.lbl1)}
+    ${fld('Shift Target = Daily ÷ N (N)','shiftDiv',S.shiftDiv,'number','min="1" max="10"')}
+    <label class="f"><span>Shift Target (auto, sab shifts me same)</span><input readonly id="gtgt" value=""></label>
   </div>
   <div class="g2">
     ${fld('Value column width (px)','colVal',S.colVal,'number','min="60" max="800"')}
     ${fld('Status column width (px)','colSt',S.colSt,'number','min="40" max="400"')}
+  </div>
+  <div class="sub">Colors (status cells &amp; yield)</div>
+  <div class="g3">
+    <label class="f"><span>Completed</span><input type="color" data-p="colDone" value="${S.colDone}"></label>
+    <label class="f"><span>Running</span><input type="color" data-p="colRun" value="${S.colRun}"></label>
+    <label class="f"><span>Pending</span><input type="color" data-p="colPen" value="${S.colPen}"></label>
+    <label class="f"><span>Hold</span><input type="color" data-p="colHold" value="${S.colHold}"></label>
+    <label class="f"><span>Yield &lt; 100 (red)</span><input type="color" data-p="colYLow" value="${S.colYLow}"></label>
   </div>
   <div class="g3">
     ${fld('Gap (px)','gap',S.gap,'number','min="0" max="80"')}
@@ -204,7 +220,7 @@ function buildForm(){
       ${i.B ? fld('Shift B production',`secs.${k}.sb`,s.sb,'number','inputmode="numeric"') : ''}
       ${i.C ? fld('Shift C production',`secs.${k}.sc`,s.sc,'number','inputmode="numeric"') : ''}
       ${fld('NG',`secs.${k}.ng`,s.ng,'number','inputmode="numeric"')}
-      <label class="f"><span>Shift Target (auto = Daily ÷ 2)</span><input readonly id="auto-${k}" value=""></label>
+      <label class="f"><span>Shift Target (auto)</span><input readonly id="auto-${k}" value=""></label>
       <label class="f"><span>Shift (${shiftLabel()}) total</span><input readonly id="tot-${k}" value=""></label>
     </div>
     <label class="chk"><input type="checkbox" data-p="secs.${k}.ngIncl" ${s.ngIncl?'checked':''}> NG, production ke andar included hai</label>
@@ -257,7 +273,7 @@ function calc(s){
   const daily = num(S.daily), i = incl();
   const sA = num(s.sa), sB = i.B ? num(s.sb) : 0, sC = i.C ? num(s.sc) : 0;
   const total = sA + sB + sC, ng = num(s.ng);
-  const tgt = Math.round(daily/2);
+  const tgt = Math.round(daily / (num(S.shiftDiv) || 2));
   const good = s.ngIncl ? Math.max(total-ng,0) : total;
   const base = s.ngIncl ? total : total+ng;
   const y = base>0 ? good/base*100 : 0;
@@ -297,7 +313,10 @@ function chart(plan, act, s){
 
 /* ---------- REPORT ---------- */
 const dmy = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}-${m}-${y}`; };
-const stCls = s => ({Completed:'ok',Running:'run',Pending:'pen',Hold:'hold'}[s]||'');
+const stStyle = st => {
+  const m = {Completed:S.colDone, Running:S.colRun, Pending:S.colPen, Hold:S.colHold};
+  return m[st] ? `background:${esc(m[st])};font-weight:700;text-align:center` : '';
+};
 const mins = t => { t = String(t||'').trim(); return /^\d+(\.\d+)?$/.test(t) ? t+' MIN' : t; };
 
 function section(s){
@@ -314,12 +333,13 @@ function section(s){
   r += `<tr><td class="gl">Date</td><td class="c">${dmy(S.date)}</td><td class="gl">Status</td></tr>`;
   s.lots.forEach((l,j)=>{
     const has = l[0]||l[1];
-    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td class="${has?stCls(l[1]):''}">${has?esc(l[1]):''}</td></tr>`;
+    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td style="${has?stStyle(l[1]):''}">${has?esc(l[1]):''}</td></tr>`;
   });
   r += `<tr><td class="lb">Shift Target</td><td class="b">${c.tgt}</td><td></td></tr>`;
   r += `<tr><td class="g">Shift Production</td><td class="b">${c.total}</td><td></td></tr>`;
   r += `<tr><td class="g red">NG</td><td class="c">${c.ng}</td><td></td></tr>`;
-  r += `<tr><td class="g">Yield</td><td class="c">${c.y.toFixed(2)}%</td><td></td></tr>`;
+  const yLow = Math.round(c.y*100)/100 < 100;
+  r += `<tr><td class="g">Yield</td><td class="c" style="${yLow?'background:'+esc(S.colYLow):''}">${c.y.toFixed(2)}%</td><td></td></tr>`;
   r += `<tr><td class="lb">Daily Target</td><td class="b">${c.daily}</td><td></td></tr>`;
   r += `<tr><td class="g">Shift (${shiftLabel()})</td><td class="b">${c.total}</td><td></td></tr>`;
   if(lossHas) r += `<tr><td>Production Loss</td><td class="c">Problem</td><td class="c">Time Loss</td></tr>`;
@@ -340,6 +360,8 @@ function render(){
   S.secs.forEach((s,k)=>{
     const c = calc(s);
     const a = $('#auto-'+k); if(a) a.value = c.tgt;
+    const shiftNote = $('#tot-'+k); if(shiftNote) shiftNote.value = c.total;
+    const gt = $('#gtgt'); if(gt) gt.value = c.tgt;
     const t = $('#tot-'+k); if(t) t.value = c.total;
   });
   fit();
