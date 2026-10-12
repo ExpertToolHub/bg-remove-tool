@@ -210,9 +210,9 @@ const withLots = arr => { const a = blankLots(); arr.forEach((x,i) => a[i] = x);
 const withLoss = arr => { const a = blankLoss(); arr.forEach((x,i) => a[i] = x); return a; };
 
 function defaultData(){
-  return {date:'2026-09-03', shift:'A', daily:'10512', secs:[
-    {sa:'2563', sb:'', sc:'', ng:'0', lots:withLots([['PBAG26817','Completed'],['PBAG26813','Completed']]), loss:withLoss([['Loss due to pre-process waiting','110']]), obs:''},
-    {sa:'2563', sb:'', sc:'', ng:'0', lots:withLots([['PBAG26817','Completed'],['PBAG26813','Completed']]), loss:blankLoss(), obs:''}
+  return {date:'', shift:'A', daily:'', secs:[
+    {sa:'', sb:'', sc:'', ng:'', lots:blankLots(), loss:blankLoss(), obs:''},
+    {sa:'', sb:'', sc:'', ng:'', lots:blankLots(), loss:blankLoss(), obs:''}
   ]};
 }
 function secDesign(title){
@@ -642,13 +642,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .btn.sm{padding:8px 12px;font-size:.8rem}
 select,input,textarea{font-family:inherit}
 .top select{background:#1a1e2c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.85rem}
-.layout{display:grid;grid-template-columns:440px 1fr;gap:18px;padding:18px;align-items:start}
+.layout{display:grid;grid-template-columns:760px 1fr;gap:18px;padding:18px;align-items:start}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .form{max-height:calc(100vh - 100px);overflow:auto;position:sticky;top:78px}
 .form h3{font-size:.95rem;margin:4px 0 12px;color:var(--accent)}
 .f{display:block;margin-bottom:12px}
 .f span{display:block;font-size:.74rem;color:#b4b9cc;margin-bottom:6px;font-weight:500;letter-spacing:.02em}
-.f input,.f select,.f textarea{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:12px 13px;font-size:.95rem;outline:0;transition:border-color .2s,box-shadow .2s}
+.f input,.f select,.f textarea{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:12px;padding:16px 16px;font-size:1.05rem;outline:0;transition:border-color .2s,box-shadow .2s}
+.f textarea{min-height:90px}
+#form textarea[data-p^="d.bulk"]{width:100%;display:block;resize:none;overflow:hidden;min-height:calc(4 * 1.5em + 32px);line-height:1.5;padding:16px;box-sizing:border-box}
+#form textarea[data-p="d.bulk"]{min-height:220px}
 .f input:hover,.f select:hover,.f textarea:hover{border-color:#3a4260}
 .f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
 .f input[type=color]{height:42px;padding:4px;cursor:pointer}
@@ -666,14 +669,69 @@ select,input,textarea{font-family:inherit}
 .lc-lbl{color:#fca5a5;font-weight:600}
 .lc-item{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;margin-right:8px}
 .lchk .btn{padding:4px 8px;font-size:.75rem}
-.item{display:grid;grid-template-columns:30px 1fr 44px 118px 36px;gap:8px;align-items:center;margin-bottom:10px}
+
+/* light (white) theme */
+body{background:#f3f5fa;color:#1d2433}
+.top{background:rgba(255,255,255,.96);border-bottom:1px solid #dde2ee}
+.top h1{color:#1d2433}
+.top h1 span,.form h3,.sub{color:#2563eb}
+.dirty{color:#b45309}
+.back{color:#5b6378}
+.top select,.btn{background:#fff;color:#1d2433;border-color:#c9cfdf}
+.btn:hover{border-color:#2563eb}
+.btn.pri{color:#fff}
+.panel{background:#fff;border-color:#dde2ee}
+.f span{color:#4a5168}
+.f input,.f select,.f textarea,.item input,.item select{background:#fff;color:#1d2433;border-color:#c9cfdf}
+.f input:hover,.f select:hover,.f textarea:hover,.item input:hover,.item select:hover{border-color:#9aa5c0}
+.f input:focus,.f select:focus,.f textarea:focus,.item input:focus,.item select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.f input[readonly]{background:#eefaf2;color:#15803d;border-color:#9fd9b5}
+.tg{background:#fff;color:#1d2433;border-color:#c9cfdf}
+.tg.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.del{background:#fff5f5;border-color:#f3c4c4;color:#c0392b}
+.item .no{color:#2563eb}
+.sub{border-bottom-color:#dde2ee}
+.hint,.prev .cap{color:#5b6378}
+.hint b{color:#15803d}
+.drawer{background:#fff;border-color:#dde2ee;color:#1d2433}
+.dhead,.dfoot{border-color:#dde2ee}
+.dbg{background:rgba(15,23,42,.35)}
+.rv-item,.rv-card{background:#f8fafc;border-color:#dde2ee}
+.bad{color:#dc2626}
+.cnt{color:#5b6378}
+.lchk{background:#fdecec;border-color:#f5b5b5}
+.lc-lbl{color:#b91c1c}
+.hl{background:#fde68a;color:#7c2d12;border-radius:3px;padding:0 2px}
+.rv-card{border:1px solid #dde2ee;border-radius:12px;padding:14px;margin-bottom:10px}
+.rv-pt{font-weight:700;color:#2563eb;margin-bottom:6px}
+.rv-sent{background:#fff;border:1px solid #dde2ee;border-radius:10px;padding:12px;margin-bottom:12px;font-size:1.05rem;line-height:1.5}
+
+/* strong white theme: sab inputs, dropdown aur buttons */
+:root{color-scheme:light}
+input:not([readonly]),select,textarea{background:#fff !important;color:#1d2433 !important;border-color:#c9cfdf !important}
+select option{background:#fff;color:#1d2433}
+input[readonly]{background:#eefaf2 !important;color:#15803d !important}
+.btn{background:#fff !important;color:#1d2433 !important;border-color:#c9cfdf !important}
+.btn.pri{background:linear-gradient(135deg,#4f8cff,#6a5cff) !important;color:#fff !important;border-color:transparent !important}
+.tg{background:#fff !important;color:#1d2433 !important;border-color:#c9cfdf !important}
+.tg.on{background:#2563eb !important;color:#fff !important;border-color:#2563eb !important}
+.del{background:#fff5f5 !important;color:#c0392b !important;border-color:#f3c4c4 !important}
+.chk,.chk span,label{color:#1d2433}
+
+@media(max-width:640px){
+  .item{grid-template-columns:30px 1fr 52px 46px;gap:8px}
+  .item select{grid-column:2 / span 3}
+  .top h1{font-size:.95rem}
+  .layout{padding:10px}
+}
+.item{display:grid;grid-template-columns:36px 1fr 56px 150px 50px;gap:10px;align-items:center;margin-bottom:14px}
 .item .no{font-weight:700;color:var(--accent);text-align:right}
-.item input,.item select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:11px 10px;font-size:.92rem;outline:0}
+.item input,.item select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:12px;padding:16px 16px;font-size:1.05rem;outline:0}
 .item input:focus,.item select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
-.item select{padding:11px 8px;font-size:.85rem}
-.tg{height:42px;border-radius:10px;border:1px solid #2c3349;background:#0c0f18;color:var(--text);font-weight:700;cursor:pointer;font-size:.95rem}
+.item select{padding:16px 10px;font-size:.95rem}
+.tg{height:56px;border-radius:12px;border:1px solid #2c3349;background:#0c0f18;color:var(--text);font-weight:700;cursor:pointer;font-size:1.1rem}
 .tg.on{background:#4f8cff;border-color:#4f8cff;color:#fff}
-.del{height:42px;border-radius:10px;border:1px solid #3a2228;background:#1a1014;color:#f87171;cursor:pointer}
+.del{height:56px;border-radius:12px;border:1px solid #3a2228;background:#1a1014;color:#f87171;cursor:pointer;font-size:1.05rem}
 .del:hover{border-color:#f87171}
 .prev{overflow:hidden}
 .prev .cap{font-size:.78rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
@@ -773,7 +831,7 @@ const alignRow = (label, key) => {
   return `<div class="g2"><label class="f"><span>${label} — left / center / right</span>${alignSel('g.align.'+key+'.h', ALIGN_H, a.h)}</label><label class="f"><span>${label} — up / middle / down</span>${alignSel('g.align.'+key+'.v', ALIGN_V, a.v)}</label></div>`;
 };
 const WORDS = `a about above across action actual add after again against all allow almost alone along already also although always among and another answer any anyone anything appear apply are area around arrive as ask at attention available away back bad base be bear beat because become been before begin behind being believe below best better between beyond big bit black body book both bottom box break bring broke broken brought build business busy but buy by call came can cannot card care carry case cause center centre certain change check checked child choose city clean clear close code cold collect color colour come comment common communicate communication company complete completed concern condition confirm connect consider continue control copy correct cost could count country course cover create cross current cut daily damage dark data date day deal dear decide deep default delay delivery depend describe design detail develop different difficult direct discuss do does done door down drop during each early easy eat effect either else end enough enter equal error especially even event ever every everyone everything exact example except excess exist expect experience explain extra eye face fact fall false family far fast feel few field figure fill final finally find fine finish fire first fit fix floor follow food for force form forward found free friend from front full further future game gap general get give given go goal good got great green ground group grow guess had hand happen hard has have having head hear heard heavy held help here high hit hold holding home hope hour house how however hundred idea if important in include increase indicate info information inform inside inspect inspection instead into is issue it item its itself job join just keep key kind know known lack large last late later lead learn least leave left less let level life light like limit line list little live load local long look lose lot lots low machine made maintain maintenance make man manage many mark material matter may maybe mean meet member mention message might minute miss mistake mix model moment money month more morning most move much must name near need never new next night no none nor normal not note nothing notice now number object of off offer often oil ok okay old on once one only open operation operator opposite or order other our out output over own page paper part particular pass past pending people per perform performance period person phase pick piece place plan plant play please plus point poor position possible post power prepare present press pretty prevent previous price print problem process produce product production program progress project proper protect provide pull purpose push put quality quick quite rate rather reach read ready real reason receive record red reduce regular relate release remain remember remove repair repeat report require rest result return review right ring rise road role room round rule run safe same save say scale scan schedule scrap screen second see seem sell send sense separate serious service set several shall shape share sheet shift ship short should show shut side sign similar simple since single site six size small so solve some someone something sometimes soon sort sound space speak special speed spend spot stage stand start state stay step stock stop store story straight strange strong study stuff subject success such sudden sum sure system table take talk tell temperature ten test than thank thanks that the their them then there these they thing think third this those though thought three through time to today together told tomorrow tonight too took top total touch toward town track trade train transfer trial trouble true try turn two type under understand unit until up update upon us use used useful usual value various very view visit wait walk wall want warm was wash watch water way we wear week weight well went were what when where whether which while white who whole whom whose why wide will win wind window wish with within without woman wonder word work worker working world worry would write wrong year yes yet you young your zero
-wl mp ng hr pbag pdi kg pcs qty lot lots line team leader supervisor engineer technician manpower plan actual target yield loss minutes min responsible rakesh ramesh yadav kumar singh sharma verma gupta mishra pandey patel shah khan rework rejection breakdown shortage handover cell registration status observation sample pls thnks
+wl mp ng hr pdi kg pcs qty lot lots line team leader supervisor engineer technician manpower plan actual target yield loss minutes min responsible rework rejection breakdown shortage handover cell registration status observation sample pls thnks
 hai hain ka ki ke ko se me mein aur bhi par ye yeh wo woh kya nahi nhi ho hona gaya gayi gaye kar karo karna kiya kiye kal aaj abhi jab tak liye wala wali wale hum main mai aap tum sab kuch koi ek do teen mat jaldi theek thik lekin phir fir sirf saath baat kaam kam sath`;
 const DICT = new Set(WORDS.split(/\s+/).filter(Boolean));
 let reviewOn = false;
@@ -822,7 +880,66 @@ function fixWord(w, s){
   D.comm.forEach(it => { it.t = it.t.replace(re, s); });
   markDirty(); buildData(); render();
 }
+let rvPos = 0, rvIgnored = {};
+function flagsList(){
+  const out = [];
+  D.comm.forEach((it, pi) => {
+    const seen = {};
+    (it.t || '').split(/[^A-Za-z]+/).forEach(w => {
+      const lw = w.toLowerCase();
+      if(lw.length < 2 || isKnown(lw) || seen[lw] || rvIgnored[pi+'|'+lw]) return;
+      seen[lw] = true;
+      out.push({pi, word:w, lw});
+    });
+  });
+  return out;
+}
+function rvAction(a){
+  const fl = flagsList(), f = fl[rvPos];
+  if(a==='next'){ rvPos = Math.min(rvPos+1, Math.max(fl.length-1, 0)); buildData(); return; }
+  if(a==='prev'){ rvPos = Math.max(rvPos-1, 0); buildData(); return; }
+  if(!f) return;
+  if(a==='ignore'){ rvIgnored[f.pi+'|'+f.lw] = true; buildData(); render(); return; }
+  if(a==='ok'){ D.words = (D.words || []).concat([f.lw]); markDirty(); buildData(); render(); return; }
+  if(a==='badlo'){
+    const nw = ($('#rvNew').value || '').trim();
+    if(!nw) return;
+    const re = new RegExp('\\b' + f.word + '\\b', 'gi');
+    D.comm[f.pi].t = D.comm[f.pi].t.replace(re, nw);
+    markDirty(); buildData(); render();
+  }
+}
+function syncBulk(rebuild){
+  const lines = (D.bulk || '').split('\n').map(s => s.trim()).filter(Boolean);
+  const old = D.comm;
+  D.comm = lines.map((t,i) => ({t, b: !!(old[i] && old[i].b), c: (old[i] && old[i].c) || '#000000', h: !!(old[i] && old[i].h)}));
+  delete D.bulk;
+  markDirty();
+  if(rebuild) buildData();
+  render();
+}
 const reviewHtml = () => {
+  const fl = flagsList();
+  if(!fl.length) return `<div class="sub">Spelling check</div><div class="hint">✅ Koi galat shabd nahi mila.</div>`;
+  if(rvPos >= fl.length) rvPos = fl.length - 1;
+  const f = fl[rvPos], sg = suggest(f.lw);
+  const parts = D.comm[f.pi].t.split(new RegExp('(\\b' + f.word + '\\b)', 'i'));
+  const shown = parts.map((p,i) => i % 2 ? `<mark class="hl">${esc(p)}</mark>` : esc(p)).join('');
+  return `<div class="sub">Spelling check — ${rvPos+1} / ${fl.length}</div>
+    <div class="rv-card">
+      <div class="rv-pt">Point ${f.pi+1}</div>
+      <div class="rv-sent">${shown}</div>
+      <label class="f"><span>Sahi shabd (badlo)</span><input id="rvNew" value="${esc(sg[0] || '')}"></label>
+      <div class="rv-btns">${sg.map(s => `<button class="btn sm" data-rvs="${esc(s)}">→ ${esc(s)}</button>`).join('')}</div>
+      <div class="rv-btns">
+        <button class="btn sm pri" data-rv="badlo">✔ Badlo</button>
+        <button class="btn sm" data-rv="ignore">Ignore</button>
+        <button class="btn sm" data-rv="ok">Sahi hai (save)</button>
+      </div>
+      <div class="rv-btns"><button class="btn sm" data-rv="prev">← Pichla</button><button class="btn sm" data-rv="next">Agla →</button></div>
+    </div>`;
+};
+const reviewHtmlOld = () => {
   const bad = scanComm(), keys = Object.keys(bad);
   if(!keys.length) return `<div class="sub">Review</div><div class="hint">✅ Common communication me koi galat shabd nahi mila.</div>`;
   return `<div class="sub">Review — ${keys.length} shabd check karo</div>` + keys.map(w => {
@@ -843,6 +960,30 @@ const liveHtml = (text, i) => {
 const updateLive = () => {
   D.comm.forEach((it,i) => { const el = document.getElementById('lchk-'+i); if(el) el.innerHTML = liveHtml(it.t, i); });
 };
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Enter' || e.shiftKey) return;
+  const p = e.target.dataset && e.target.dataset.p;
+  const m = p && p.match(/^d\.(wl|mp|comm)\.(\d+)\.t$/);
+  const key = m && m[1];
+  if(!m) return;
+  e.preventDefault();
+  const i = +m[2];
+  D[key].splice(i+1, 0, {t:'', b:false, c:'#000000', h:false});
+  markDirty(); buildData(); render();
+  const nx = document.querySelector(`#form input[data-p="d.${key}.${i+1}.t"]`);
+  if(nx) nx.focus();
+});
+function syncBulkKey(key, rebuild){
+  const src = D['bulk_'+key] || '';
+  const lines = src.split('\n').map(s => s.trim()).filter(Boolean);
+  const old = D[key] || [];
+  D[key] = lines.map((t,i) => ({t, b: !!(old[i] && old[i].b), c: (old[i] && old[i].c) || '#000000', h: !!(old[i] && old[i].h)}));
+  delete D['bulk_'+key];
+  markDirty();
+  if(rebuild) buildData();
+  render();
+}
+function fitArea(t){ t.style.height = 'auto'; t.style.height = (t.scrollHeight + 6) + 'px'; }
 function clearAll(){
   if(!confirm('Sara handover data (date, shift, WL, Man Power, communication) saaf kar du? Design aur approved shabd nahi badlenge.')) return;
   const learned = D.words || [];
@@ -884,7 +1025,7 @@ const COLORS = [
 /* ---------- DATA (roz ka data) ---------- */
 const blankItem = () => ({t:'', b:false, c:'#000000'});
 function defaultData(){
-  return {date:'', shift:'A', responsible:'', words:[], liveOn:true, wl:[blankItem()], mp:[blankItem()], comm:[blankItem()]};
+  return {date:'', shift:'A', responsible:'', words:[], liveOn:false, wl:[blankItem()], mp:[blankItem()], comm:[blankItem()]};
 }
 /* ---------- DESIGN (formatting) ---------- */
 function defaultDesign(){
@@ -942,11 +1083,11 @@ function listEditor(key, label){
   let h = `<div class="sub">${label}</div>`;
   D[key].forEach((it,i) => {
     h += `<div class="item">
-      <span class="no">${i+1}.</span>
+      <span class="no">${key==='comm' && it.h ? 'H' : (key==='comm' ? D.comm.slice(0,i+1).filter(x => !x.h).length : i+1)}.</span>
       <input data-p="d.${key}.${i}.t" value="${esc(it.t)}" placeholder="Point ${i+1} likho" spellcheck="true" lang="en">
       <button class="tg ${it.b?'on':''}" data-toggle="d.${key}.${i}.b" title="Bold">B</button>
       <select data-p="d.${key}.${i}.c">${COLORS.map(([n,v]) => `<option value="${v}" ${it.c===v?'selected':''}>${n}</option>`).join('')}</select>
-      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
+      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<label class="chk" style="grid-column:1/-1;margin:0 0 6px 46px"><input type="checkbox" data-p="d.comm.${i}.h" ${it.h?'checked':''}> Heading (number nahi)</label>` : ''}${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
     </div>`;
   });
   h += `<div class="bar-btns"><button class="btn sm" data-add="${key}">+ Line add karo</button></div>`;
@@ -964,9 +1105,12 @@ function buildData(){
   ${reviewOn ? reviewHtml() : ''}`;
   h += `<div class="sub">Responsible (WL section)</div>
   <div class="bar-btns"><button class="btn sm" id="respBtn">👤 Responsible ${showResp?'band karo':'kholo'}</button></div>
-  ${showResp ? `<label class="f"><span>Responsible ka naam</span><input data-p="d.responsible" value="${esc(D.responsible||'')}" placeholder="e.g. Rakesh Yadav"></label>` : ''}`;
+  ${showResp ? `<label class="f"><span>Responsible ka naam</span><input data-p="d.responsible" value="${esc(D.responsible||'')}" placeholder="naam likho"></label>` : ''}`;
+  h += `<div class="sub">WL (ek line = ek point, Enter se nayi line)</div><textarea data-p="d.bulk_wl" rows="8" spellcheck="true" lang="en" style="font-size:1.1rem" placeholder="WL yahan likho">${esc((D.wl||[]).map(x => x.t).join('\n'))}</textarea>`;
   h += listEditor('wl', 'WL');
+  h += `<div class="sub">Man Power (ek line = ek naam, Enter se nayi line)</div><textarea data-p="d.bulk_mp" rows="8" spellcheck="true" lang="en" style="font-size:1.1rem" placeholder="Man Power ke naam yahan likho">${esc((D.mp||[]).map(x => x.t).join('\n'))}</textarea>`;
   h += listEditor('mp', 'Man Power');
+  h += `<div class="sub">Poora communication (ek line = ek point)</div><textarea data-p="d.bulk" rows="10" spellcheck="true" lang="en" style="font-size:1.1rem" placeholder="Yahan poora communication likho. Har line ek point banegi.">${esc((D.comm||[]).map(x => x.t).join('\n'))}</textarea>`;
   h += listEditor('comm', 'Shift Communication');
   h += `<div class="sub">Spelling check</div>
   <div class="g2">
@@ -1060,7 +1204,7 @@ function buildDesign(){
     <label class="chk"><input type="checkbox" data-p="g.autoNum" ${G.autoNum!==false?'checked':''}> Auto numbering (1. 2. 3.) dikhao — agar aap khud 1. likhte ho to ise band karo</label>
 
     <div class="sub">Approved shabd / text</div>
-    <label class="f"><span>Yahan roz ke shabd ya text paste karo (ye review me galat nahi dikhenge, capital ho ya small)</span><textarea data-p="g.approved" rows="5" placeholder="jaise: Rakesh Yadav, PBAG, WL, Man Power, Final Inspection, Cell Registration">${esc(G.approved||'')}</textarea></label>
+    <label class="f"><span>Yahan roz ke shabd ya text paste karo (ye review me galat nahi dikhenge, capital ho ya small)</span><textarea data-p="g.approved" rows="5" placeholder="jaise: naam, codes, process ke shabd">${esc(G.approved||'')}</textarea></label>
 
     <div class="sub">Text alignment (har jagah)</div>
     ${alignRow('Title','title')}
@@ -1098,8 +1242,9 @@ $('#resetDesign').onclick = () => {
 const addDot = s => { const t = (s || '').trim(); return /[.!?:;।]$/.test(t) ? t : t + '.'; };
 const listHtml = (items, numbered=true, period=false) => {
   const vis = items.filter(x => (x.t || '').trim());
+  const nums = {}; let kk = 0; vis.forEach((x,i) => { if(!x.h) nums[i] = ++kk; });
   return vis.map((x,i) =>
-    `<div class="li" style="${x.b?'font-weight:700;':''}color:${esc(x.c||'#000000')}">${numbered && G.autoNum!==false ? `<span class="n" style="color:${esc(G.numColor)}">${i+1}.</span>` : ''}${esc(period ? addDot(x.t) : x.t)}</div>`
+    `<div class="li" style="${x.b||x.h?'font-weight:700;':''}${x.h?'text-align:center;':''}color:${esc(x.c||'#000000')}">${numbered && !x.h && G.autoNum!==false ? `<span class="n" style="color:${esc(x.c && x.c!=='#000000' ? x.c : G.numColor)};${x.b?'font-weight:700;':''}">${nums[i]}.</span>` : ''}${esc(period && !x.h ? addDot(x.t) : x.t)}</div>`
   ).join('');
 };
 function render(){
@@ -1127,6 +1272,7 @@ function render(){
       <td id="commCell" style="${A('comm')}" contenteditable="true" spellcheck="true" lang="en">${listHtml(D.comm,true,true)}</td>
     </tr></table>`;
   const co = $('#dcodeOut'); if(co) co.value = encodeDesign();
+  document.querySelectorAll('textarea[data-p^="d.bulk"]').forEach(fitArea);
   const cc = $('#commCell');
   if(cc){
     // preview me hi likhne/sudharne par data sync hota hai (spelling underline ke saath)
@@ -1163,6 +1309,10 @@ function onEdit(e){
   if(lm){ delete lchkHidden[+lm[1]]; updateLive(); }
   if(p==='d.liveOn') updateLive();
   if(p==='g.approved'){ updateLive(); if(reviewOn) buildData(); }
+  if(p==='d.bulk'){ syncBulk(e.type==='change'); }
+  if(p==='d.bulk_wl'){ syncBulkKey('wl', e.type==='change'); }
+  if(p==='d.bulk_mp'){ syncBulkKey('mp', e.type==='change'); }
+  if(e.target.tagName==='TEXTAREA') fitArea(e.target);
   markDirty();
   render();
 }
@@ -1181,6 +1331,8 @@ document.addEventListener('click', e => {
     $('#fMsg').textContent = n ? `✅ ${n} jagah sudhaar gaya` : 'Ye shabd kahin nahi mila';
     return;
   }
+  if(e.target.closest('[data-rvs]')){ $('#rvNew').value = e.target.closest('[data-rvs]').dataset.rvs; return; }
+  if(e.target.closest('[data-rv]')){ rvAction(e.target.closest('[data-rv]').dataset.rv); return; }
   if(e.target.closest('#clearAll')){ clearAll(); return; }
   if(e.target.closest('#finalChk')){ openCheck(); return; }
   if(e.target.closest('[data-hide]')){ lchkHidden[+e.target.closest('[data-hide]').dataset.hide] = true; updateLive(); return; }
