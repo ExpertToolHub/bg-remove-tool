@@ -3,9 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Production Report Generator</title>
+<title>Production Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:#0b0d14;color:#eceef5;overflow:hidden}
+#home{height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.wrap{width:min(860px,100%)}
+h1{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+h1 span{color:#4f8cff}
+.sub{color:#8d93a8;margin-bottom:32px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{display:block;cursor:pointer;background:#12151f;border:1px solid #232838;border-radius:20px;padding:34px 30px;transition:.25s}
+.card:hover{transform:translateY(-6px);border-color:#4f8cff;box-shadow:0 20px 50px -20px rgba(79,140,255,.45)}
+.ico{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-size:1.8rem;background:rgba(79,140,255,.12);border:1px solid rgba(79,140,255,.3);margin-bottom:22px}
+.card h2{font-size:1.35rem;font-weight:700;margin-bottom:10px}
+.card p{color:#8d93a8;font-size:.95rem;line-height:1.5;margin-bottom:22px}
+.open{color:#4f8cff;font-weight:600;font-size:.92rem}
+@media(max-width:640px){.cards{grid-template-columns:1fr}}
+
+#viewer{position:fixed;inset:0;display:none;flex-direction:column;background:#0b0d14}
+#viewer.open{display:flex}
+#viewerbar{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid #232838;background:#12151f}
+#viewerbar button{border:1px solid #232838;background:#1a1e2c;color:#eceef5;padding:9px 14px;border-radius:10px;font-family:inherit;font-size:.88rem;cursor:pointer}
+#viewerbar button:hover{border-color:#4f8cff}
+#vtitle{font-size:1rem;font-weight:600}
+#frame{flex:1;width:100%;border:0;background:#0b0d14}
+</style>
+</head>
+<body>
+
+<div id="home">
+  <div class="wrap">
+    <h1>Production <span>Tools</span></h1>
+    <p class="sub">Kaunsa tool kholna hai?</p>
+    <div class="cards">
+      <div class="card" data-tool="process">
+        <div class="ico">📊</div>
+        <h2>Process Tag</h2>
+        <p>Final Inspection aur Cell Registration ka daily production report, lots, loss aur yield ke saath.</p>
+        <span class="open">Open →</span>
+      </div>
+      <div class="card" data-tool="handover">
+        <div class="ico">🔁</div>
+        <h2>Shift Handover</h2>
+        <p>Date, Shift, WL, Man Power aur Shift Communication ka handover sheet, numbered points aur bold/red formatting ke saath.</p>
+        <span class="open">Open →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="viewer">
+  <div id="viewerbar"><button id="back">← Home</button><span id="vtitle"></span></div>
+  <iframe id="frame"></iframe>
+</div>
+
+<!-- Tool 1: Process Tag (source yahi file me embed hai) -->
+<script type="text/plain" id="src-process"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Tag — Production Report</title>
 <link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
 <style>
 :root{--bg:#0b0d14;--panel:#12151f;--line:#232838;--text:#eceef5;--muted:#8d93a8;--accent:#4f8cff}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -17,7 +80,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .btn{border:1px solid var(--line);background:#1a1e2c;color:var(--text);padding:10px 16px;border-radius:10px;font-size:.88rem;font-family:inherit;cursor:pointer;transition:.2s;font-weight:500}
 .btn:hover{border-color:var(--accent)}
 .btn.pri{background:linear-gradient(135deg,#4f8cff,#6a5cff);border:0;color:#fff}
-.btn.pri:hover{filter:brightness(1.12)}
 .btn.sm{padding:8px 12px;font-size:.8rem}
 select,input,textarea{font-family:inherit}
 .top select{background:#1a1e2c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.85rem}
@@ -47,6 +109,8 @@ select,input,textarea{font-family:inherit}
 .prev .cap{font-size:.78rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
 #wrap{width:100%;overflow:hidden;background:#fff;border-radius:4px}
 #stage{transform-origin:0 0}
+.colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
+.colbox .f{flex:1;margin:0}
 
 /* drawer (design settings) */
 .dbg{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
@@ -57,8 +121,6 @@ select,input,textarea{font-family:inherit}
 .dhead b{font-size:1rem}
 .dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
 .dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
-.colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
-.colbox .f{flex:1;margin:0}
 
 /* ===== REPORT (exported area) ===== */
 .report{background:#fff;padding:1px;color:#000}
@@ -141,10 +203,7 @@ const FONTS = [
   ['Courier New', '"Courier New", Courier, monospace']
 ];
 
-/* ---------- DATA MODEL ----------
-   D = roz ka data (form me bharte ho)
-   G = design / formatting (Design panel me)
-*/
+/* ---------- DATA MODEL ---------- */
 const blankLots = () => Array.from({length:8}, () => ['','']);
 const blankLoss = () => Array.from({length:5}, () => ['','']);
 const withLots = arr => { const a = blankLots(); arr.forEach((x,i) => a[i] = x); return a; };
@@ -352,7 +411,7 @@ function buildDesign(){
       ${colf('Continue','g.colRun',G.colRun)}
       ${colf('Pending','g.colPen',G.colPen)}
       ${colf('Hold','g.colHold',G.colHold)}
-      ${colf('Yield < 100 (cell red)','g.colYLow',G.colYLow)}
+      ${colf('Yield &lt; 100 (cell red)','g.colYLow',G.colYLow)}
       ${fld('Status font size (px)','g.statusSize',G.statusSize,'number','min="6" max="40" step="0.5"')}
     </div>
 
@@ -360,6 +419,16 @@ function buildDesign(){
     ${sec(1)}`;
   attachCode();
 }
+const openD = () => { buildDesign(); $('#drawer').classList.add('open'); $('#dbg').classList.add('open'); };
+const closeD = () => { $('#drawer').classList.remove('open'); $('#dbg').classList.remove('open'); };
+$('#openDesign').onclick = openD;
+$('#closeDesign').onclick = closeD;
+$('#dbg').onclick = closeD;
+$('#resetDesign').onclick = () => {
+  if(confirm('Design (colors, fonts, width) default par wapas kar du? Data nahi badlega.')){
+    G = defaultDesign(); markDirty(); buildDesign(); render();
+  }
+};
 
 /* ---------- CALC ---------- */
 function calc(k){
@@ -486,19 +555,7 @@ function onEdit(e){
 document.addEventListener('input', onEdit);
 document.addEventListener('change', onEdit);
 
-/* drawer open/close */
-const openD = () => { buildDesign(); $('#drawer').classList.add('open'); $('#dbg').classList.add('open'); };
-const closeD = () => { $('#drawer').classList.remove('open'); $('#dbg').classList.remove('open'); };
-$('#openDesign').onclick = openD;
-$('#closeDesign').onclick = closeD;
-$('#dbg').onclick = closeD;
-$('#resetDesign').onclick = () => {
-  if(confirm('Design (colors, fonts, width) default par wapas kar du? Data nahi badlega.')){
-    G = defaultDesign(); markDirty(); buildDesign(); render();
-  }
-};
-
-/* ---------- EXPORT (content-only, max resolution) ---------- */
+/* ---------- EXPORT ---------- */
 function canvasOK(W,H){
   if(W>32767 || H>32767 || W*H>268435456) return false;
   try{
@@ -559,6 +616,692 @@ $('#dlJpg').onclick = () => exportImg('jpg');
 
 buildData(); buildDesign(); render();
 document.fonts && document.fonts.ready.then(fit);
+<\/script>
+</script>
+
+<!-- Tool 2: Shift Handover (source yahi file me embed hai) -->
+<script type="text/plain" id="src-handover"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift Handover Communication</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
+<style>
+:root{--bg:#0b0d14;--panel:#12151f;--line:#232838;--text:#eceef5;--muted:#8d93a8;--accent:#4f8cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,13,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.top h1{font-size:1.05rem;font-weight:600;margin-right:auto}
+.top h1 span{color:var(--accent)}
+.dirty{font-size:.82rem;color:#fbbf24;min-width:120px}
+.btn{border:1px solid var(--line);background:#1a1e2c;color:var(--text);padding:10px 16px;border-radius:10px;font-size:.88rem;font-family:inherit;cursor:pointer;transition:.2s;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:linear-gradient(135deg,#4f8cff,#6a5cff);border:0;color:#fff}
+.btn.sm{padding:8px 12px;font-size:.8rem}
+select,input,textarea{font-family:inherit}
+.top select{background:#1a1e2c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.85rem}
+.layout{display:grid;grid-template-columns:440px 1fr;gap:18px;padding:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.form{max-height:calc(100vh - 100px);overflow:auto;position:sticky;top:78px}
+.form h3{font-size:.95rem;margin:4px 0 12px;color:var(--accent)}
+.f{display:block;margin-bottom:12px}
+.f span{display:block;font-size:.74rem;color:#b4b9cc;margin-bottom:6px;font-weight:500;letter-spacing:.02em}
+.f input,.f select,.f textarea{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:12px 13px;font-size:.95rem;outline:0;transition:border-color .2s,box-shadow .2s}
+.f input:hover,.f select:hover,.f textarea:hover{border-color:#3a4260}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
+.f input[type=color]{height:42px;padding:4px;cursor:pointer}
+.f textarea{resize:vertical;font-family:monospace;font-size:.75rem;line-height:1.4}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.sub{font-size:.74rem;color:var(--accent);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;padding-bottom:6px;border-bottom:1px dashed #232838}
+.hint{font-size:.76rem;color:var(--muted);margin:2px 0 10px}
+.bar-btns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.rv-item{border:1px solid #2c3349;border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#0c0f18}
+.rv-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.bad{color:#f87171}
+.cnt{color:#8d93a8;font-size:.8rem}
+.lchk{margin:-4px 0 4px;padding:8px 10px;border-radius:10px;background:#2a1216;border:1px solid #5b1f27;font-size:.82rem;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lc-lbl{color:#fca5a5;font-weight:600}
+.lc-item{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;margin-right:8px}
+.lchk .btn{padding:4px 8px;font-size:.75rem}
+.item{display:grid;grid-template-columns:30px 1fr 44px 118px 36px;gap:8px;align-items:center;margin-bottom:10px}
+.item .no{font-weight:700;color:var(--accent);text-align:right}
+.item input,.item select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:11px 10px;font-size:.92rem;outline:0}
+.item input:focus,.item select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
+.item select{padding:11px 8px;font-size:.85rem}
+.tg{height:42px;border-radius:10px;border:1px solid #2c3349;background:#0c0f18;color:var(--text);font-weight:700;cursor:pointer;font-size:.95rem}
+.tg.on{background:#4f8cff;border-color:#4f8cff;color:#fff}
+.del{height:42px;border-radius:10px;border:1px solid #3a2228;background:#1a1014;color:#f87171;cursor:pointer}
+.del:hover{border-color:#f87171}
+.prev{overflow:hidden}
+.prev .cap{font-size:.78rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+#wrap{width:100%;overflow:hidden;background:#fff;border-radius:4px}
+#stage{transform-origin:0 0}
+
+/* drawer */
+.dbg{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
+.dbg.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(460px,96vw);background:var(--panel);border-left:1px solid var(--line);transform:translateX(105%);transition:transform .3s;z-index:160;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dhead b{font-size:1rem}
+.dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
+.dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
+
+/* ===== REPORT (exported area) ===== */
+.report{background:#fff;padding:1px;color:#000}
+.report table{border-collapse:collapse;table-layout:fixed}
+.report td{border:1px solid var(--bd);padding:6px 9px;vertical-align:top;overflow:hidden;background:#fff;color:inherit}
+.report td.ttl{text-align:center;font-weight:700;vertical-align:middle}
+.report td.hd{text-align:center;font-weight:700;vertical-align:middle}
+.report td.cc{text-align:center;vertical-align:middle}
+.report td.ctr{text-align:center}
+.li{margin-bottom:var(--lg);line-height:1.35;word-wrap:break-word;overflow-wrap:anywhere}
+.li .n{display:inline-block;margin-right:4px}
+
+@media(max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .form{position:static;max-height:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>🔁 Shift <span>Handover</span></h1>
+  <button class="btn" id="finalChk">✅ Double check</button>
+  <button class="btn" id="clearAll">🗑 Clear data</button>
+  <span class="dirty" id="dirty"></span>
+  <button class="btn" id="openDesign">🎨 Design</button>
+  <button class="btn" id="save">💾 Save</button>
+  <select id="scale" title="Image quality">
+    <option value="max" selected>Ultra HD — Max (auto)</option>
+    <option value="8">8x</option>
+    <option value="6">6x</option>
+    <option value="4">4x</option>
+    <option value="3">3x</option>
+    <option value="2">2x (HD)</option>
+  </select>
+  <button class="btn pri" id="dlPng">⬇ PNG</button>
+  <button class="btn" id="dlJpg">⬇ JPG</button>
+</div>
+
+<div class="layout">
+  <div class="panel form" id="form"></div>
+  <div class="panel prev">
+    <div class="cap"><span>Live Preview — jo yaha dikh raha hai wahi image me export hoga</span><span id="status"></span></div>
+    <div id="wrap"><div id="stage"><div class="report" id="report"></div></div></div>
+  </div>
+</div>
+
+<div class="dbg" id="dbg"></div>
+<aside class="drawer" id="drawer">
+  <div class="dhead"><b>🎨 Design Settings</b><button class="btn sm" id="closeDesign">✕ Close</button></div>
+  <div class="dcontent" id="design"></div>
+  <div class="dfoot"><button class="btn sm" id="resetDesign">↺ Reset design</button><button class="btn sm pri" id="save2">💾 Save</button></div>
+</aside>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+const KEY = 'shiftHandoverV1';
+const CODE_PREFIX = 'QSH1:';
+const FONTS = [
+  ['Carlito (Calibri jaisa)', 'Carlito, Calibri, Arial, sans-serif'],
+  ['Arial', 'Arial, Helvetica, sans-serif'],
+  ['Verdana', 'Verdana, Geneva, sans-serif'],
+  ['Tahoma', 'Tahoma, Geneva, sans-serif'],
+  ['Trebuchet MS', '"Trebuchet MS", Helvetica, sans-serif'],
+  ['Segoe UI', '"Segoe UI", Tahoma, sans-serif'],
+  ['Inter', 'Inter, Arial, sans-serif'],
+  ['Georgia', 'Georgia, serif'],
+  ['Times New Roman', '"Times New Roman", Times, serif'],
+  ['Courier New', '"Courier New", Courier, monospace']
+];
+const ALIGN_H = ['left','center','right'], ALIGN_V = ['top','middle','bottom'];
+let showResp = false;
+const respHtml = () => {
+  const n = (D.responsible || '').trim();
+  return n ? `<div>Responsible</div><div>( ${esc(n)} )</div>` : '';
+};
+const alignSel = (path, opts, val) => `<select data-p="${path}">${opts.map(x => `<option value="${x}" ${val===x?'selected':''}>${x}</option>`).join('')}</select>`;
+const alignRow = (label, key) => {
+  const a = (G.align && G.align[key]) || {h:'left', v:'top'};
+  return `<div class="g2"><label class="f"><span>${label} — left / center / right</span>${alignSel('g.align.'+key+'.h', ALIGN_H, a.h)}</label><label class="f"><span>${label} — up / middle / down</span>${alignSel('g.align.'+key+'.v', ALIGN_V, a.v)}</label></div>`;
+};
+const WORDS = `a about above across action actual add after again against all allow almost alone along already also although always among and another answer any anyone anything appear apply are area around arrive as ask at attention available away back bad base be bear beat because become been before begin behind being believe below best better between beyond big bit black body book both bottom box break bring broke broken brought build business busy but buy by call came can cannot card care carry case cause center centre certain change check checked child choose city clean clear close code cold collect color colour come comment common communicate communication company complete completed concern condition confirm connect consider continue control copy correct cost could count country course cover create cross current cut daily damage dark data date day deal dear decide deep default delay delivery depend describe design detail develop different difficult direct discuss do does done door down drop during each early easy eat effect either else end enough enter equal error especially even event ever every everyone everything exact example except excess exist expect experience explain extra eye face fact fall false family far fast feel few field figure fill final finally find fine finish fire first fit fix floor follow food for force form forward found free friend from front full further future game gap general get give given go goal good got great green ground group grow guess had hand happen hard has have having head hear heard heavy held help here high hit hold holding home hope hour house how however hundred idea if important in include increase indicate info information inform inside inspect inspection instead into is issue it item its itself job join just keep key kind know known lack large last late later lead learn least leave left less let level life light like limit line list little live load local long look lose lot lots low machine made maintain maintenance make man manage many mark material matter may maybe mean meet member mention message might minute miss mistake mix model moment money month more morning most move much must name near need never new next night no none nor normal not note nothing notice now number object of off offer often oil ok okay old on once one only open operation operator opposite or order other our out output over own page paper part particular pass past pending people per perform performance period person phase pick piece place plan plant play please plus point poor position possible post power prepare present press pretty prevent previous price print problem process produce product production program progress project proper protect provide pull purpose push put quality quick quite rate rather reach read ready real reason receive record red reduce regular relate release remain remember remove repair repeat report require rest result return review right ring rise road role room round rule run safe same save say scale scan schedule scrap screen second see seem sell send sense separate serious service set several shall shape share sheet shift ship short should show shut side sign similar simple since single site six size small so solve some someone something sometimes soon sort sound space speak special speed spend spot stage stand start state stay step stock stop store story straight strange strong study stuff subject success such sudden sum sure system table take talk tell temperature ten test than thank thanks that the their them then there these they thing think third this those though thought three through time to today together told tomorrow tonight too took top total touch toward town track trade train transfer trial trouble true try turn two type under understand unit until up update upon us use used useful usual value various very view visit wait walk wall want warm was wash watch water way we wear week weight well went were what when where whether which while white who whole whom whose why wide will win wind window wish with within without woman wonder word work worker working world worry would write wrong year yes yet you young your zero
+wl mp ng hr pbag pdi kg pcs qty lot lots line team leader supervisor engineer technician manpower plan actual target yield loss minutes min responsible rakesh ramesh yadav kumar singh sharma verma gupta mishra pandey patel shah khan rework rejection breakdown shortage handover cell registration status observation sample pls thnks
+hai hain ka ki ke ko se me mein aur bhi par ye yeh wo woh kya nahi nhi ho hona gaya gayi gaye kar karo karna kiya kiye kal aaj abhi jab tak liye wala wali wale hum main mai aap tum sab kuch koi ek do teen mat jaldi theek thik lekin phir fir sirf saath baat kaam kam sath`;
+const DICT = new Set(WORDS.split(/\s+/).filter(Boolean));
+let reviewOn = false;
+const isKnown = w => {
+  if(DICT.has(w) || (D.words || []).includes(w)) return true;
+  if((G.approved || '').toLowerCase().split(/[^a-z]+/).includes(w)) return true;
+  if(w.endsWith('s') && (DICT.has(w.slice(0,-1)) || DICT.has(w.slice(0,-2)))) return true;
+  if(w.endsWith('es') && DICT.has(w.slice(0,-2))) return true;
+  if(w.endsWith('ed') && (DICT.has(w.slice(0,-2)) || DICT.has(w.slice(0,-1)))) return true;
+  if(w.endsWith('ing') && (DICT.has(w.slice(0,-3)) || DICT.has(w.slice(0,-3)+'e'))) return true;
+  if(w.endsWith('ly') && DICT.has(w.slice(0,-2))) return true;
+  return false;
+};
+const lev = (a, b) => {
+  const m = a.length, n = b.length;
+  if(!m) return n; if(!n) return m;
+  let prev = Array.from({length:n+1}, (_,j) => j);
+  for(let i=1;i<=m;i++){
+    const cur = [i];
+    for(let j=1;j<=n;j++) cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1] + (a[i-1]===b[j-1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[n];
+};
+const suggest = w => {
+  const lim = w.length <= 4 ? 1 : 2, out = [];
+  DICT.forEach(x => {
+    if(Math.abs(x.length - w.length) > lim) return;
+    const d = lev(w, x);
+    if(d <= lim) out.push([d, x]);
+  });
+  out.sort((p,q) => p[0]-q[0] || p[1].localeCompare(q[1]));
+  return out.slice(0,3).map(p => p[1]);
+};
+const scanComm = () => {
+  const bad = {};
+  D.comm.forEach(it => (it.t || '').split(/[^A-Za-z]+/).forEach(w => {
+    const lw = w.toLowerCase();
+    if(lw.length < 2 || isKnown(lw)) return;
+    bad[lw] = (bad[lw] || 0) + 1;
+  }));
+  return bad;
+};
+function fixWord(w, s){
+  const re = new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+  D.comm.forEach(it => { it.t = it.t.replace(re, s); });
+  markDirty(); buildData(); render();
+}
+const reviewHtml = () => {
+  const bad = scanComm(), keys = Object.keys(bad);
+  if(!keys.length) return `<div class="sub">Review</div><div class="hint">✅ Common communication me koi galat shabd nahi mila.</div>`;
+  return `<div class="sub">Review — ${keys.length} shabd check karo</div>` + keys.map(w => {
+    const sg = suggest(w);
+    return `<div class="rv-item"><div><b class="bad">${esc(w)}</b> <span class="cnt">(${bad[w]}x)</span></div>
+      <div class="rv-btns">${sg.map(s => `<button class="btn sm" data-fixw="${esc(w)}" data-fixs="${esc(s)}">→ ${esc(s)}</button>`).join('')}
+      <button class="btn sm" data-okw="${esc(w)}">✔ Sahi hai</button></div></div>`;
+  }).join('');
+};
+let lchkHidden = {};
+const liveHtml = (text, i) => {
+  if(D.liveOn === false || lchkHidden[i]) return '';
+  const words = (text || '').split(/[^A-Za-z]+/).filter(w => w.length >= 2 && !isKnown(w.toLowerCase()));
+  const uniq = [...new Set(words.map(w => w.toLowerCase()))];
+  if(!uniq.length) return '';
+  return `<div class="lchk"><span class="lc-lbl">❌ Galat shabd:</span>${uniq.map(w => `<span class="lc-item"><b class="bad">${esc(w)}</b>${suggest(w).map(s => ` <button class="btn sm" data-fixw="${esc(w)}" data-fixs="${esc(s)}">→ ${esc(s)}</button>`).join('')} <button class="btn sm" data-okw="${esc(w)}">✔ sahi</button></span>`).join('')}<button class="btn sm" data-hide="${i}">✕</button></div>`;
+};
+const updateLive = () => {
+  D.comm.forEach((it,i) => { const el = document.getElementById('lchk-'+i); if(el) el.innerHTML = liveHtml(it.t, i); });
+};
+function clearAll(){
+  if(!confirm('Sara handover data (date, shift, WL, Man Power, communication) saaf kar du? Design aur approved shabd nahi badlenge.')) return;
+  const learned = D.words || [];
+  D = defaultData();
+  D.words = learned;
+  lchkHidden = {};
+  markDirty(); buildData(); render();
+}
+function openCheck(){
+  const bad = scanComm(), nBad = Object.keys(bad).length;
+  const probs = [];
+  if(!D.date) probs.push('Date khali hai');
+  if(!D.comm.some(x => (x.t || '').trim())) probs.push('Shift Communication khali hai');
+  if(!D.wl.some(x => (x.t || '').trim())) probs.push('WL khali hai');
+  if(!D.mp.some(x => (x.t || '').trim())) probs.push('Man Power khali hai');
+  if(nBad) probs.push(`${nBad} shabd galat ya unknown hain (Review me dekho)`);
+  const pts = D.comm.filter(x => (x.t || '').trim())
+    .map(x => `<li style="${x.b?'font-weight:700;':''}color:${esc(x.c||'#000000')}">${esc(addDot(x.t))}</li>`).join('');
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px';
+  ov.innerHTML = `<div style="background:#12151f;border:1px solid #232838;border-radius:16px;padding:22px;max-width:640px;width:100%;max-height:85vh;overflow:auto;color:#eceef5">
+    <h3 style="margin-bottom:12px;font-size:1.1rem">✅ Double check</h3>
+    <div style="font-size:.92rem;margin-bottom:10px">${probs.length
+      ? '<b style="color:#fca5a5">Dhyan do:</b><ul style="margin:6px 0 0 18px">' + probs.map(p => `<li>${esc(p)}</li>`).join('') + '</ul>'
+      : '<span style="color:#7fd6a0">✔ Sab fields bhare hain aur koi galat shabd nahi mila.</span>'}</div>
+    <div style="font-size:.85rem;color:#8d93a8;margin:12px 0 6px">Shift Communication (jaisa export hoga):</div>
+    <ol style="background:#fff;color:#000;padding:14px 14px 14px 34px;border-radius:10px;font-family:${esc(G.bodyFont)};font-size:15px;line-height:1.6">${pts || '<li>(khali)</li>'}</ol>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="btn sm" id="chkClose">✕ Band karo</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#chkClose').onclick = () => ov.remove();
+  ov.onclick = e => { if(e.target === ov) ov.remove(); };
+}
+const COLORS = [
+  ['Black', '#000000'], ['Red', '#e32424'], ['Blue', '#1d4ed8'],
+  ['Green', '#15803d'], ['Orange', '#ea580c'], ['Purple', '#7e22ce']
+];
+
+/* ---------- DATA (roz ka data) ---------- */
+const blankItem = () => ({t:'', b:false, c:'#000000'});
+function defaultData(){
+  return {date:'', shift:'A', responsible:'', words:[], liveOn:true, wl:[blankItem()], mp:[blankItem()], comm:[blankItem()]};
+}
+/* ---------- DESIGN (formatting) ---------- */
+function defaultDesign(){
+  return {
+    titleText:'Shift Handover Communication', titleBg:'#ffff00', titleColor:'#000000', titleSize:'18', titleH:'34',
+    hdBg:'#a9c8ea', hdColor:'#000000', hdSize:'14', hdH:'30',
+    bodyFont:'Carlito, Calibri, Arial, sans-serif', bodyColor:'#000000', bodySize:'13', bodyH:'60',
+    lineGap:'6', numColor:'#000000', borderColor:'#2b2b2b', autoNum:true, approved:'', align:{title:{h:'center',v:'middle'}, hd:{h:'center',v:'middle'}, date:{h:'center',v:'middle'}, shift:{h:'center',v:'middle'}, wl:{h:'left',v:'top'}, mp:{h:'center',v:'top'}, comm:{h:'left',v:'top'}},
+    cols:['110','110','280','230','430']
+  };
+}
+function load(){
+  let raw = null; try { raw = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  const D0 = defaultData(), G0 = defaultDesign();
+  const D = (raw && raw.data) || D0, G = (raw && raw.design) || G0;
+  for(const k in D0) if(D[k] === undefined) D[k] = D0[k];
+  for(const k in G0) if(G[k] === undefined) G[k] = G0[k];
+  if(!Array.isArray(G.cols) || G.cols.length !== 5) G.cols = G0.cols;
+  return {D, G};
+}
+let {D, G} = load();
+
+/* ---------- SAVE ---------- */
+let dirty = false;
+const markDirty = () => { dirty = true; $('#dirty').textContent = '● Unsaved changes'; };
+function saveAll(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({data:D, design:G}));
+    dirty = false;
+    $('#dirty').textContent = '✅ Saved';
+    setTimeout(() => { if(!dirty) $('#dirty').textContent = ''; }, 2500);
+  }catch(e){ $('#dirty').textContent = '⚠ Save fail'; }
+}
+$('#save').onclick = saveAll;
+$('#save2').onclick = saveAll;
+addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- HELPERS ---------- */
+function getPath(root, path){
+  return path.split('.').reduce((o,k) => o == null ? undefined : o[k], root);
+}
+function setPath(root, path, val){
+  const keys = path.split('.'); let o = root;
+  for(let i=0;i<keys.length-1;i++) o = o[keys[i]];
+  o[keys[keys.length-1]] = val;
+}
+const dmy = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}-${m}-${y}`; };
+const fld = (label, path, val, type='text', extra='') =>
+  `<label class="f"><span>${label}</span><input type="${type}" data-p="${path}" value="${esc(val)}" ${extra}></label>`;
+const colf = (label, path, val) =>
+  `<label class="f"><span>${label}</span><input type="color" data-p="${path}" value="${esc(val)}"></label>`;
+
+/* ---------- DATA PANEL ---------- */
+function listEditor(key, label){
+  let h = `<div class="sub">${label}</div>`;
+  D[key].forEach((it,i) => {
+    h += `<div class="item">
+      <span class="no">${i+1}.</span>
+      <input data-p="d.${key}.${i}.t" value="${esc(it.t)}" placeholder="Point ${i+1} likho" spellcheck="true" lang="en">
+      <button class="tg ${it.b?'on':''}" data-toggle="d.${key}.${i}.b" title="Bold">B</button>
+      <select data-p="d.${key}.${i}.c">${COLORS.map(([n,v]) => `<option value="${v}" ${it.c===v?'selected':''}>${n}</option>`).join('')}</select>
+      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
+    </div>`;
+  });
+  h += `<div class="bar-btns"><button class="btn sm" data-add="${key}">+ Line add karo</button></div>`;
+  return h;
+}
+function buildData(){
+  let h = `<h3>Shift details</h3>
+  <div class="g2">
+    ${fld('Date','d.date',D.date,'date')}
+    <label class="f"><span>Shift</span><select data-p="d.shift">${['A','B','C'].map(x => `<option value="${x}" ${D.shift===x?'selected':''}>${x}</option>`).join('')}</select></label>
+  </div>
+  <div class="hint">Har point ek alag box me likho. <b>B</b> se bold karo aur color se red/blue waghera chuno.</div>
+  <div class="bar-btns"><button class="btn sm" id="review">🔍 Review (galat shabd dhoondo)</button></div>
+  <div class="hint" id="rvMsg"></div>
+  ${reviewOn ? reviewHtml() : ''}`;
+  h += `<div class="sub">Responsible (WL section)</div>
+  <div class="bar-btns"><button class="btn sm" id="respBtn">👤 Responsible ${showResp?'band karo':'kholo'}</button></div>
+  ${showResp ? `<label class="f"><span>Responsible ka naam</span><input data-p="d.responsible" value="${esc(D.responsible||'')}" placeholder="e.g. Rakesh Yadav"></label>` : ''}`;
+  h += listEditor('wl', 'WL');
+  h += listEditor('mp', 'Man Power');
+  h += listEditor('comm', 'Shift Communication');
+  h += `<div class="sub">Spelling check</div>
+  <div class="g2">
+          </div>
+      <label class="chk"><input type="checkbox" data-p="d.liveOn" ${D.liveOn!==false?'checked':''}> Live spelling check (likhte hi galat shabd dikhein)</label>`;
+  h += `<div class="sub">Reset</div><button class="btn sm" id="resetData">↺ Reset data (design same rahega)</button>`;
+  $('#form').innerHTML = h;
+  $('#resetData').onclick = () => {
+    if(confirm('Sara handover data reset kar du? (design nahi badlega)')){
+      D = defaultData(); markDirty(); buildData(); render();
+    }
+  };
+}
+
+/* ---------- DESIGN PANEL ---------- */
+function encodeDesign(){ return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(G)))); }
+function applyCode(txt){
+  let t = (txt || '').trim();
+  if(!t) return false;
+  if(t.startsWith(CODE_PREFIX)) t = t.slice(CODE_PREFIX.length);
+  let obj;
+  try{ obj = JSON.parse(decodeURIComponent(escape(atob(t)))); }
+  catch(e){ try{ obj = JSON.parse(t); }catch(e2){ return false; } }
+  if(!obj || typeof obj !== 'object' || !Array.isArray(obj.cols)) return false;
+  const def = defaultDesign();
+  G = Object.assign({}, def, obj);
+  if(G.cols.length !== 5) G.cols = def.cols;
+  markDirty();
+  return true;
+}
+function attachCode(){
+  $('#copyCode').onclick = () => {
+    const out = () => { $('#dcodeMsg').textContent = '📋 Code copy ho gaya'; };
+    const fallback = () => { $('#dcodeOut').select(); document.execCommand('copy'); out(); };
+    if(navigator.clipboard) navigator.clipboard.writeText(encodeDesign()).then(out, fallback);
+    else fallback();
+  };
+  let timer = null;
+  $('#dcodeIn').addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const v = $('#dcodeIn').value;
+      if(!v.trim()) return;
+      if(applyCode(v)){
+        buildDesign();
+        $('#dcodeIn').value = v;
+        $('#dcodeMsg').textContent = '✅ Design apply ho gaya';
+        render();
+      } else {
+        $('#dcodeMsg').textContent = '⚠ Galat code — poora code paste karo';
+      }
+    }, 500);
+  });
+}
+function buildDesign(){
+  $('#design').innerHTML = `
+    <div class="sub">Design code</div>
+    <label class="f"><span>Aapka design code (copy karke kisi ko bhejo)</span><textarea id="dcodeOut" rows="4" readonly>${esc(encodeDesign())}</textarea></label>
+    <div class="bar-btns"><button class="btn sm" id="copyCode">📋 Copy code</button></div>
+    <label class="f" style="margin-top:12px"><span>Design code paste karo (apply apne aap ho jayega)</span><textarea id="dcodeIn" rows="4" placeholder="Yahan design code paste karo"></textarea></label>
+    <div class="hint" id="dcodeMsg"></div>
+
+    <div class="sub">Title row</div>
+    ${fld('Title text','g.titleText',G.titleText)}
+    <div class="g2">
+      ${colf('Title background','g.titleBg',G.titleBg)}
+      ${colf('Title text color','g.titleColor',G.titleColor)}
+      ${fld('Title font size (px)','g.titleSize',G.titleSize,'number','min="8" max="60"')}
+      ${fld('Title row height (px)','g.titleH',G.titleH,'number','min="14" max="150"')}
+    </div>
+
+    <div class="sub">Header row (Date, Shift, WL...)</div>
+    <div class="g2">
+      ${colf('Header background','g.hdBg',G.hdBg)}
+      ${colf('Header text color','g.hdColor',G.hdColor)}
+      ${fld('Header font size (px)','g.hdSize',G.hdSize,'number','min="8" max="40"')}
+      ${fld('Header row height (px)','g.hdH',G.hdH,'number','min="14" max="150"')}
+    </div>
+
+    <div class="sub">Body</div>
+    <div class="g2">
+      <label class="f"><span>Font</span><select data-p="g.bodyFont">${FONTS.map(([n,v]) => `<option value="${esc(v)}" ${G.bodyFont===v?'selected':''}>${n}</option>`).join('')}</select></label>
+      ${colf('Body text color','g.bodyColor',G.bodyColor)}
+      ${fld('Body font size (px)','g.bodySize',G.bodySize,'number','min="6" max="40" step="0.5"')}
+      ${fld('Body row min height (px)','g.bodyH',G.bodyH,'number','min="30" max="1000"')}
+      ${fld('Gap between points (px)','g.lineGap',G.lineGap,'number','min="0" max="40"')}
+      ${colf('Number (1. 2.) color','g.numColor',G.numColor)}
+      ${colf('Border color','g.borderColor',G.borderColor)}
+    </div>
+
+    <label class="chk"><input type="checkbox" data-p="g.autoNum" ${G.autoNum!==false?'checked':''}> Auto numbering (1. 2. 3.) dikhao — agar aap khud 1. likhte ho to ise band karo</label>
+
+    <div class="sub">Approved shabd / text</div>
+    <label class="f"><span>Yahan roz ke shabd ya text paste karo (ye review me galat nahi dikhenge, capital ho ya small)</span><textarea data-p="g.approved" rows="5" placeholder="jaise: Rakesh Yadav, PBAG, WL, Man Power, Final Inspection, Cell Registration">${esc(G.approved||'')}</textarea></label>
+
+    <div class="sub">Text alignment (har jagah)</div>
+    ${alignRow('Title','title')}
+    ${alignRow('Header (Date, Shift...)','hd')}
+    ${alignRow('Date','date')}
+    ${alignRow('Shift','shift')}
+    ${alignRow('WL','wl')}
+    ${alignRow('Man Power','mp')}
+    ${alignRow('Shift Communication','comm')}
+
+    <div class="sub">Column widths (px)</div>
+    <div class="g3">
+      ${fld('Date','g.cols.0',G.cols[0],'number','min="40" max="800"')}
+      ${fld('Shift','g.cols.1',G.cols[1],'number','min="40" max="800"')}
+      ${fld('WL','g.cols.2',G.cols[2],'number','min="40" max="1200"')}
+    </div>
+    <div class="g2">
+      ${fld('Man Power','g.cols.3',G.cols[3],'number','min="40" max="1200"')}
+      ${fld('Shift Communication','g.cols.4',G.cols[4],'number','min="40" max="1200"')}
+    </div>`;
+  attachCode();
+}
+const openD = () => { buildDesign(); $('#drawer').classList.add('open'); $('#dbg').classList.add('open'); };
+const closeD = () => { $('#drawer').classList.remove('open'); $('#dbg').classList.remove('open'); };
+$('#openDesign').onclick = openD;
+$('#closeDesign').onclick = closeD;
+$('#dbg').onclick = closeD;
+$('#resetDesign').onclick = () => {
+  if(confirm('Design default par wapas kar du? Data nahi badlega.')){
+    G = defaultDesign(); markDirty(); buildDesign(); render();
+  }
+};
+
+/* ---------- REPORT ---------- */
+const addDot = s => { const t = (s || '').trim(); return /[.!?:;।]$/.test(t) ? t : t + '.'; };
+const listHtml = (items, numbered=true, period=false) => {
+  const vis = items.filter(x => (x.t || '').trim());
+  return vis.map((x,i) =>
+    `<div class="li" style="${x.b?'font-weight:700;':''}color:${esc(x.c||'#000000')}">${numbered && G.autoNum!==false ? `<span class="n" style="color:${esc(G.numColor)}">${i+1}.</span>` : ''}${esc(period ? addDot(x.t) : x.t)}</div>`
+  ).join('');
+};
+function render(){
+  const W = G.cols.map(v => Math.max(40, num(v) || 100));
+  const TW = W.reduce((a,b) => a+b, 0);
+  const titleH = Math.max(14, num(G.titleH)||34), hdH = Math.max(14, num(G.hdH)||30), bodyH = Math.max(30, num(G.bodyH)||60);
+  const rep = $('#report');
+  rep.style.width = (TW+2)+'px';
+  const A = k => { const a = (G.align && G.align[k]) || {}; return `text-align:${a.h||'left'};vertical-align:${a.v||'top'}`; };
+  rep.style.fontFamily = G.bodyFont;
+  rep.style.fontSize = (num(G.bodySize)||13)+'px';
+  rep.style.color = G.bodyColor;
+  rep.style.setProperty('--bd', G.borderColor);
+  rep.style.setProperty('--lg', (num(G.lineGap))+'px');
+  const hd = ['Date','Shift','WL','Man Power','Shift Communication']
+    .map(t => `<td class="hd" style="background:${esc(G.hdBg)};color:${esc(G.hdColor)};font-size:${num(G.hdSize)||14}px;height:${hdH}px;${A('hd')}">${t}</td>`).join('');
+  rep.innerHTML = `<table style="width:${TW}px"><colgroup>${W.map(w => `<col style="width:${w}px">`).join('')}</colgroup>
+    <tr style="height:${titleH}px"><td colspan="5" class="ttl" style="background:${esc(G.titleBg)};color:${esc(G.titleColor)};font-size:${num(G.titleSize)||18}px;height:${titleH}px;${A('title')}">${esc(G.titleText)}</td></tr>
+    <tr style="height:${hdH}px">${hd}</tr>
+    <tr style="height:${bodyH}px">
+      <td style="${A('date')}">${dmy(D.date)}</td>
+      <td style="${A('shift')}">${esc(D.shift)}</td>
+      <td style="${A('wl')}">${respHtml()}${listHtml(D.wl,false)}</td>
+      <td style="${A('mp')}">${listHtml(D.mp,true)}</td>
+      <td id="commCell" style="${A('comm')}" contenteditable="true" spellcheck="true" lang="en">${listHtml(D.comm,true,true)}</td>
+    </tr></table>`;
+  const co = $('#dcodeOut'); if(co) co.value = encodeDesign();
+  const cc = $('#commCell');
+  if(cc){
+    // preview me hi likhne/sudharne par data sync hota hai (spelling underline ke saath)
+    cc.addEventListener('input', () => {
+      const old = D.comm.filter(x => (x.t||'').trim());
+      const blocks = cc.children.length ? Array.from(cc.children) : [cc];
+      const texts = blocks.map(b => {
+        let s = b.textContent;
+        if(G.autoNum!==false) s = s.replace(/^\s*\d+\.\s*/, '');
+        return s.trim();
+      }).filter(Boolean);
+      D.comm = texts.map((t,i) => ({t, b: !!(old[i] && old[i].b), c: (old[i] && old[i].c) || '#000000'}));
+      markDirty();
+    });
+    cc.addEventListener('blur', () => { buildData(); render(); });
+  }
+  fit();
+}
+function fit(){
+  const wrap = $('#wrap'), st = $('#stage'), rep = $('#report');
+  const k = Math.min(1, wrap.clientWidth / rep.offsetWidth);
+  st.style.transform = `scale(${k})`;
+  st.style.width = rep.offsetWidth + 'px';
+  wrap.style.height = (rep.offsetHeight * k) + 'px';
+}
+addEventListener('resize', fit);
+
+/* ---------- EVENTS ---------- */
+function onEdit(e){
+  const p = e.target.dataset && e.target.dataset.p; if(!p) return;
+  const root = p.startsWith('g.') ? G : D;
+  setPath(root, p.slice(2), e.target.type==='checkbox' ? e.target.checked : e.target.value);
+  const lm = p.match(/^d\.comm\.(\d+)\.t$/);
+  if(lm){ delete lchkHidden[+lm[1]]; updateLive(); }
+  if(p==='d.liveOn') updateLive();
+  if(p==='g.approved'){ updateLive(); if(reviewOn) buildData(); }
+  markDirty();
+  render();
+}
+document.addEventListener('input', onEdit);
+document.addEventListener('change', onEdit);
+
+document.addEventListener('click', e => {
+  if(e.target.closest('#respBtn')){ showResp = !showResp; buildData(); return; }
+  if(e.target.closest('#fDo')){
+    const f = $('#fFind').value.trim(), r = $('#fRep').value;
+    if(!f){ $('#fMsg').textContent = 'Pehle galat shabd likho'; return; }
+    const re = new RegExp(f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    let n = 0;
+    D.comm.forEach(it => { it.t = it.t.replace(re, () => { n++; return r; }); });
+    markDirty(); buildData(); render();
+    $('#fMsg').textContent = n ? `✅ ${n} jagah sudhaar gaya` : 'Ye shabd kahin nahi mila';
+    return;
+  }
+  if(e.target.closest('#clearAll')){ clearAll(); return; }
+  if(e.target.closest('#finalChk')){ openCheck(); return; }
+  if(e.target.closest('[data-hide]')){ lchkHidden[+e.target.closest('[data-hide]').dataset.hide] = true; updateLive(); return; }
+  if(e.target.closest('[data-fixw]')){ const b = e.target.closest('[data-fixw]'); fixWord(b.dataset.fixw, b.dataset.fixs); return; }
+  if(e.target.closest('[data-okw]')){ D.words = (D.words || []).concat([e.target.closest('[data-okw]').dataset.okw]); markDirty(); buildData(); render(); return; }
+  if(e.target.closest('#review')){ reviewOn = !reviewOn; buildData(); return; }
+  if(e.target.closest('#rvOld')){
+    document.querySelectorAll('#form input[data-p$=".t"]').forEach(el => { el.setAttribute('spellcheck','true'); el.setAttribute('lang','en'); });
+    const first = document.querySelector('#form input[data-p$=".t"]');
+    if(first) first.focus();
+    $('#rvMsg').textContent = 'Galat shabd lal lakeer se dikhenge. Us par right-click karke sahi shabd chuno.';
+    return;
+  }
+  const t = e.target.closest('[data-toggle],[data-add],[data-del]'); if(!t) return;
+  if(t.dataset.toggle){
+    const p = t.dataset.toggle.slice(2);
+    setPath(D, p, !getPath(D, p));
+  } else if(t.dataset.add){
+    D[t.dataset.add].push(blankItem());
+  } else if(t.dataset.del){
+    const [k, i] = t.dataset.del.split(':');
+    D[k].splice(+i, 1);
+  }
+  markDirty(); buildData(); render();
+});
+
+/* ---------- EXPORT ---------- */
+function canvasOK(W,H){
+  if(W>32767 || H>32767 || W*H>268435456) return false;
+  try{
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'); if(!x) return false;
+    x.fillStyle = '#000'; x.fillRect(W-1,H-1,1,1);
+    const ok = x.getImageData(W-1,H-1,1,1).data[3] === 255;
+    c.width = c.height = 0; return ok;
+  }catch(e){ return false; }
+}
+async function renderAt(scale){
+  const rep = $('#report');
+  const W = Math.round(rep.offsetWidth*scale), H = Math.round(rep.offsetHeight*scale);
+  if(!canvasOK(W,H)) return null;
+  try{
+    const canvas = await html2canvas(rep, {
+      scale, backgroundColor:'#ffffff', useCORS:true, logging:false,
+      windowWidth:1400, scrollX:0, scrollY:-window.scrollY,
+      onclone: d => {
+        const s = d.getElementById('stage'); s.style.transform = 'none';
+        const w = d.getElementById('wrap'); w.style.height = 'auto'; w.style.overflow = 'visible';
+      }
+    });
+    const x = canvas.getContext('2d');
+    if(x.getImageData(canvas.width-1, canvas.height-1, 1, 1).data[3] !== 255) return null;
+    return canvas;
+  }catch(e){ console.warn('scale failed', scale, e); return null; }
+}
+async function exportImg(type){
+  const st = $('#status'); st.textContent = '⏳ Image ban rahi hai...';
+  try{
+    await document.fonts.ready;
+    const sel = $('#scale').value;
+    const list = sel==='max' ? [8,6,5,4,3,2] : [+sel,4,3,2].filter((v,i,a) => a.indexOf(v)===i);
+    let canvas = null, used = 0;
+    for(const sc of list){
+      st.textContent = `⏳ ${sc}x try ho raha hai...`;
+      canvas = await renderAt(sc);
+      if(canvas){ used = sc; break; }
+    }
+    if(!canvas){ st.textContent = '⚠ Export fail — dusre browser (Chrome) me try karo.'; return; }
+    const mime = type==='jpg' ? 'image/jpeg' : 'image/png';
+    canvas.toBlob(b => {
+      if(!b){ st.textContent = '⚠ Image bahut badi hai — quality kam karo.'; return; }
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `Shift-Handover-${D.date||'report'}.${type}`;
+      document.body.appendChild(a); a.click(); a.remove();
+      st.textContent = `✅ Done — ${canvas.width}×${canvas.height}px (${used}x)`;
+    }, mime, 1);
+  }catch(err){
+    console.error(err);
+    st.textContent = '⚠ Export fail — quality kam karke try karo.';
+  }
+}
+$('#dlPng').onclick = () => exportImg('png');
+$('#dlJpg').onclick = () => exportImg('jpg');
+
+buildData(); buildDesign(); render();
+document.fonts && document.fonts.ready.then(fit);
+<\/script>
+</script>
+
+<script>
+/* ---------- HOME + VIEWER (tools isi file me embedded hain) ---------- */
+const TOOLS = {
+  process:   {title:'📊 Process Tag — Production Report', src:'src-process'},
+  handover:  {title:'🔁 Shift Handover Communication',    src:'src-handover'}
+};
+const frame = document.getElementById('frame');
+const viewer = document.getElementById('viewer');
+
+function toolHtml(id){
+  // text/plain block me closing tag ko escape kiya gaya hai, use wapas badal rahe hain
+  return document.getElementById(id).textContent.replace(/<\\\/script/g, '</script');
+}
+function openTool(key){
+  const t = TOOLS[key];
+  document.getElementById('vtitle').textContent = t.title;
+  frame.srcdoc = toolHtml(t.src);
+  viewer.classList.add('open');
+  document.getElementById('home').style.display = 'none';
+}
+function goHome(){
+  try{
+    const d = frame.contentDocument && frame.contentDocument.getElementById('dirty');
+    if(d && d.textContent.includes('Unsaved') && !confirm('Save nahi hua. Bahar jaye? (unsaved changes chale jayenge)')) return;
+  }catch(e){}
+  frame.srcdoc = '';
+  viewer.classList.remove('open');
+  document.getElementById('home').style.display = '';
+}
+document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => openTool(c.dataset.tool)));
+document.getElementById('back').addEventListener('click', goHome);
 </script>
 </body>
 </html>
