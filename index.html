@@ -107,7 +107,7 @@ select,input,textarea{font-family:inherit}
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const KEY = 'prodReportV3';
-const STATUS = ['', 'Completed', 'Running', 'Pending', 'Hold'];
+const STATUS = ['', 'Completed', 'Continue', 'Pending', 'Hold'];
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 
 const blankLots = () => Array.from({length:8}, () => ['','']);
@@ -145,6 +145,7 @@ if(!S || !S.secs) S = defaults();
   });
 }
 const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+S.secs.forEach(s => s.lots.forEach(l => { if(l[1]==='Running') l[1] = 'Continue'; }));
 
 /* ---------- SHIFT HELPERS ---------- */
 function incl(){ return {A:true, B:S.shift==='B'||S.shift==='C', C:S.shift==='C'}; }
@@ -176,7 +177,7 @@ function buildForm(){
   <div class="sub">Colors (status cells &amp; yield)</div>
   <div class="g3">
     <label class="f"><span>Completed</span><input type="color" data-p="colDone" value="${S.colDone}"></label>
-    <label class="f"><span>Running</span><input type="color" data-p="colRun" value="${S.colRun}"></label>
+    <label class="f"><span>Continue</span><input type="color" data-p="colRun" value="${S.colRun}"></label>
     <label class="f"><span>Pending</span><input type="color" data-p="colPen" value="${S.colPen}"></label>
     <label class="f"><span>Hold</span><input type="color" data-p="colHold" value="${S.colHold}"></label>
     <label class="f"><span>Yield &lt; 100 (red)</span><input type="color" data-p="colYLow" value="${S.colYLow}"></label>
@@ -314,7 +315,7 @@ function chart(plan, act, s){
 /* ---------- REPORT ---------- */
 const dmy = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}-${m}-${y}`; };
 const stStyle = st => {
-  const m = {Completed:S.colDone, Running:S.colRun, Pending:S.colPen, Hold:S.colHold};
+  const m = {Completed:S.colDone, Continue:S.colRun, Pending:S.colPen, Hold:S.colHold};
   return m[st] ? `background:${esc(m[st])};font-weight:700;text-align:center` : '';
 };
 const mins = t => { t = String(t||'').trim(); return /^\d+(\.\d+)?$/.test(t) ? t+' MIN' : t; };
