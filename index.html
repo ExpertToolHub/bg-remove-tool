@@ -67,6 +67,7 @@ select,input,textarea{font-family:inherit}
 .gl2{position:absolute;left:0;right:0;height:1px;background:#e4e4e4}
 .yl{position:absolute;right:calc(100% + 8px);transform:translateY(50%);font-size:10px;color:#666;font-family:'Inter',Arial,sans-serif;white-space:nowrap}
 .bar{position:absolute;bottom:0}
+.blb{position:absolute;bottom:0;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-family:'Inter',Arial,sans-serif;line-height:1}
 .vl{position:absolute;width:70px;transform:translateX(-50%);text-align:center;font-size:9.5px;color:#666;font-family:'Inter',Arial,sans-serif}
 
 @media(max-width:980px){
@@ -119,15 +120,21 @@ function defaults(){
   a.loss[0] = ['Loss due to pre-process waiting','110'];
   const b = newSec('Cell Registration Process', false);
   b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
-  return {date:'2026-09-03', shift:'A', gap:'24', axisMin:'', axisMax:'', secs:[a,b]};
+  return {date:'2026-09-03', shift:'A', gap:'24', colVal:'414', colSt:'82', axisMin:'', axisMax:'', secs:[a,b]};
 }
 let S;
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
 if(!S || !S.secs) S = defaults();
+if(!S.colVal) S.colVal = '414';
+if(!S.colSt) S.colSt = '82';
 S.secs.forEach(s => {
   if(s.tagText === undefined) s.tagText = s.tag ? 'Shift - ' + (S.shift||'A') : '';
   if(!s.tagColor) s.tagColor = '#000000';
   if(!s.tagSize) s.tagSize = '16';
+  if(s.lbl1===undefined) s.lbl1 = 'Daily Target';
+  if(s.lbl2===undefined) s.lbl2 = 'Shift (A+B+C)';
+  if(!s.lblColor) s.lblColor = '#000000';
+  if(!s.lblSize) s.lblSize = '11';
   if(!s.barW1) s.barW1 = '33';
   if(!s.barW2) s.barW2 = '37';
   if(!s.barC1) s.barC1 = '#ffb953';
@@ -142,6 +149,10 @@ const fld = (label, path, val, type='text', extra='') =>
 function buildForm(){
   let h = `<h3>General</h3>
   ${fld('Date','date',S.date,'date')}
+  <div class="g2">
+    ${fld('Value column width (px)','colVal',S.colVal,'number','min="60" max="800"')}
+    ${fld('Status column width (px)','colSt',S.colSt,'number','min="40" max="400"')}
+  </div>
   <div class="g3">
     ${fld('Gap between sections (px)','gap',S.gap,'number','min="0" max="80"')}
     ${fld('Chart axis min','axisMin',S.axisMin,'number','placeholder="Auto"')}
@@ -172,6 +183,14 @@ function buildForm(){
       ${fld('Green bar (Shift A+B+C) width',`secs.${i}.barW2`,s.barW2,'number','min="4" max="80"')}
       <label class="f"><span>Yellow bar color</span><input type="color" data-p="secs.${i}.barC1" value="${s.barC1}"></label>
       <label class="f"><span>Green bar color</span><input type="color" data-p="secs.${i}.barC2" value="${s.barC2}"></label>
+    </div>
+
+    <div class="sub">Graph labels (bar ke neeche)</div>
+    <div class="g2">
+      ${fld('Yellow bar label',`secs.${i}.lbl1`,s.lbl1)}
+      ${fld('Green bar label',`secs.${i}.lbl2`,s.lbl2)}
+      <label class="f"><span>Label color</span><input type="color" data-p="secs.${i}.lblColor" value="${s.lblColor}"></label>
+      ${fld('Label font size (px)',`secs.${i}.lblSize`,s.lblSize,'number','min="6" max="30"')}
     </div>
 
     <div class="sub">Production</div>
@@ -210,7 +229,7 @@ function buildForm(){
   $('#form').innerHTML = h;
   const c = $('#copy12');
   if(c) c.onclick = () => {
-    const keep = {barW1:S.secs[1].barW1, barW2:S.secs[1].barW2, barC1:S.secs[1].barC1, barC2:S.secs[1].barC2, title:S.secs[1].title, tagText:S.secs[1].tagText, tagColor:S.secs[1].tagColor, tagSize:S.secs[1].tagSize, titleColor:S.secs[1].titleColor, hdBg:S.secs[1].hdBg, titleSize:S.secs[1].titleSize, hh:S.secs[1].hh};
+    const keep = {lbl1:S.secs[1].lbl1, lbl2:S.secs[1].lbl2, lblColor:S.secs[1].lblColor, lblSize:S.secs[1].lblSize, barW1:S.secs[1].barW1, barW2:S.secs[1].barW2, barC1:S.secs[1].barC1, barC2:S.secs[1].barC2, title:S.secs[1].title, tagText:S.secs[1].tagText, tagColor:S.secs[1].tagColor, tagSize:S.secs[1].tagSize, titleColor:S.secs[1].titleColor, hdBg:S.secs[1].hdBg, titleSize:S.secs[1].titleSize, hh:S.secs[1].hh};
     S.secs[1] = Object.assign(JSON.parse(JSON.stringify(S.secs[0])), keep);
     save(); buildForm(); render();
   };
@@ -254,6 +273,9 @@ function chart(plan, act, s){
     <div class="vl" style="left:${center}px;bottom:calc(${pct(v)}% + 3px)">${fmt(v)}</div>`;
   const w1 = Math.max(4, num(s.barW1)||33), w2 = Math.max(4, num(s.barW2)||37);
   h += bar(plan,23.5,w1,esc(s.barC1)) + bar(act,148.5,w2,esc(s.barC2));
+  const lsz = num(s.lblSize)||11;
+  h += `<div class="blb" style="left:${70+23.5}px;color:${esc(s.lblColor)};font-size:${lsz}px">${esc(s.lbl1)}</div>`;
+  h += `<div class="blb" style="left:${70+148.5}px;color:${esc(s.lblColor)};font-size:${lsz}px">${esc(s.lbl2)}</div>`;
   return h + `</div></div>`;
 }
 
@@ -307,7 +329,9 @@ function section(s, idx){
 function render(){
   const g = Math.max(0, num(S.gap));
   const gap = g>0 ? `<tr style="height:${g}px"><td style="height:${g}px"></td><td style="height:${g}px"></td><td style="height:${g}px"></td></tr>` : '';
-  $('#report').innerHTML = `<table><colgroup><col style="width:110px"><col style="width:414px"><col style="width:82px"><col style="width:289px"></colgroup>
+  const cv = Math.max(60, num(S.colVal)||414), cs = Math.max(40, num(S.colSt)||82), TW = 110+cv+cs+289;
+  $('#report').style.width = (TW+2)+'px';
+  $('#report').innerHTML = `<table style="width:${TW}px"><colgroup><col style="width:110px"><col style="width:${cv}px"><col style="width:${cs}px"><col style="width:289px"></colgroup>
     ${section(S.secs[0],0)}${gap}${section(S.secs[1],1)}</table>`;
   S.secs.forEach((s,i)=>{
     const c = calc(s);
