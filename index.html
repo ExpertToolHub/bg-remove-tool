@@ -142,7 +142,7 @@ function defaults(){
   a.loss[0] = ['Loss due to pre-process waiting','110'];
   const b = newSec('Cell Registration Process');
   b.sa = '2563'; b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
-  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', headerColor:'#000000', font:'Carlito, Calibri, Arial, sans-serif', gap:'24', colVal:'414', colSt:'82',
+  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', headerColor:'#000000', font:'Carlito, Calibri, Arial, sans-serif', statusSize:'12.5', gap:'24', colVal:'414', colSt:'82',
     colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b',
     axisMin:'', axisMax:'', secs:[a,b]};
 }
@@ -188,6 +188,7 @@ function buildForm(){
     ${fld('Value column width (px)','colVal',S.colVal,'number','min="60" max="800"')}
     ${fld('Status column width (px)','colSt',S.colSt,'number','min="40" max="400"')}
   </div>
+  ${fld('Status font size (px)','statusSize',S.statusSize,'number','min="6" max="40" step="0.5"')}
   <label class="f"><span>Font (table + chart text)</span><select data-p="font">${FONTS.map(([n,v])=>`<option value="${esc(v)}" ${S.font===v?'selected':''}>${n}</option>`).join('')}</select></label>
   <div class="sub">Header text colors (dono sections me same)</div>
   <div class="colbox">
@@ -351,7 +352,7 @@ function section(s){
   r += `<tr><td class="gl">Date</td><td class="c">${dmy(S.date)}</td><td class="gl">Status</td></tr>`;
   s.lots.forEach((l,j)=>{
     const has = l[0]||l[1];
-    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td style="${has?stStyle(l[1]):''}">${has?esc(l[1]):''}</td></tr>`;
+    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td style="${has?stStyle(l[1])+';font-size:'+(num(S.statusSize)||12.5)+'px':''}">${has?esc(l[1]):''}</td></tr>`;
   });
   r += `<tr><td class="lb">Shift Target</td><td class="b">${c.tgt}</td><td></td></tr>`;
   r += `<tr><td class="g">Shift Production</td><td class="b">${c.total}</td><td></td></tr>`;
