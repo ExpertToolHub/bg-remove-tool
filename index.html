@@ -669,6 +669,9 @@ select,input,textarea{font-family:inherit}
 .lc-lbl{color:#fca5a5;font-weight:600}
 .lc-item{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;margin-right:8px}
 .lchk .btn{padding:4px 8px;font-size:.75rem}
+.stylebar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
+.stylebar .tg{height:54px;min-width:60px;padding:0 14px}
+.stylebar select{padding:14px 12px;font-size:1rem}
 
 /* light (white) theme */
 body{background:#f3f5fa;color:#1d2433}
@@ -718,13 +721,25 @@ input[readonly]{background:#eefaf2 !important;color:#15803d !important}
 .del{background:#fff5f5 !important;color:#c0392b !important;border-color:#f3c4c4 !important}
 .chk,.chk span,label{color:#1d2433}
 
+/* design panel: poora white */
+.drawer{background:#fff !important;color:#1d2433 !important;border-left:1px solid #dde2ee !important}
+.dhead,.dfoot{background:#fff !important;border-color:#dde2ee !important}
+.dhead b{color:#1d2433 !important}
+.dcontent{background:#fff !important}
+.dcontent .sub{color:#2563eb !important;border-bottom-color:#dde2ee !important}
+.dcontent label span{color:#4a5168 !important}
+.dcontent input:not([type=color]),.dcontent select,.dcontent textarea{background:#fff !important;color:#1d2433 !important;border:1px solid #c9cfdf !important}
+.dcontent input[type=color]{border:1px solid #c9cfdf !important;background:#fff !important}
+.dcontent .hint{color:#5b6378 !important}
+.dbg{background:rgba(15,23,42,.35) !important}
+
 @media(max-width:640px){
-  .item{grid-template-columns:30px 1fr 52px 46px;gap:8px}
-  .item select{grid-column:2 / span 3}
+  .item{grid-template-columns:30px 1fr 46px;gap:8px}
+  .item select{grid-column:2 / span 2}
   .top h1{font-size:.95rem}
   .layout{padding:10px}
 }
-.item{display:grid;grid-template-columns:36px 1fr 56px 150px 50px;gap:10px;align-items:center;margin-bottom:14px}
+.item{display:grid;grid-template-columns:36px 1fr 200px 50px;gap:10px;align-items:center;margin-bottom:14px}
 .item .no{font-weight:700;color:var(--accent);text-align:right}
 .item input,.item select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:12px;padding:16px 16px;font-size:1.05rem;outline:0}
 .item input:focus,.item select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
@@ -1017,6 +1032,20 @@ function openCheck(){
   ov.querySelector('#chkClose').onclick = () => ov.remove();
   ov.onclick = e => { if(e.target === ov) ov.remove(); };
 }
+const STYLES = [['n','Normal'],['b','Bold'],['r','Bold — Red'],['u','Bold — Blue'],['g','Bold — Green'],['o','Bold — Orange'],['p','Bold — Purple'],['h','Heading (number nahi)']];
+const COLMAP = {r:'#e32424', u:'#1d4ed8', g:'#15803d', o:'#ea580c', p:'#7e22ce'};
+function applyStyle(key, i, v){
+  const it = D[key][i]; if(!it) return;
+  it.h = v === 'h';
+  it.b = v !== 'n';
+  it.c = COLMAP[v] || '#000000';
+}
+function styleOf(it){
+  if(it.h) return 'h';
+  if(!it.b) return 'n';
+  const e = Object.entries(COLMAP).find(([k,c]) => c === (it.c || ''));
+  return e ? e[0] : 'b';
+}
 const COLORS = [
   ['Black', '#000000'], ['Red', '#e32424'], ['Blue', '#1d4ed8'],
   ['Green', '#15803d'], ['Orange', '#ea580c'], ['Purple', '#7e22ce']
@@ -1079,15 +1108,29 @@ const colf = (label, path, val) =>
   `<label class="f"><span>${label}</span><input type="color" data-p="${path}" value="${esc(val)}"></label>`;
 
 /* ---------- DATA PANEL ---------- */
+let selPt = {wl:0, mp:0, comm:0};
 function listEditor(key, label){
+  const items = D[key] || [];
+  if(!items.length) return `<div class="sub">${label} — point style</div><div class="hint">Upar wale box me text likho, phir yahan point chuno.</div>`;
+  const cur = Math.min(selPt[key] || 0, items.length - 1);
+  const it = items[cur];
+  const opts = items.map((x,i) => `<option value="${i}" ${i===cur?'selected':''}>${i+1}. ${esc((x.t || '').slice(0,30)) || '(khali)'}</option>`).join('');
+  return `<div class="sub">${label} — point style</div>
+    <div class="stylebar">
+      <label class="f" style="flex:1;margin:0"><span>Point chuno</span><select data-p="sp.${key}">${opts}</select></label>
+      <button class="tg ${it.b?'on':''}" data-pb="${key}" title="Bold">B</button>
+      <label class="f" style="margin:0"><span>Color</span><select data-p="sc.${key}">${COLORS.map(([n,v]) => `<option value="${v}" ${(it.c||'#000000')===v?'selected':''}>${n}</option>`).join('')}</select></label>
+      <button class="tg ${it.h?'on':''}" data-ph="${key}" title="Heading (number nahi)">H</button>
+    </div>`;
+}
+function listEditorOld(key, label){
   let h = `<div class="sub">${label}</div>`;
   D[key].forEach((it,i) => {
     h += `<div class="item">
       <span class="no">${key==='comm' && it.h ? 'H' : (key==='comm' ? D.comm.slice(0,i+1).filter(x => !x.h).length : i+1)}.</span>
       <input data-p="d.${key}.${i}.t" value="${esc(it.t)}" placeholder="Point ${i+1} likho" spellcheck="true" lang="en">
-      <button class="tg ${it.b?'on':''}" data-toggle="d.${key}.${i}.b" title="Bold">B</button>
-      <select data-p="d.${key}.${i}.c">${COLORS.map(([n,v]) => `<option value="${v}" ${it.c===v?'selected':''}>${n}</option>`).join('')}</select>
-      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<label class="chk" style="grid-column:1/-1;margin:0 0 6px 46px"><input type="checkbox" data-p="d.comm.${i}.h" ${it.h?'checked':''}> Heading (number nahi)</label>` : ''}${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
+            <select data-p="st.${key}.${i}" class="stsel">${STYLES.map(([v,n]) => `<option value="${v}" ${styleOf(it)===v?'selected':''}>${n}</option>`).join('')}</select>
+      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
     </div>`;
   });
   h += `<div class="bar-btns"><button class="btn sm" data-add="${key}">+ Line add karo</button></div>`;
@@ -1304,6 +1347,12 @@ addEventListener('resize', fit);
 function onEdit(e){
   const p = e.target.dataset && e.target.dataset.p; if(!p) return;
   const root = p.startsWith('g.') ? G : D;
+  const spm = p.match(/^sp\.(wl|mp|comm)$/);
+  if(spm){ selPt[spm[1]] = +e.target.value; buildData(); return; }
+  const scm = p.match(/^sc\.(wl|mp|comm)$/);
+  if(scm){ const it = D[scm[1]][selPt[scm[1]]]; if(it) it.c = e.target.value; markDirty(); buildData(); render(); return; }
+  const sm = p.match(/^st\.(wl|mp|comm)\.(\d+)$/);
+  if(sm){ applyStyle(sm[1], +sm[2], e.target.value); markDirty(); buildData(); render(); return; }
   setPath(root, p.slice(2), e.target.type==='checkbox' ? e.target.checked : e.target.value);
   const lm = p.match(/^d\.comm\.(\d+)\.t$/);
   if(lm){ delete lchkHidden[+lm[1]]; updateLive(); }
@@ -1331,6 +1380,8 @@ document.addEventListener('click', e => {
     $('#fMsg').textContent = n ? `✅ ${n} jagah sudhaar gaya` : 'Ye shabd kahin nahi mila';
     return;
   }
+  if(e.target.closest('[data-pb]')){ const k = e.target.closest('[data-pb]').dataset.pb; const it = D[k][selPt[k]]; if(it) it.b = !it.b; markDirty(); buildData(); render(); return; }
+  if(e.target.closest('[data-ph]')){ const k = e.target.closest('[data-ph]').dataset.ph; const it = D[k][selPt[k]]; if(it) it.h = !it.h; markDirty(); buildData(); render(); return; }
   if(e.target.closest('[data-rvs]')){ $('#rvNew').value = e.target.closest('[data-rvs]').dataset.rvs; return; }
   if(e.target.closest('[data-rv]')){ rvAction(e.target.closest('[data-rv]').dataset.rv); return; }
   if(e.target.closest('#clearAll')){ clearAll(); return; }
