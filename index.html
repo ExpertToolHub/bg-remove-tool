@@ -33,6 +33,8 @@ select,input,textarea{font-family:inherit}
 .f input[type=number]{font-variant-numeric:tabular-nums}
 .f input[readonly]{font-weight:600;font-size:1rem}
 .f textarea{resize:vertical;font-family:inherit;line-height:1.4}
+.colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
+.colbox .f{flex:1;margin:0}
 .f input[type=color]{height:38px;padding:3px;cursor:pointer}
 .f input[readonly]{color:#7fd6a0;background:#0a1410;border-style:dashed}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -128,7 +130,7 @@ function defaults(){
   a.loss[0] = ['Loss due to pre-process waiting','110'];
   const b = newSec('Cell Registration Process');
   b.sa = '2563'; b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
-  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', gap:'24', colVal:'414', colSt:'82',
+  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', headerColor:'#000000', gap:'24', colVal:'414', colSt:'82',
     colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b',
     axisMin:'', axisMax:'', secs:[a,b]};
 }
@@ -174,6 +176,10 @@ function buildForm(){
     ${fld('Value column width (px)','colVal',S.colVal,'number','min="60" max="800"')}
     ${fld('Status column width (px)','colSt',S.colSt,'number','min="40" max="400"')}
   </div>
+  <div class="sub">Header text colors (dono sections me same)</div>
+  <div class="colbox">
+    <label class="f"><span>Header text color (Process name + Shift)</span><input type="color" data-p="headerColor" value="${S.headerColor}"></label>
+      </div>
   <div class="sub">Colors (status cells &amp; yield)</div>
   <div class="g3">
     <label class="f"><span>Completed</span><input type="color" data-p="colDone" value="${S.colDone}"></label>
@@ -192,8 +198,7 @@ function buildForm(){
     h += `<div class="sec"><h3>Section ${k+1}</h3>
     ${fld('Process name',`secs.${k}.title`,s.title)}
     <div class="g2">
-      <label class="f"><span>Title text color</span><input type="color" data-p="secs.${k}.titleColor" value="${s.titleColor}"></label>
-      <label class="f"><span>Header background</span><input type="color" data-p="secs.${k}.hdBg" value="${s.hdBg}"></label>
+            <label class="f"><span>Header background</span><input type="color" data-p="secs.${k}.hdBg" value="${s.hdBg}"></label>
       ${fld('Title font size (px)',`secs.${k}.titleSize`,s.titleSize,'number','min="8" max="40"')}
       ${fld('Header row height (px)',`secs.${k}.hh`,s.hh,'number','min="14" max="90"')}
     </div>
@@ -201,8 +206,7 @@ function buildForm(){
     <div class="sub">Header right cell</div>
     ${fld('Text override (khali = auto)',`secs.${k}.hdTag`,s.hdTag,'text',`placeholder="Shift - ${S.shift}"`)}
     <div class="g2">
-      <label class="f"><span>Text color</span><input type="color" data-p="secs.${k}.tagColor" value="${s.tagColor}"></label>
-      ${fld('Font size (px)',`secs.${k}.tagSize`,s.tagSize,'number','min="8" max="40"')}
+            ${fld('Font size (px)',`secs.${k}.tagSize`,s.tagSize,'number','min="8" max="40"')}
     </div>
 
     <div class="sub">Graph</div>
@@ -328,8 +332,8 @@ function section(s){
   const bg = `background:${esc(s.hdBg)};height:${hh}px`;
   let r = '';
   r += `<tr style="height:${hh}px"><td class="hd" style="${bg}"></td>
-    <td class="hd" style="${bg};color:${esc(s.titleColor)};font-size:${num(s.titleSize)||18}px">${esc(s.title)}</td>
-    <td class="hd" style="${bg};color:${esc(s.tagColor)};font-size:${num(s.tagSize)||16}px">${esc(headerText(s))}</td>
+    <td class="hd" style="${bg};color:${esc(S.headerColor)};font-size:${num(s.titleSize)||18}px">${esc(s.title)}</td>
+    <td class="hd" style="${bg};color:${esc(S.headerColor)};font-size:${num(s.tagSize)||16}px">${esc(headerText(s))}</td>
     <td class="ch" rowspan="${rows}">${chart(c.daily,c.total,s)}</td></tr>`;
   r += `<tr><td class="gl">Date</td><td class="c">${dmy(S.date)}</td><td class="gl">Status</td></tr>`;
   s.lots.forEach((l,j)=>{
