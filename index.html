@@ -10,17 +10,18 @@
 :root{--bg:#0b0d14;--panel:#12151f;--line:#232838;--text:#eceef5;--muted:#8d93a8;--accent:#4f8cff}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.top{position:sticky;top:0;z-index:50;background:rgba(11,13,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,13,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .top h1{font-size:1.05rem;font-weight:600;margin-right:auto}
 .top h1 span{color:var(--accent)}
+.dirty{font-size:.82rem;color:#fbbf24;min-width:120px}
 .btn{border:1px solid var(--line);background:#1a1e2c;color:var(--text);padding:10px 16px;border-radius:10px;font-size:.88rem;font-family:inherit;cursor:pointer;transition:.2s;font-weight:500}
 .btn:hover{border-color:var(--accent)}
 .btn.pri{background:linear-gradient(135deg,#4f8cff,#6a5cff);border:0;color:#fff}
 .btn.pri:hover{filter:brightness(1.12)}
-.btn.sm{padding:7px 12px;font-size:.8rem}
+.btn.sm{padding:8px 12px;font-size:.8rem}
 select,input,textarea{font-family:inherit}
 .top select{background:#1a1e2c;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.85rem}
-.layout{display:grid;grid-template-columns:400px 1fr;gap:18px;padding:18px;align-items:start}
+.layout{display:grid;grid-template-columns:420px 1fr;gap:18px;padding:18px;align-items:start}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .form{max-height:calc(100vh - 100px);overflow:auto;position:sticky;top:78px}
 .form h3{font-size:.95rem;margin:4px 0 12px;color:var(--accent)}
@@ -30,27 +31,37 @@ select,input,textarea{font-family:inherit}
 .f input,.f select,.f textarea,.row2 input,.row2 select{width:100%;background:#0c0f18;border:1px solid #2c3349;color:var(--text);border-radius:10px;padding:12px 13px;font-size:.95rem;outline:0;transition:border-color .2s,box-shadow .2s}
 .f input:hover,.f select:hover,.f textarea:hover,.row2 input:hover,.row2 select:hover{border-color:#3a4260}
 .f input:focus,.f select:focus,.f textarea:focus,.row2 input:focus,.row2 select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.18)}
-.f input[type=number]{font-variant-numeric:tabular-nums}
-.f input[readonly]{font-weight:600;font-size:1rem}
-.f textarea{resize:vertical;font-family:inherit;line-height:1.4}
-.colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
-.colbox .f{flex:1;margin:0}
-.f input[type=color]{height:38px;padding:3px;cursor:pointer}
-.f input[readonly]{color:#7fd6a0;background:#0a1410;border-style:dashed}
+.f input[type=color]{height:42px;padding:4px;cursor:pointer}
+.f input[readonly]{color:#7fd6a0;background:#0a1410;border-style:dashed;font-weight:600}
+.f textarea{resize:vertical;line-height:1.4}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .row2{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-bottom:10px}
 .sub{font-size:.74rem;color:var(--accent);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;padding-bottom:6px;border-bottom:1px dashed #232838}
-.chk{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:6px 0 10px;color:var(--text)}
+.chk{display:flex;gap:8px;align-items:center;font-size:.85rem;margin:6px 0 10px}
 .chk input{width:auto}
-.hint{font-size:.74rem;color:var(--muted);margin:2px 0 8px}
+.hint{font-size:.76rem;color:var(--muted);margin:2px 0 10px}
+.hint b{color:#7fd6a0}
+.bar-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .prev{overflow:hidden}
 .prev .cap{font-size:.78rem;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
 #wrap{width:100%;overflow:hidden;background:#fff;border-radius:4px}
 #stage{transform-origin:0 0}
 
+/* drawer (design settings) */
+.dbg{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
+.dbg.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(460px,96vw);background:var(--panel);border-left:1px solid var(--line);transform:translateX(105%);transition:transform .3s;z-index:160;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dhead b{font-size:1rem}
+.dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
+.dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
+.colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
+.colbox .f{flex:1;margin:0}
+
 /* ===== REPORT (exported area) ===== */
-.report{background:#fff;padding:1px;font-family:'Carlito',Calibri,Arial,sans-serif;color:#000}
+.report{background:#fff;padding:1px;color:#000}
 .report table{border-collapse:collapse;table-layout:fixed}
 .report td{border:1px solid #2b2b2b;height:17px;padding:0 3px;font-size:12.5px;line-height:15px;white-space:nowrap;overflow:hidden;background:#fff}
 .report td.hd{background:#a9c8ea;font-weight:700;text-align:center;line-height:1.1;padding:0 3px}
@@ -60,10 +71,6 @@ select,input,textarea{font-family:inherit}
 .report td.c{font-weight:700;text-align:center}
 .report td.lb{font-weight:700}
 .report td.red{color:#e32424}
-.report td.ok{background:#4cd05e;font-weight:700;text-align:center}
-.report td.run{background:#ffd966;font-weight:700;text-align:center}
-.report td.pen{background:#f4b183;font-weight:700;text-align:center}
-.report td.hold{background:#ff7c80;font-weight:700;text-align:center}
 .report td.wrap{white-space:normal;height:auto;min-height:17px}
 .report td.ch{position:relative;padding:0;background:#fff}
 .cw{position:absolute;inset:0}
@@ -85,6 +92,9 @@ select,input,textarea{font-family:inherit}
 
 <div class="top">
   <h1>📊 Production <span>Report</span> Generator</h1>
+  <span class="dirty" id="dirty"></span>
+  <button class="btn" id="openDesign">🎨 Design</button>
+  <button class="btn" id="save">💾 Save</button>
   <select id="scale" title="Image quality">
     <option value="max" selected>Ultra HD — Max (auto)</option>
     <option value="8">8x</option>
@@ -93,7 +103,7 @@ select,input,textarea{font-family:inherit}
     <option value="3">3x</option>
     <option value="2">2x (HD)</option>
   </select>
-  <button class="btn pri" id="dlPng">⬇ Download PNG</button>
+  <button class="btn pri" id="dlPng">⬇ PNG</button>
   <button class="btn" id="dlJpg">⬇ JPG</button>
 </div>
 
@@ -105,12 +115,19 @@ select,input,textarea{font-family:inherit}
   </div>
 </div>
 
+<div class="dbg" id="dbg"></div>
+<aside class="drawer" id="drawer">
+  <div class="dhead"><b>🎨 Design Settings</b><button class="btn sm" id="closeDesign">✕ Close</button></div>
+  <div class="dcontent" id="design"></div>
+  <div class="dfoot"><button class="btn sm" id="resetDesign">↺ Reset design</button><button class="btn sm pri" id="save2">💾 Save</button></div>
+</aside>
+
 <script>
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const KEY = 'prodReportV3';
-const STATUS = ['', 'Completed', 'Continue', 'Pending', 'Hold'];
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+const KEY = 'prodReportV4';
+const STATUS = ['', 'Completed', 'Continue', 'Pending', 'Hold'];
 const FONTS = [
   ['Carlito (Calibri jaisa)', 'Carlito, Calibri, Arial, sans-serif'],
   ['Arial', 'Arial, Helvetica, sans-serif'],
@@ -124,178 +141,235 @@ const FONTS = [
   ['Courier New', '"Courier New", Courier, monospace']
 ];
 
+/* ---------- DATA MODEL ----------
+   D = roz ka data (form me bharte ho)
+   G = design / formatting (Design panel me)
+*/
 const blankLots = () => Array.from({length:8}, () => ['','']);
 const blankLoss = () => Array.from({length:5}, () => ['','']);
+const withLots = arr => { const a = blankLots(); arr.forEach((x,i) => a[i] = x); return a; };
+const withLoss = arr => { const a = blankLoss(); arr.forEach((x,i) => a[i] = x); return a; };
 
-/* ---------- DATA MODEL ----------
-   Global (dono sections me common): date, shift, daily, lbl1, colVal, colSt, gap, axis
-   Per section: title, header/bar styling, sa/sb/sc (shift productions), ng, lots, loss, obs
-*/
-function newSec(title){
-  return {title, hdTag:'', tagColor:'#000000', tagSize:'16', titleColor:'#000000', hdBg:'#a9c8ea', titleSize:'18', hh:'28',
-    barW1:'33', barW2:'37', barC1:'#ffb953', barC2:'#00b050', lblColor:'#000000', lblSize:'11',
-    sa:'', sb:'', sc:'', ta:'', tb:'', tc:'', ng:'0', ngIncl:true, lots:blankLots(), loss:blankLoss(), obs:''};
+function defaultData(){
+  return {date:'2026-09-03', shift:'A', daily:'10512', secs:[
+    {sa:'2563', sb:'', sc:'', ng:'0', lots:withLots([['PBAG26817','Completed'],['PBAG26813','Completed']]), loss:withLoss([['Loss due to pre-process waiting','110']]), obs:''},
+    {sa:'2563', sb:'', sc:'', ng:'0', lots:withLots([['PBAG26817','Completed'],['PBAG26813','Completed']]), loss:blankLoss(), obs:''}
+  ]};
 }
-function defaults(){
-  const a = newSec('Final Inspection Process');
-  a.sa = '2563'; a.lots[0] = ['PBAG26817','Completed']; a.lots[1] = ['PBAG26813','Completed'];
-  a.loss[0] = ['Loss due to pre-process waiting','110'];
-  const b = newSec('Cell Registration Process');
-  b.sa = '2563'; b.lots[0] = ['PBAG26817','Completed']; b.lots[1] = ['PBAG26813','Completed'];
-  return {date:'2026-09-03', shift:'A', daily:'10512', lbl1:'Daily Target', shiftDiv:'2', headerColor:'#000000', font:'Carlito, Calibri, Arial, sans-serif', statusSize:'12.5', gap:'24', colVal:'414', colSt:'82',
-    colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b',
-    axisMin:'', axisMax:'', secs:[a,b]};
+function secDesign(title){
+  return {title, hdTag:'', hdBg:'#a9c8ea', titleSize:'18', hh:'28', tagSize:'16',
+    barW1:'33', barW2:'37', barC1:'#ffb953', barC2:'#00b050', lblColor:'#000000', lblSize:'11'};
 }
-
-let S;
-try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
-if(!S || !S.secs) S = defaults();
-{ // fill missing keys from defaults (safe migration)
-  const d = defaults();
-  for(const k in d) if(S[k]===undefined) S[k] = d[k];
-  S.secs.forEach((s,i) => {
-    const t = newSec(s.title || d.secs[i].title);
-    for(const k in t) if(s[k]===undefined) s[k] = t[k];
-  });
+function defaultDesign(){
+  return {lbl1:'Daily Target', shiftDiv:'2', gap:'24', colVal:'414', colSt:'82', axisMin:'', axisMax:'',
+    font:'Carlito, Calibri, Arial, sans-serif', headerColor:'#000000', statusSize:'12.5',
+    colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b', ngIncl:true,
+    secs:[secDesign('Final Inspection Process'), secDesign('Cell Registration Process')]};
 }
-const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
-S.secs.forEach(s => s.lots.forEach(l => { if(l[1]==='Running') l[1] = 'Continue'; }));
+function load(){
+  let raw = null; try { raw = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  const D0 = defaultData(), G0 = defaultDesign();
+  const D = (raw && raw.data) || D0, G = (raw && raw.design) || G0;
+  for(const k in D0) if(D[k] === undefined) D[k] = D0[k];
+  if(!D.secs) D.secs = D0.secs;
+  D0.secs.forEach((s,i) => { D.secs[i] = D.secs[i] || s; for(const k in s) if(D.secs[i][k] === undefined) D.secs[i][k] = s[k]; });
+  for(const k in G0) if(G[k] === undefined) G[k] = G0[k];
+  if(!G.secs) G.secs = G0.secs;
+  G0.secs.forEach((s,i) => { G.secs[i] = G.secs[i] || s; for(const k in s) if(G.secs[i][k] === undefined) G.secs[i][k] = s[k]; });
+  return {D, G};
+}
+let {D, G} = load();
 
-/* ---------- SHIFT HELPERS ---------- */
-function incl(){ return {A:true, B:S.shift==='B'||S.shift==='C', C:S.shift==='C'}; }
-function shiftLabel(){ return S.shift==='C' ? 'A+B+C' : S.shift==='B' ? 'A+B' : 'A'; }
-function headerText(s){ return (s.hdTag||'').trim() || ('Shift - ' + S.shift); }
+/* ---------- SAVE ---------- */
+let dirty = false;
+const markDirty = () => { dirty = true; $('#dirty').textContent = '● Unsaved changes'; };
+function saveAll(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({data:D, design:G}));
+    dirty = false;
+    $('#dirty').textContent = '✅ Saved';
+    setTimeout(() => { if(!dirty) $('#dirty').textContent = ''; }, 2500);
+  }catch(e){ $('#dirty').textContent = '⚠ Save fail'; }
+}
+$('#save').onclick = saveAll;
+$('#save2').onclick = saveAll;
+addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
 
-/* ---------- FORM ---------- */
+/* ---------- HELPERS ---------- */
+function incl(){ return {B: D.shift==='B' || D.shift==='C', C: D.shift==='C'}; }
+function shiftLabel(){ return D.shift==='C' ? 'A+B+C' : D.shift==='B' ? 'A+B' : 'A'; }
+function headerText(k){ return (G.secs[k].hdTag || '').trim() || ('Shift - ' + D.shift); }
+function setPath(root, path, val){
+  const keys = path.split('.'); let o = root;
+  for(let i=0;i<keys.length-1;i++) o = o[keys[i]];
+  o[keys[keys.length-1]] = val;
+}
 const fld = (label, path, val, type='text', extra='') =>
   `<label class="f"><span>${label}</span><input type="${type}" data-p="${path}" value="${esc(val)}" ${extra}></label>`;
+const colf = (label, path, val) =>
+  `<label class="f"><span>${label}</span><input type="color" data-p="${path}" value="${esc(val)}"></label>`;
 
-function buildForm(){
+/* ---------- DATA PANEL ---------- */
+function buildData(){
   const i = incl();
-  let h = `<h3>General (dono sections me common)</h3>
+  let h = `<h3>Roz ka data</h3>
   <div class="g2">
-    ${fld('Date','date',S.date,'date')}
-    <label class="f"><span>Shift</span><select data-p="shift">${['A','B','C'].map(x=>`<option value="${x}" ${S.shift===x?'selected':''}>${x}</option>`).join('')}</select></label>
+    ${fld('Date','d.date',D.date,'date')}
+    <label class="f"><span>Shift</span><select data-p="d.shift">${['A','B','C'].map(x => `<option value="${x}" ${D.shift===x?'selected':''}>${x}</option>`).join('')}</select></label>
   </div>
-  <div class="hint">Shift ${S.shift} chuna hai → Shift row me <b>${shiftLabel()}</b> ka total aur header me "Shift - ${S.shift}" aayega.</div>
-  <div class="g2">
-    ${fld('Daily Target','daily',S.daily,'number','inputmode="numeric"')}
-    ${fld('Yellow bar label','lbl1',S.lbl1)}
-    ${fld('Shift Target = Daily ÷ N (N)','shiftDiv',S.shiftDiv,'number','min="1" max="10"')}
-    <label class="f"><span>Shift Target (auto, sab shifts me same)</span><input readonly id="gtgt" value=""></label>
-  </div>
-  <div class="g2">
-    ${fld('Value column width (px)','colVal',S.colVal,'number','min="60" max="800"')}
-    ${fld('Status column width (px)','colSt',S.colSt,'number','min="40" max="400"')}
-  </div>
-  ${fld('Status font size (px)','statusSize',S.statusSize,'number','min="6" max="40" step="0.5"')}
-  <label class="f"><span>Font (table + chart text)</span><select data-p="font">${FONTS.map(([n,v])=>`<option value="${esc(v)}" ${S.font===v?'selected':''}>${n}</option>`).join('')}</select></label>
-  <div class="sub">Header text colors (dono sections me same)</div>
-  <div class="colbox">
-    <label class="f"><span>Header text color (Process name + Shift)</span><input type="color" data-p="headerColor" value="${S.headerColor}"></label>
-      </div>
-  <div class="sub">Colors (status cells &amp; yield)</div>
-  <div class="g3">
-    <label class="f"><span>Completed</span><input type="color" data-p="colDone" value="${S.colDone}"></label>
-    <label class="f"><span>Continue</span><input type="color" data-p="colRun" value="${S.colRun}"></label>
-    <label class="f"><span>Pending</span><input type="color" data-p="colPen" value="${S.colPen}"></label>
-    <label class="f"><span>Hold</span><input type="color" data-p="colHold" value="${S.colHold}"></label>
-    <label class="f"><span>Yield &lt; 100 (red)</span><input type="color" data-p="colYLow" value="${S.colYLow}"></label>
-  </div>
-  <div class="g3">
-    ${fld('Gap (px)','gap',S.gap,'number','min="0" max="80"')}
-    ${fld('Axis min','axisMin',S.axisMin,'number','placeholder="Auto"')}
-    ${fld('Axis max','axisMax',S.axisMax,'number','placeholder="Auto"')}
-  </div>`;
+  ${fld('Daily Target','d.daily',D.daily,'number','inputmode="numeric"')}
+  <div class="hint">Shift <b>${D.shift}</b> chuna hai → total <b>${shiftLabel()}</b> ka banega.</div>`;
 
-  S.secs.forEach((s,k)=>{
-    h += `<div class="sec"><h3>Section ${k+1}</h3>
-    ${fld('Process name',`secs.${k}.title`,s.title)}
+  D.secs.forEach((s,k) => {
+    h += `<div class="sec"><h3>${esc(G.secs[k].title)}</h3>
     <div class="g2">
-            <label class="f"><span>Header background</span><input type="color" data-p="secs.${k}.hdBg" value="${s.hdBg}"></label>
-      ${fld('Title font size (px)',`secs.${k}.titleSize`,s.titleSize,'number','min="8" max="40"')}
-      ${fld('Header row height (px)',`secs.${k}.hh`,s.hh,'number','min="14" max="90"')}
+      ${fld('Shift A production',`d.secs.${k}.sa`,s.sa,'number','inputmode="numeric"')}
+      ${i.B ? fld('Shift B production',`d.secs.${k}.sb`,s.sb,'number','inputmode="numeric"') : ''}
+      ${i.C ? fld('Shift C production',`d.secs.${k}.sc`,s.sc,'number','inputmode="numeric"') : ''}
+      ${fld('NG',`d.secs.${k}.ng`,s.ng,'number','inputmode="numeric"')}
+      <label class="f"><span>Shift Target</span><input readonly id="dtgt-${k}" value=""></label>
+      <label class="f"><span>Shift (${shiftLabel()}) total</span><input readonly id="dtot-${k}" value=""></label>
     </div>
+    <label class="f"><span>Yield (auto)</span><input readonly id="dy-${k}" value=""></label>
 
-    <div class="sub">Header right cell</div>
-    ${fld('Text override (khali = auto)',`secs.${k}.hdTag`,s.hdTag,'text',`placeholder="Shift - ${S.shift}"`)}
-    <div class="g2">
-            ${fld('Font size (px)',`secs.${k}.tagSize`,s.tagSize,'number','min="8" max="40"')}
-    </div>
-
-    <div class="sub">Graph</div>
-    <div class="g2">
-      ${fld('Yellow bar width',`secs.${k}.barW1`,s.barW1,'number','min="4" max="80"')}
-      ${fld('Green bar width',`secs.${k}.barW2`,s.barW2,'number','min="4" max="80"')}
-      <label class="f"><span>Yellow bar color</span><input type="color" data-p="secs.${k}.barC1" value="${s.barC1}"></label>
-      <label class="f"><span>Green bar color</span><input type="color" data-p="secs.${k}.barC2" value="${s.barC2}"></label>
-      <label class="f"><span>Bar label color</span><input type="color" data-p="secs.${k}.lblColor" value="${s.lblColor}"></label>
-      ${fld('Bar label font size (px)',`secs.${k}.lblSize`,s.lblSize,'number','min="6" max="30"')}
-    </div>
-
-    <div class="sub">Production</div>
-    <div class="g2">
-      ${fld('Shift A production',`secs.${k}.sa`,s.sa,'number','inputmode="numeric"')}
-      ${i.B ? fld('Shift B production',`secs.${k}.sb`,s.sb,'number','inputmode="numeric"') : ''}
-      ${i.C ? fld('Shift C production',`secs.${k}.sc`,s.sc,'number','inputmode="numeric"') : ''}
-      ${fld('NG',`secs.${k}.ng`,s.ng,'number','inputmode="numeric"')}
-      <label class="f"><span>Shift Target (auto)</span><input readonly id="auto-${k}" value=""></label>
-      <label class="f"><span>Shift (${shiftLabel()}) total</span><input readonly id="tot-${k}" value=""></label>
-    </div>
-    <label class="chk"><input type="checkbox" data-p="secs.${k}.ngIncl" ${s.ngIncl?'checked':''}> NG, production ke andar included hai</label>
-    <div class="hint">Yield = (Production − NG) ÷ Production. Checkbox off karoge to: Production ÷ (Production + NG)</div>
-
-    <div class="sub">Running Lots (Lot No. / Status)</div>`;
-    s.lots.forEach((l,j)=>{
-      h += `<div class="row2"><input data-p="secs.${k}.lots.${j}.0" placeholder="Running Lot -${j+1}" value="${esc(l[0])}">
-      <select data-p="secs.${k}.lots.${j}.1">${STATUS.map(x=>`<option ${l[1]===x?'selected':''} value="${x}">${x||'— Status —'}</option>`).join('')}</select></div>`;
+    <div class="sub">Running Lots</div>`;
+    s.lots.forEach((l,j) => {
+      h += `<div class="row2"><input data-p="d.secs.${k}.lots.${j}.0" placeholder="Running Lot -${j+1}" value="${esc(l[0])}">
+      <select data-p="d.secs.${k}.lots.${j}.1">${STATUS.map(x => `<option value="${x}" ${l[1]===x?'selected':''}>${x||'— Status —'}</option>`).join('')}</select></div>`;
     });
-    h += `<div class="sub">Production Loss (Problem / Minutes)</div>`;
-    s.loss.forEach((l,j)=>{
-      h += `<div class="row2"><input data-p="secs.${k}.loss.${j}.0" placeholder="Production Loss-${j+1}" value="${esc(l[0])}">
-      <input data-p="secs.${k}.loss.${j}.1" placeholder="Minutes" value="${esc(l[1])}"></div>`;
+    h += `<div class="sub">Production Loss</div>`;
+    s.loss.forEach((l,j) => {
+      h += `<div class="row2"><input data-p="d.secs.${k}.loss.${j}.0" placeholder="Production Loss-${j+1}" value="${esc(l[0])}">
+      <input data-p="d.secs.${k}.loss.${j}.1" placeholder="Minutes" value="${esc(l[1])}"></div>`;
     });
-    h += `<label class="f" style="margin-top:10px"><span>Observation</span><textarea rows="2" data-p="secs.${k}.obs">${esc(s.obs)}</textarea></label>`;
+    h += `<label class="f" style="margin-top:10px"><span>Observation</span><textarea rows="2" data-p="d.secs.${k}.obs">${esc(s.obs)}</textarea></label>`;
     if(k===0) h += `<button class="btn sm" id="copy12">Section 1 → Section 2 copy karo</button>`;
     h += `</div>`;
   });
-  h += `<div class="sec"><button class="btn sm" id="reset">↺ Reset to sample data</button></div>`;
+  h += `<div class="sec"><button class="btn sm" id="resetData">↺ Reset data (design same rahega)</button></div>`;
   $('#form').innerHTML = h;
 
   const c = $('#copy12');
   if(c) c.onclick = () => {
-    const keepKeys = ['title','hdTag','tagColor','tagSize','titleColor','hdBg','titleSize','hh','barW1','barW2','barC1','barC2','lblColor','lblSize'];
-    const keep = {}; keepKeys.forEach(k => keep[k] = S.secs[1][k]);
-    S.secs[1] = Object.assign(JSON.parse(JSON.stringify(S.secs[0])), keep);
-    save(); buildForm(); render();
+    D.secs[1] = JSON.parse(JSON.stringify(D.secs[0]));
+    markDirty(); buildData(); render();
   };
-  $('#reset').onclick = () => { if(confirm('Sab data reset kar du?')){ S = defaults(); save(); buildForm(); render(); } };
+  $('#resetData').onclick = () => {
+    if(confirm('Roz ka data reset kar du? (design nahi badlega)')){
+      D = defaultData(); markDirty(); buildData(); render();
+    }
+  };
 }
 
-function setPath(path, val){
-  const k = path.split('.'); let o = S;
-  for(let i=0;i<k.length-1;i++) o = o[k[i]];
-  o[k[k.length-1]] = val;
+/* ---------- DESIGN CODE (share / apply) ---------- */
+const CODE_PREFIX = 'QDS1:';
+function encodeDesign(){ return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(G)))); }
+function applyCode(txt){
+  let t = (txt || '').trim();
+  if(!t) return false;
+  if(t.startsWith(CODE_PREFIX)) t = t.slice(CODE_PREFIX.length);
+  let obj;
+  try{ obj = JSON.parse(decodeURIComponent(escape(atob(t)))); }
+  catch(e){ try{ obj = JSON.parse(t); }catch(e2){ return false; } }
+  if(!obj || typeof obj !== 'object' || !Array.isArray(obj.secs)) return false;
+  const def = defaultDesign();
+  const merged = Object.assign({}, def, obj);
+  merged.secs = def.secs.map((s,i) => Object.assign({}, s, obj.secs[i] || {}));
+  G = merged; markDirty();
+  return true;
 }
-function onEdit(e){
-  const p = e.target.dataset && e.target.dataset.p; if(!p) return;
-  setPath(p, e.target.type==='checkbox' ? e.target.checked : e.target.value);
-  save();
-  if(p==='shift') buildForm();   // B/C fields aur labels change hote hain
-  render();
+function attachCode(){
+  $('#copyCode').onclick = () => {
+    const out = () => { $('#dcodeMsg').textContent = '📋 Code copy ho gaya'; };
+    const fallback = () => { $('#dcodeOut').select(); document.execCommand('copy'); out(); };
+    if(navigator.clipboard) navigator.clipboard.writeText(encodeDesign()).then(out, fallback);
+    else fallback();
+  };
+  let timer = null;
+  $('#dcodeIn').addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const v = $('#dcodeIn').value;
+      if(!v.trim()) return;
+      if(applyCode(v)){
+        buildDesign();
+        $('#dcodeIn').value = v;
+        $('#dcodeMsg').textContent = '✅ Design apply ho gaya';
+        render();
+      } else {
+        $('#dcodeMsg').textContent = '⚠ Galat code — poora code paste karo';
+      }
+    }, 500);
+  });
 }
-document.addEventListener('input', onEdit);
-document.addEventListener('change', onEdit);
+
+/* ---------- DESIGN PANEL ---------- */
+function buildDesign(){
+  const sec = k => {
+    const s = G.secs[k];
+    return `<div class="sub">Section ${k+1} — ${esc(s.title)}</div>
+    ${fld('Process name',`g.secs.${k}.title`,s.title)}
+    <div class="g2">
+      ${colf('Header background',`g.secs.${k}.hdBg`,s.hdBg)}
+      ${fld('Title font size (px)',`g.secs.${k}.titleSize`,s.titleSize,'number','min="8" max="40"')}
+      ${fld('Header row height (px)',`g.secs.${k}.hh`,s.hh,'number','min="14" max="90"')}
+      ${fld('Shift text size (px)',`g.secs.${k}.tagSize`,s.tagSize,'number','min="8" max="40"')}
+    </div>
+    ${fld('Header right text (khali = Shift - '+D.shift+')',`g.secs.${k}.hdTag`,s.hdTag,'text',`placeholder="Shift - ${D.shift}"`)}
+    <div class="g2">
+      ${fld('Yellow bar width',`g.secs.${k}.barW1`,s.barW1,'number','min="4" max="80"')}
+      ${fld('Green bar width',`g.secs.${k}.barW2`,s.barW2,'number','min="4" max="80"')}
+      ${colf('Yellow bar color',`g.secs.${k}.barC1`,s.barC1)}
+      ${colf('Green bar color',`g.secs.${k}.barC2`,s.barC2)}
+      ${colf('Bar label color',`g.secs.${k}.lblColor`,s.lblColor)}
+      ${fld('Bar label size (px)',`g.secs.${k}.lblSize`,s.lblSize,'number','min="6" max="30"')}
+    </div>`;
+  };
+  $('#design').innerHTML = `
+    <div class="sub">Design code</div>
+    <label class="f"><span>Aapka design code (copy karke kisi ko bhejo)</span><textarea id="dcodeOut" rows="4" readonly style="font-family:monospace;font-size:.75rem">${esc(encodeDesign())}</textarea></label>
+    <div class="bar-btns"><button class="btn sm" id="copyCode">📋 Copy code</button></div>
+    <label class="f" style="margin-top:12px"><span>Design code paste karo (apply apne aap ho jayega)</span><textarea id="dcodeIn" rows="4" placeholder="Yahan design code paste karo" style="font-family:monospace;font-size:.75rem"></textarea></label>
+    <div class="hint" id="dcodeMsg"></div>
+
+    <div class="sub">General</div>
+    <div class="g2">
+      <label class="f"><span>Font (table + chart)</span><select data-p="g.font">${FONTS.map(([n,v]) => `<option value="${esc(v)}" ${G.font===v?'selected':''}>${n}</option>`).join('')}</select></label>
+      ${colf('Header text color (Process name + Shift)','g.headerColor',G.headerColor)}
+      ${fld('Yellow bar label','g.lbl1',G.lbl1)}
+      ${fld('Shift Target = Daily ÷ N (N)','g.shiftDiv',G.shiftDiv,'number','min="1" max="10"')}
+      ${fld('Value column width (px)','g.colVal',G.colVal,'number','min="60" max="800"')}
+      ${fld('Status column width (px)','g.colSt',G.colSt,'number','min="40" max="400"')}
+      ${fld('Gap between sections (px)','g.gap',G.gap,'number','min="0" max="80"')}
+      ${fld('Axis min (khali = auto)','g.axisMin',G.axisMin,'number','placeholder="Auto"')}
+      ${fld('Axis max (khali = auto)','g.axisMax',G.axisMax,'number','placeholder="Auto"')}
+    </div>
+    <label class="chk"><input type="checkbox" data-p="g.ngIncl" ${G.ngIncl?'checked':''}> NG, production ke andar included hai (yield formula)</label>
+
+    <div class="sub">Status colors &amp; text</div>
+    <div class="g2">
+      ${colf('Completed','g.colDone',G.colDone)}
+      ${colf('Continue','g.colRun',G.colRun)}
+      ${colf('Pending','g.colPen',G.colPen)}
+      ${colf('Hold','g.colHold',G.colHold)}
+      ${colf('Yield < 100 (cell red)','g.colYLow',G.colYLow)}
+      ${fld('Status font size (px)','g.statusSize',G.statusSize,'number','min="6" max="40" step="0.5"')}
+    </div>
+
+    ${sec(0)}
+    ${sec(1)}`;
+  attachCode();
+}
 
 /* ---------- CALC ---------- */
-function calc(s){
-  const daily = num(S.daily), i = incl();
+function calc(k){
+  const s = D.secs[k], i = incl(), daily = num(D.daily);
   const sA = num(s.sa), sB = i.B ? num(s.sb) : 0, sC = i.C ? num(s.sc) : 0;
   const total = sA + sB + sC, ng = num(s.ng);
-  const tgt = Math.round(daily / (num(S.shiftDiv) || 2));
-  const good = s.ngIncl ? Math.max(total-ng,0) : total;
-  const base = s.ngIncl ? total : total+ng;
-  const y = base>0 ? good/base*100 : 0;
+  const tgt = Math.round(daily / (num(G.shiftDiv) || 2));
+  const good = G.ngIncl ? Math.max(total - ng, 0) : total;
+  const base = G.ngIncl ? total : total + ng;
+  const y = base > 0 ? good / base * 100 : 0;
   return {daily, total, ng, tgt, y};
 }
 
@@ -303,17 +377,18 @@ function calc(s){
 const fmt = n => Number(n).toLocaleString('en-US');
 function axis(a, b){
   const lo = Math.min(a,b), hi = Math.max(a,b);
-  const steps = []; for(let k=0;k<=7;k++) [1,2,5].forEach(m=>steps.push(m*10**k));
+  const steps = []; for(let k=0;k<=7;k++) [1,2,5].forEach(m => steps.push(m*10**k));
   for(const st of steps){
-    let mn = S.axisMin!=='' ? +S.axisMin : Math.floor(lo/st)*st;
-    let mx = S.axisMax!=='' ? +S.axisMax : Math.ceil(hi/st)*st;
+    let mn = G.axisMin!=='' ? +G.axisMin : Math.floor(lo/st)*st;
+    let mx = G.axisMax!=='' ? +G.axisMax : Math.ceil(hi/st)*st;
     if(mx<=mn) mx = mn+st;
     if((mx-mn)/st <= 5) return {mn,mx,st};
   }
-  return {mn:0,mx:Math.max(hi,1),st:Math.max(hi,1)/5};
+  return {mn:0, mx:Math.max(hi,1), st:Math.max(hi,1)/5};
 }
-function chart(plan, act, s){
-  const {mn,mx,st} = axis(plan, act);
+function chart(k, c){
+  const s = G.secs[k];
+  const {mn,mx,st} = axis(c.daily, c.total);
   const pct = v => Math.max(0, Math.min(100, (v-mn)/(mx-mn)*100));
   let h = `<div class="cw"><div class="ctitle">Plan vs Actual Trend</div><div class="plot">`;
   for(let v=mn; v<=mx+1e-9; v+=st){
@@ -323,46 +398,46 @@ function chart(plan, act, s){
   const w1 = Math.max(4, num(s.barW1)||33), w2 = Math.max(4, num(s.barW2)||37);
   const bar = (v,center,w,col) => `<div class="bar" style="left:${center-w/2}px;width:${w}px;height:${pct(v)}%;background:${col}"></div>
     <div class="vl" style="left:${center}px;bottom:calc(${pct(v)}% + 3px)">${fmt(v)}</div>`;
-  h += bar(plan, C1, w1, esc(s.barC1)) + bar(act, C2, w2, esc(s.barC2));
+  h += bar(c.daily, C1, w1, esc(s.barC1)) + bar(c.total, C2, w2, esc(s.barC2));
   const lsz = num(s.lblSize)||11, lc = esc(s.lblColor);
-  h += `<div class="blb" style="left:${C1}px;color:${lc};font-size:${lsz}px">${esc(S.lbl1)}</div>`;
+  h += `<div class="blb" style="left:${C1}px;color:${lc};font-size:${lsz}px">${esc(G.lbl1)}</div>`;
   h += `<div class="blb" style="left:${C2}px;color:${lc};font-size:${lsz}px">Shift (${shiftLabel()})</div>`;
   return h + `</div></div>`;
 }
 
 /* ---------- REPORT ---------- */
 const dmy = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}-${m}-${y}`; };
-const stStyle = st => {
-  const m = {Completed:S.colDone, Continue:S.colRun, Pending:S.colPen, Hold:S.colHold};
-  return m[st] ? `background:${esc(m[st])};font-weight:700;text-align:center` : '';
-};
 const mins = t => { t = String(t||'').trim(); return /^\d+(\.\d+)?$/.test(t) ? t+' MIN' : t; };
+const stStyle = st => {
+  const m = {Completed:G.colDone, Continue:G.colRun, Pending:G.colPen, Hold:G.colHold};
+  return m[st] ? `background:${esc(m[st])};font-weight:700;text-align:center;font-size:${num(G.statusSize)||12.5}px` : '';
+};
 
-function section(s){
-  const c = calc(s);
-  const lossHas = s.loss.some(l=>l[0]||l[1]);
+function section(k){
+  const s = D.secs[k], g = G.secs[k], c = calc(k);
+  const lossHas = s.loss.some(l => l[0] || l[1]);
   const rows = 1+1+8+6+(lossHas?1:0)+5+1;
-  const hh = Math.max(14, num(s.hh)||28);
-  const bg = `background:${esc(s.hdBg)};height:${hh}px`;
+  const hh = Math.max(14, num(g.hh)||28);
+  const bg = `background:${esc(g.hdBg)};height:${hh}px`;
+  const yLow = Math.round(c.y*100)/100 < 100;
   let r = '';
   r += `<tr style="height:${hh}px"><td class="hd" style="${bg}"></td>
-    <td class="hd" style="${bg};color:${esc(S.headerColor)};font-size:${num(s.titleSize)||18}px">${esc(s.title)}</td>
-    <td class="hd" style="${bg};color:${esc(S.headerColor)};font-size:${num(s.tagSize)||16}px">${esc(headerText(s))}</td>
-    <td class="ch" rowspan="${rows}">${chart(c.daily,c.total,s)}</td></tr>`;
-  r += `<tr><td class="gl">Date</td><td class="c">${dmy(S.date)}</td><td class="gl">Status</td></tr>`;
-  s.lots.forEach((l,j)=>{
-    const has = l[0]||l[1];
-    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td style="${has?stStyle(l[1])+';font-size:'+(num(S.statusSize)||12.5)+'px':''}">${has?esc(l[1]):''}</td></tr>`;
+    <td class="hd" style="${bg};color:${esc(G.headerColor)};font-size:${num(g.titleSize)||18}px">${esc(g.title)}</td>
+    <td class="hd" style="${bg};color:${esc(G.headerColor)};font-size:${num(g.tagSize)||16}px">${esc(headerText(k))}</td>
+    <td class="ch" rowspan="${rows}">${chart(k, c)}</td></tr>`;
+  r += `<tr><td class="gl">Date</td><td class="c">${dmy(D.date)}</td><td class="gl">Status</td></tr>`;
+  s.lots.forEach((l,j) => {
+    const has = l[0] || l[1];
+    r += `<tr><td>Running Lot -${j+1}</td><td class="c">${esc(l[0])}</td><td style="${has?stStyle(l[1]):''}">${has?esc(l[1]):''}</td></tr>`;
   });
   r += `<tr><td class="lb">Shift Target</td><td class="b">${c.tgt}</td><td></td></tr>`;
   r += `<tr><td class="g">Shift Production</td><td class="b">${c.total}</td><td></td></tr>`;
   r += `<tr><td class="g red">NG</td><td class="c">${c.ng}</td><td></td></tr>`;
-  const yLow = Math.round(c.y*100)/100 < 100;
-  r += `<tr><td class="g">Yield</td><td class="c" style="${yLow?'background:'+esc(S.colYLow):''}">${c.y.toFixed(2)}%</td><td></td></tr>`;
+  r += `<tr><td class="g">Yield</td><td class="c" style="${yLow?'background:'+esc(G.colYLow):''}">${c.y.toFixed(2)}%</td><td></td></tr>`;
   r += `<tr><td class="lb">Daily Target</td><td class="b">${c.daily}</td><td></td></tr>`;
   r += `<tr><td class="g">Shift (${shiftLabel()})</td><td class="b">${c.total}</td><td></td></tr>`;
   if(lossHas) r += `<tr><td>Production Loss</td><td class="c">Problem</td><td class="c">Time Loss</td></tr>`;
-  s.loss.forEach((l,j)=>{
+  s.loss.forEach((l,j) => {
     r += `<tr><td>Production Loss-${j+1}</td><td class="c">${esc(l[0])}</td><td class="c">${esc(mins(l[1]))}</td></tr>`;
   });
   r += `<tr><td>Observation</td><td class="c wrap">${esc(s.obs).replace(/\n/g,'<br>')}</td><td></td></tr>`;
@@ -370,19 +445,20 @@ function section(s){
 }
 
 function render(){
-  const cv = Math.max(60, num(S.colVal)||414), cs = Math.max(40, num(S.colSt)||82), TW = 110+cv+cs+289;
-  const g = Math.max(0, num(S.gap));
+  const cv = Math.max(60, num(G.colVal)||414), cs = Math.max(40, num(G.colSt)||82), TW = 110+cv+cs+289;
+  const g = Math.max(0, num(G.gap));
   const gap = g>0 ? `<tr style="height:${g}px"><td style="height:${g}px"></td><td style="height:${g}px"></td><td style="height:${g}px"></td></tr>` : '';
   $('#report').style.width = (TW+2)+'px';
-  $('#report').style.fontFamily = S.font;
+  $('#report').style.fontFamily = G.font;
   $('#report').innerHTML = `<table style="width:${TW}px"><colgroup><col style="width:110px"><col style="width:${cv}px"><col style="width:${cs}px"><col style="width:289px"></colgroup>
-    ${section(S.secs[0])}${gap}${section(S.secs[1])}</table>`;
-  S.secs.forEach((s,k)=>{
-    const c = calc(s);
-    const a = $('#auto-'+k); if(a) a.value = c.tgt;
-    const shiftNote = $('#tot-'+k); if(shiftNote) shiftNote.value = c.total;
-    const gt = $('#gtgt'); if(gt) gt.value = c.tgt;
-    const t = $('#tot-'+k); if(t) t.value = c.total;
+    ${section(0)}${gap}${section(1)}</table>`;
+  D.secs.forEach((s,k) => {
+    const c = calc(k);
+    const set = (id, v) => { const el = $(id); if(el) el.value = v; };
+    set('#dtgt-'+k, c.tgt);
+    set('#dtot-'+k, c.total);
+    set('#dy-'+k, c.y.toFixed(2)+'%');
+    const co = $('#dcodeOut'); if(co) co.value = encodeDesign();
   });
   fit();
 }
@@ -395,6 +471,32 @@ function fit(){
   wrap.style.height = (rep.offsetHeight * k) + 'px';
 }
 addEventListener('resize', fit);
+
+/* ---------- EVENTS ---------- */
+function onEdit(e){
+  const p = e.target.dataset && e.target.dataset.p; if(!p) return;
+  const isG = p.startsWith('g.');
+  const root = isG ? G : D;
+  const path = p.slice(2);
+  setPath(root, path, e.target.type==='checkbox' ? e.target.checked : e.target.value);
+  markDirty();
+  if(p==='d.shift'){ buildData(); buildDesign(); }
+  render();
+}
+document.addEventListener('input', onEdit);
+document.addEventListener('change', onEdit);
+
+/* drawer open/close */
+const openD = () => { buildDesign(); $('#drawer').classList.add('open'); $('#dbg').classList.add('open'); };
+const closeD = () => { $('#drawer').classList.remove('open'); $('#dbg').classList.remove('open'); };
+$('#openDesign').onclick = openD;
+$('#closeDesign').onclick = closeD;
+$('#dbg').onclick = closeD;
+$('#resetDesign').onclick = () => {
+  if(confirm('Design (colors, fonts, width) default par wapas kar du? Data nahi badlega.')){
+    G = defaultDesign(); markDirty(); buildDesign(); render();
+  }
+};
 
 /* ---------- EXPORT (content-only, max resolution) ---------- */
 function canvasOK(W,H){
@@ -430,7 +532,7 @@ async function exportImg(type){
   try{
     await document.fonts.ready;
     const sel = $('#scale').value;
-    const list = sel==='max' ? [8,6,5,4,3,2] : [+sel,4,3,2].filter((v,i,a)=>a.indexOf(v)===i);
+    const list = sel==='max' ? [8,6,5,4,3,2] : [+sel,4,3,2].filter((v,i,a) => a.indexOf(v)===i);
     let canvas = null, used = 0;
     for(const sc of list){
       st.textContent = `⏳ ${sc}x try ho raha hai...`;
@@ -443,7 +545,7 @@ async function exportImg(type){
       if(!b){ st.textContent = '⚠ Image bahut badi hai — quality kam karo.'; return; }
       const a = document.createElement('a');
       a.href = URL.createObjectURL(b);
-      a.download = `Production-Report-${S.date||'report'}.${type}`;
+      a.download = `Production-Report-${D.date||'report'}.${type}`;
       document.body.appendChild(a); a.click(); a.remove();
       st.textContent = `✅ Done — ${canvas.width}×${canvas.height}px (${used}x)`;
     }, mime, 1);
@@ -455,7 +557,7 @@ async function exportImg(type){
 $('#dlPng').onclick = () => exportImg('png');
 $('#dlJpg').onclick = () => exportImg('jpg');
 
-buildForm(); render();
+buildData(); buildDesign(); render();
 document.fonts && document.fonts.ready.then(fit);
 </script>
 </body>
