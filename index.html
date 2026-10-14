@@ -3,6 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:#0b0d14;color:#eceef5;overflow:hidden}
+#home{height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.wrap{width:min(860px,100%)}
+h1{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+h1 span{color:#4f8cff}
+.sub{color:#8d93a8;margin-bottom:32px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{display:block;cursor:pointer;background:#12151f;border:1px solid #232838;border-radius:20px;padding:34px 30px;transition:.25s}
+.card:hover{transform:translateY(-6px);border-color:#4f8cff;box-shadow:0 20px 50px -20px rgba(79,140,255,.45)}
+.ico{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-size:1.8rem;background:rgba(79,140,255,.12);border:1px solid rgba(79,140,255,.3);margin-bottom:22px}
+.card h2{font-size:1.35rem;font-weight:700;margin-bottom:10px}
+.card p{color:#8d93a8;font-size:.95rem;line-height:1.5;margin-bottom:22px}
+.open{color:#4f8cff;font-weight:600;font-size:.92rem}
+@media(max-width:640px){.cards{grid-template-columns:1fr}}
+
+#viewer{position:fixed;inset:0;display:none;flex-direction:column;background:#0b0d14}
+#viewer.open{display:flex}
+#viewerbar{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid #232838;background:#12151f}
+#viewerbar button{border:1px solid #232838;background:#1a1e2c;color:#eceef5;padding:9px 14px;border-radius:10px;font-family:inherit;font-size:.88rem;cursor:pointer}
+#viewerbar button:hover{border-color:#4f8cff}
+#vtitle{font-size:1rem;font-weight:600}
+#frame{flex:1;width:100%;border:0;background:#0b0d14}
+</style>
+</head>
+<body>
+
+<div id="home">
+  <div class="wrap">
+    <h1>Production <span>Tools</span></h1>
+    <p class="sub">Kaunsa tool kholna hai?</p>
+    <div class="cards">
+      <div class="card" data-tool="process">
+        <div class="ico">📊</div>
+        <h2>Process Tag</h2>
+        <p>Final Inspection aur Cell Registration ka daily production report, lots, loss aur yield ke saath.</p>
+        <span class="open">Open →</span>
+      </div>
+      <div class="card" data-tool="handover">
+        <div class="ico">🔁</div>
+        <h2>Shift Handover</h2>
+        <p>Date, Shift, WL, Man Power aur Shift Communication ka handover sheet, numbered points aur bold/red formatting ke saath.</p>
+        <span class="open">Open →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="viewer">
+  <div id="viewerbar"><button id="back">← Home</button><span id="vtitle"></span></div>
+  <iframe id="frame"></iframe>
+</div>
+
+<!-- Tool 1: Process Tag -->
+<script type="text/plain" id="src-process"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Process Tag — Production Report</title>
 <link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
@@ -56,11 +119,11 @@ select,input,textarea{font-family:inherit}
 .dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
 .dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
 
-/* ===== REPORT (exported area) — THIN BORDERS ===== */
+/* ===== REPORT ===== */
 .report{background:#fff;padding:1px;color:#000}
 .report table{border-collapse:collapse;table-layout:fixed}
 .report td{border:0.5px solid var(--gridColor);height:17px;padding:0 3px;font-size:var(--cellFS);line-height:1.15;white-space:nowrap;overflow:hidden;background:#fff}
-.report td.hd{background:var(--hdBg);font-weight:700;text-align:center;line-height:1.1;padding:0 3px}
+.report td.hd{font-weight:700;text-align:center;line-height:1.1;padding:0 3px}
 .report td.gl{background:#92d36e;font-weight:700;text-align:center;font-size:var(--labelFS)}
 .report td.g{background:#4cd05e;font-weight:700;font-size:var(--labelFS)}
 .report td.b{background:#a9c8ea;font-weight:700;text-align:center;font-size:var(--valueFS)}
@@ -69,13 +132,13 @@ select,input,textarea{font-family:inherit}
 .report td.red{color:#e32424}
 .report td.wrap{white-space:normal;height:auto;min-height:17px;font-size:var(--obsFS)}
 .report td.ch{position:relative;padding:0;background:#fff}
-.cw{position:absolute;inset:0}
-.ctitle{position:absolute;top:10px;left:0;right:0;text-align:center;font-weight:700;font-size:var(--chartTitleFS);color:#2ab4d6;font-family:inherit}
-.plot{position:absolute;left:70px;right:44px;top:36px;bottom:24px}
+.cw{position:absolute;inset:0;overflow:hidden}
+.ctitle{position:absolute;top:6px;left:0;right:0;text-align:center;font-weight:700;font-size:var(--chartTitleFS);color:#2ab4d6;font-family:inherit;line-height:1}
+.plot{position:absolute;left:60px;right:40px;top:28px;bottom:26px}
 .gl2{position:absolute;left:0;right:0;height:1px;background:var(--gridLineColor)}
-.yl{position:absolute;right:calc(100% + 8px);transform:translateY(50%);font-size:var(--axisFS);color:#666;font-family:inherit;white-space:nowrap}
+.yl{position:absolute;right:calc(100% + 6px);transform:translateY(50%);font-size:var(--axisFS);color:#666;font-family:inherit;white-space:nowrap;line-height:1}
 .bar{position:absolute;bottom:0}
-.vl{position:absolute;width:70px;transform:translateX(-50%);text-align:center;font-size:var(--barValFS);color:#666;font-family:inherit}
+.vl{position:absolute;width:70px;transform:translateX(-50%);text-align:center;font-size:var(--barValFS);color:#666;font-family:inherit;line-height:1}
 .blb{position:absolute;bottom:-18px;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-family:inherit;line-height:1}
 
 @media(max-width:980px){
@@ -122,7 +185,7 @@ select,input,textarea{font-family:inherit}
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
-const KEY = 'prodReportV5';
+const KEY = 'prodReportV6';
 const STATUS = ['', 'Completed', 'Continue', 'Pending', 'Hold'];
 const FONTS = [
   ['Carlito (Calibri jaisa)', 'Carlito, Calibri, Arial, sans-serif'],
@@ -155,10 +218,8 @@ function defaultDesign(){
   return {lbl1:'Daily Target', shiftDiv:'2', gap:'24', colVal:'414', colSt:'82', axisMin:'', axisMax:'',
     font:'Carlito, Calibri, Arial, sans-serif', headerColor:'#000000', statusSize:'12.5',
     colDone:'#4cd05e', colRun:'#ffd966', colPen:'#f4b183', colHold:'#ff7c80', colYLow:'#ff3b3b', ngIncl:true,
-    // NEW: per-text font sizes
     cellFS:'12.5', labelFS:'12.5', valueFS:'12.5', obsFS:'12.5',
     chartTitleFS:'11.5', axisFS:'10', barValFS:'9.5',
-    // NEW: grid line
     gridColor:'#cccccc', gridLineColor:'#e4e4e4', gridThickness:'0.5',
     secs:[secDesign('Final Inspection Process'), secDesign('Cell Registration Process')]};
 }
@@ -258,7 +319,7 @@ function buildData(){
 }
 
 /* ---------- DESIGN CODE ---------- */
-const CODE_PREFIX = 'QDS2:';
+const CODE_PREFIX = 'QDS3:';
 function encodeDesign(){ return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(G)))); }
 function applyCode(txt){
   let t = (txt || '').trim();
@@ -328,31 +389,30 @@ function buildDesign(){
     <label class="f" style="margin-top:12px"><span>Design code paste karo (apply apne aap ho jayega)</span><textarea id="dcodeIn" rows="4" placeholder="Yahan design code paste karo" style="font-family:monospace;font-size:.75rem"></textarea></label>
     <div class="hint" id="dcodeMsg"></div>
 
-    <div class="sub">📏 Grid / Border (patla karne ke liye)</div>
+    <div class="sub">📏 Grid / Border</div>
     <div class="g2">
       ${colf('Grid line color (table border)','g.gridColor',G.gridColor)}
-      ${fld('Grid thickness (px) — 0.5 = patla, 1 = normal','g.gridThickness',G.gridThickness,'number','min="0.25" max="3" step="0.25"')}
+      ${fld('Grid thickness (px) — 0.5 patla','g.gridThickness',G.gridThickness,'number','min="0.25" max="3" step="0.25"')}
       ${colf('Chart grid line color','g.gridLineColor',G.gridLineColor)}
     </div>
-    <div class="hint">💡 0.5 ya 0.25 karne se grid patli dikhegi (print me bhi saaf).</div>
 
     <div class="sub">🔤 Har text ka font size (px)</div>
     <div class="g2">
-      ${fld('Cell text (Running Lot, label)','g.cellFS',G.cellFS,'number','min="6" max="30" step="0.5"')}
-      ${fld('Label text (Shift Target, Yield)','g.labelFS',G.labelFS,'number','min="6" max="30" step="0.5"')}
-      ${fld('Value text (numbers, 9600)','g.valueFS',G.valueFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Cell text','g.cellFS',G.cellFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Label text','g.labelFS',G.labelFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Value text (numbers)','g.valueFS',G.valueFS,'number','min="6" max="30" step="0.5"')}
       ${fld('Observation text','g.obsFS',G.obsFS,'number','min="6" max="30" step="0.5"')}
-      ${fld('Chart title font size','g.chartTitleFS',G.chartTitleFS,'number','min="6" max="30" step="0.5"')}
-      ${fld('Axis numbers (0, 2000...)','g.axisFS',G.axisFS,'number','min="6" max="30" step="0.5"')}
-      ${fld('Bar value (9600 upar)','g.barValFS',G.barValFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Chart title','g.chartTitleFS',G.chartTitleFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Axis numbers','g.axisFS',G.axisFS,'number','min="6" max="30" step="0.5"')}
+      ${fld('Bar value (upar)','g.barValFS',G.barValFS,'number','min="6" max="30" step="0.5"')}
     </div>
 
     <div class="sub">General</div>
     <div class="g2">
       <label class="f"><span>Font (table + chart)</span><select data-p="g.font">${FONTS.map(([n,v]) => `<option value="${esc(v)}" ${G.font===v?'selected':''}>${n}</option>`).join('')}</select></label>
-      ${colf('Header text color (Process name + Shift)','g.headerColor',G.headerColor)}
+      ${colf('Header text color','g.headerColor',G.headerColor)}
       ${fld('Yellow bar label','g.lbl1',G.lbl1)}
-      ${fld('Shift Target = Daily ÷ N (N)','g.shiftDiv',G.shiftDiv,'number','min="1" max="10"')}
+      ${fld('Shift Target = Daily ÷ N','g.shiftDiv',G.shiftDiv,'number','min="1" max="10"')}
       ${fld('Value column width (px)','g.colVal',G.colVal,'number','min="60" max="800"')}
       ${fld('Status column width (px)','g.colSt',G.colSt,'number','min="40" max="400"')}
       ${fld('Gap between sections (px)','g.gap',G.gap,'number','min="0" max="80"')}
@@ -398,25 +458,32 @@ function calc(k){
   return {daily, total, ng, tgt, y};
 }
 
-/* ---------- CHART ---------- */
+/* ---------- CHART (auto 0 → target) ---------- */
 const fmt = n => Number(n).toLocaleString('en-US');
-function axis(a, b){
-  const lo = Math.min(a,b), hi = Math.max(a,b);
-  const steps = []; for(let k=0;k<=7;k++) [1,2,5].forEach(m => steps.push(m*10**k));
-  for(const st of steps){
-    let mn = G.axisMin!=='' ? +G.axisMin : Math.floor(lo/st)*st;
-    let mx = G.axisMax!=='' ? +G.axisMax : Math.ceil(hi/st)*st;
-    if(mx<=mn) mx = mn+st;
-    if((mx-mn)/st <= 5) return {mn,mx,st};
+function axisAuto(c){
+  if(G.axisMin !== '' || G.axisMax !== ''){
+    const mn = G.axisMin !== '' ? +G.axisMin : 0;
+    const mx = G.axisMax !== '' ? +G.axisMax : Math.max(c.daily, c.total, 1);
+    if(mx > mn) return {mn, mx, st: (mx - mn) / 5};
   }
-  return {mn:0, mx:Math.max(hi,1), st:Math.max(hi,1)/5};
+  const mx = Math.max(c.daily, c.total, 1);
+  const rawStep = mx / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const norm = rawStep / mag;
+  let step;
+  if(norm <= 1) step = 1 * mag;
+  else if(norm <= 2) step = 2 * mag;
+  else if(norm <= 5) step = 5 * mag;
+  else step = 10 * mag;
+  const top = step * 5;
+  return {mn: 0, mx: top, st: step};
 }
 function chart(k, c){
   const s = G.secs[k];
-  const {mn,mx,st} = axis(c.daily, c.total);
+  const {mn,mx,st} = axisAuto(c);
   const pct = v => Math.max(0, Math.min(100, (v-mn)/(mx-mn)*100));
   let h = `<div class="cw"><div class="ctitle">Plan vs Actual Trend</div><div class="plot">`;
-  for(let v=mn; v<=mx+1e-9; v+=st){
+  for(let v = 0; v <= mx + 1e-9; v += st){
     h += `<div class="gl2" style="bottom:${pct(v)}%"></div><div class="yl" style="bottom:${pct(v)}%">${fmt(v)}</div>`;
   }
   const C1 = 23.5, C2 = 148.5;
@@ -476,7 +543,6 @@ function render(){
   const rep = $('#report');
   rep.style.width = (TW+2)+'px';
   rep.style.fontFamily = G.font;
-  // CSS variables for fonts and grid
   rep.style.setProperty('--cellFS', (num(G.cellFS)||12.5)+'px');
   rep.style.setProperty('--labelFS', (num(G.labelFS)||12.5)+'px');
   rep.style.setProperty('--valueFS', (num(G.valueFS)||12.5)+'px');
@@ -487,12 +553,9 @@ function render(){
   rep.style.setProperty('--gridColor', G.gridColor || '#cccccc');
   rep.style.setProperty('--gridLineColor', G.gridLineColor || '#e4e4e4');
   rep.style.setProperty('--hdBg', G.secs[0].hdBg || '#a9c8ea');
-  // Thin border
   const bt = num(G.gridThickness) || 0.5;
-  rep.style.setProperty('--gridThickness', bt + 'px');
-  rep.innerHTML = `<table style="width:${TW}px;border-collapse:collapse"><colgroup><col style="width:110px"><col style="width:${cv}px"><col style="width:${cs}px"><col style="width:289px"></colgroup>
+  rep.innerHTML = `<table style="width:${TW}px"><colgroup><col style="width:110px"><col style="width:${cv}px"><col style="width:${cs}px"><col style="width:289px"></colgroup>
     ${section(0)}${gap}${section(1)}</table>`;
-  // Apply thin border to all td
   rep.querySelectorAll('td').forEach(td => {
     td.style.border = bt + 'px solid ' + (G.gridColor || '#cccccc');
   });
@@ -594,7 +657,7 @@ document.fonts && document.fonts.ready.then(fit);
 <\/script>
 </script>
 
-<!-- Tool 2: Shift Handover (unchanged) -->
+<!-- Tool 2: Shift Handover -->
 <script type="text/plain" id="src-handover"><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1412,7 +1475,6 @@ document.fonts && document.fonts.ready.then(fit);
 </script>
 
 <script>
-/* ---------- HOME + VIEWER (tools isi file me embedded hain) ---------- */
 const TOOLS = {
   process:   {title:'📊 Process Tag — Production Report', src:'src-process'},
   handover:  {title:'🔁 Shift Handover Communication',    src:'src-handover'}
