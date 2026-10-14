@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Production Tools</title>
+<title>Production Tools — Auto Axis (0 to Target)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -37,7 +37,7 @@ h1 span{color:#4f8cff}
 <div id="home">
   <div class="wrap">
     <h1>Production <span>Tools</span></h1>
-    <p class="sub">Kaunsa tool kholna hai?</p>
+    <p class="sub">Kaunsa tool kholna hai? — Graph axis ab <b>0 se target tak</b> auto adjust hoga.</p>
     <div class="cards">
       <div class="card" data-tool="process">
         <div class="ico">📊</div>
@@ -60,7 +60,7 @@ h1 span{color:#4f8cff}
   <iframe id="frame"></iframe>
 </div>
 
-<!-- Tool 1: Process Tag (source yahi file me embed hai) -->
+<!-- Tool 1: Process Tag (auto axis: 0 se target) -->
 <script type="text/plain" id="src-process"><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,7 +112,6 @@ select,input,textarea{font-family:inherit}
 .colbox{display:flex;gap:14px;border:1px solid #2c3349;border-radius:12px;padding:14px;background:#0c0f18;margin-bottom:12px}
 .colbox .f{flex:1;margin:0}
 
-/* drawer (design settings) */
 .dbg{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
 .dbg.open{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;height:100vh;width:min(460px,96vw);background:var(--panel);border-left:1px solid var(--line);transform:translateX(105%);transition:transform .3s;z-index:160;display:flex;flex-direction:column}
@@ -122,7 +121,6 @@ select,input,textarea{font-family:inherit}
 .dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
 .dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
 
-/* ===== REPORT (exported area) ===== */
 .report{background:#fff;padding:1px;color:#000}
 .report table{border-collapse:collapse;table-layout:fixed}
 .report td{border:1px solid #2b2b2b;height:17px;padding:0 3px;font-size:12.5px;line-height:15px;white-space:nowrap;overflow:hidden;background:#fff}
@@ -153,7 +151,7 @@ select,input,textarea{font-family:inherit}
 <body>
 
 <div class="top">
-  <h1>📊 Production <span>Report</span> Generator</h1>
+  <h1>📊 Production <span>Report</span> Generator <small style="color:#7fd6a0;font-size:.75rem;">(axis: 0 → target auto)</small></h1>
   <span class="dirty" id="dirty"></span>
   <button class="btn" id="openDesign">🎨 Design</button>
   <button class="btn" id="save">💾 Save</button>
@@ -277,7 +275,7 @@ function buildData(){
     <label class="f"><span>Shift</span><select data-p="d.shift">${['A','B','C'].map(x => `<option value="${x}" ${D.shift===x?'selected':''}>${x}</option>`).join('')}</select></label>
   </div>
   ${fld('Daily Target','d.daily',D.daily,'number','inputmode="numeric"')}
-  <div class="hint">Shift <b>${D.shift}</b> chuna hai → total <b>${shiftLabel()}</b> ka banega.</div>`;
+  <div class="hint">Shift <b>${D.shift}</b> chuna hai → total <b>${shiftLabel()}</b> ka banega. <b style="color:#7fd6a0">Graph axis 0 se target tak auto.</b></div>`;
 
   D.secs.forEach((s,k) => {
     h += `<div class="sec"><h3>${esc(G.secs[k].title)}</h3>
@@ -320,7 +318,7 @@ function buildData(){
   };
 }
 
-/* ---------- DESIGN CODE (share / apply) ---------- */
+/* ---------- DESIGN CODE ---------- */
 const CODE_PREFIX = 'QDS1:';
 function encodeDesign(){ return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(G)))); }
 function applyCode(txt){
@@ -400,8 +398,8 @@ function buildDesign(){
       ${fld('Value column width (px)','g.colVal',G.colVal,'number','min="60" max="800"')}
       ${fld('Status column width (px)','g.colSt',G.colSt,'number','min="40" max="400"')}
       ${fld('Gap between sections (px)','g.gap',G.gap,'number','min="0" max="80"')}
-      ${fld('Axis min (khali = auto)','g.axisMin',G.axisMin,'number','placeholder="Auto"')}
-      ${fld('Axis max (khali = auto)','g.axisMax',G.axisMax,'number','placeholder="Auto"')}
+      ${fld('Axis min (khali = auto 0)','g.axisMin',G.axisMin,'number','placeholder="0"')}
+      ${fld('Axis max (khali = auto target)','g.axisMax',G.axisMax,'number','placeholder="Target"')}
     </div>
     <label class="chk"><input type="checkbox" data-p="g.ngIncl" ${G.ngIncl?'checked':''}> NG, production ke andar included hai (yield formula)</label>
 
@@ -442,25 +440,38 @@ function calc(k){
   return {daily, total, ng, tgt, y};
 }
 
-/* ---------- CHART ---------- */
+/* ---------- CHART (auto 0 → target) ---------- */
 const fmt = n => Number(n).toLocaleString('en-US');
-function axis(a, b){
-  const lo = Math.min(a,b), hi = Math.max(a,b);
-  const steps = []; for(let k=0;k<=7;k++) [1,2,5].forEach(m => steps.push(m*10**k));
-  for(const st of steps){
-    let mn = G.axisMin!=='' ? +G.axisMin : Math.floor(lo/st)*st;
-    let mx = G.axisMax!=='' ? +G.axisMax : Math.ceil(hi/st)*st;
-    if(mx<=mn) mx = mn+st;
-    if((mx-mn)/st <= 5) return {mn,mx,st};
+function axis(a, b, k){
+  const c = calc(k);
+  // Manual override agar user ne design me diya ho
+  if(G.axisMin !== '' || G.axisMax !== ''){
+    const mn = G.axisMin !== '' ? +G.axisMin : 0;
+    const mx = G.axisMax !== '' ? +G.axisMax : Math.max(c.daily, c.total, 1);
+    if(mx > mn) return {mn, mx, st: (mx - mn) / 5};
   }
-  return {mn:0, mx:Math.max(hi,1), st:Math.max(hi,1)/5};
+  // AUTO: hamesha 0 se target tak
+  const mn = 0;
+  const mx = Math.max(c.daily, c.total, c.tgt, 1); // target / daily / production me se sabse bada
+  // sundar step: 0 se mx tak 5 equal parts me
+  const rawStep = mx / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const norm = rawStep / mag;
+  let step;
+  if(norm <= 1) step = 1 * mag;
+  else if(norm <= 2) step = 2 * mag;
+  else if(norm <= 5) step = 5 * mag;
+  else step = 10 * mag;
+  const top = step * 5; // 5 grids → 0, step, 2*step, 3*step, 4*step, top
+  return {mn: 0, mx: top, st: step};
 }
 function chart(k, c){
   const s = G.secs[k];
-  const {mn,mx,st} = axis(c.daily, c.total);
+  const {mn,mx,st} = axis(c.daily, c.total, k);
   const pct = v => Math.max(0, Math.min(100, (v-mn)/(mx-mn)*100));
-  let h = `<div class="cw"><div class="ctitle">Plan vs Actual Trend</div><div class="plot">`;
-  for(let v=mn; v<=mx+1e-9; v+=st){
+  let h = `<div class="cw"><div class="ctitle">Plan vs Actual Trend <span style="font-weight:400;color:#888;font-size:9px;">(0 – ${fmt(mx)})</span></div><div class="plot">`;
+  // grid lines + y labels: 0, step, 2step ... top
+  for(let v = 0; v <= mx + 1e-9; v += st){
     h += `<div class="gl2" style="bottom:${pct(v)}%"></div><div class="yl" style="bottom:${pct(v)}%">${fmt(v)}</div>`;
   }
   const C1 = 23.5, C2 = 148.5;
@@ -619,7 +630,7 @@ document.fonts && document.fonts.ready.then(fit);
 <\/script>
 </script>
 
-<!-- Tool 2: Shift Handover (source yahi file me embed hai) -->
+<!-- Tool 2: Shift Handover (unchanged) -->
 <script type="text/plain" id="src-handover"><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -673,7 +684,6 @@ select,input,textarea{font-family:inherit}
 .stylebar .tg{height:54px;min-width:60px;padding:0 14px}
 .stylebar select{padding:14px 12px;font-size:1rem}
 
-/* light (white) theme */
 body{background:#f3f5fa;color:#1d2433}
 .top{background:rgba(255,255,255,.96);border-bottom:1px solid #dde2ee}
 .top h1{color:#1d2433}
@@ -709,7 +719,6 @@ body{background:#f3f5fa;color:#1d2433}
 .rv-pt{font-weight:700;color:#2563eb;margin-bottom:6px}
 .rv-sent{background:#fff;border:1px solid #dde2ee;border-radius:10px;padding:12px;margin-bottom:12px;font-size:1.05rem;line-height:1.5}
 
-/* strong white theme: sab inputs, dropdown aur buttons */
 :root{color-scheme:light}
 input:not([readonly]),select,textarea{background:#fff !important;color:#1d2433 !important;border-color:#c9cfdf !important}
 select option{background:#fff;color:#1d2433}
@@ -721,7 +730,6 @@ input[readonly]{background:#eefaf2 !important;color:#15803d !important}
 .del{background:#fff5f5 !important;color:#c0392b !important;border-color:#f3c4c4 !important}
 .chk,.chk span,label{color:#1d2433}
 
-/* design panel: poora white */
 .drawer{background:#fff !important;color:#1d2433 !important;border-left:1px solid #dde2ee !important}
 .dhead,.dfoot{background:#fff !important;border-color:#dde2ee !important}
 .dhead b{color:#1d2433 !important}
@@ -753,7 +761,6 @@ input[readonly]{background:#eefaf2 !important;color:#15803d !important}
 #wrap{width:100%;overflow:hidden;background:#fff;border-radius:4px}
 #stage{transform-origin:0 0}
 
-/* drawer */
 .dbg{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
 .dbg.open{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;height:100vh;width:min(460px,96vw);background:var(--panel);border-left:1px solid var(--line);transform:translateX(105%);transition:transform .3s;z-index:160;display:flex;flex-direction:column}
@@ -763,7 +770,6 @@ input[readonly]{background:#eefaf2 !important;color:#15803d !important}
 .dcontent{overflow:auto;padding:4px 18px 18px;flex:1}
 .dfoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between}
 
-/* ===== REPORT (exported area) ===== */
 .report{background:#fff;padding:1px;color:#000}
 .report table{border-collapse:collapse;table-layout:fixed}
 .report td{border:1px solid var(--bd);padding:6px 9px;vertical-align:top;overflow:hidden;background:#fff;color:inherit}
@@ -1051,12 +1057,10 @@ const COLORS = [
   ['Green', '#15803d'], ['Orange', '#ea580c'], ['Purple', '#7e22ce']
 ];
 
-/* ---------- DATA (roz ka data) ---------- */
 const blankItem = () => ({t:'', b:false, c:'#000000'});
 function defaultData(){
   return {date:'', shift:'A', responsible:'', words:[], liveOn:false, wl:[blankItem()], mp:[blankItem()], comm:[blankItem()]};
 }
-/* ---------- DESIGN (formatting) ---------- */
 function defaultDesign(){
   return {
     titleText:'Shift Handover Communication', titleBg:'#ffff00', titleColor:'#000000', titleSize:'18', titleH:'34',
@@ -1077,7 +1081,6 @@ function load(){
 }
 let {D, G} = load();
 
-/* ---------- SAVE ---------- */
 let dirty = false;
 const markDirty = () => { dirty = true; $('#dirty').textContent = '● Unsaved changes'; };
 function saveAll(){
@@ -1092,7 +1095,6 @@ $('#save').onclick = saveAll;
 $('#save2').onclick = saveAll;
 addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
 
-/* ---------- HELPERS ---------- */
 function getPath(root, path){
   return path.split('.').reduce((o,k) => o == null ? undefined : o[k], root);
 }
@@ -1107,7 +1109,6 @@ const fld = (label, path, val, type='text', extra='') =>
 const colf = (label, path, val) =>
   `<label class="f"><span>${label}</span><input type="color" data-p="${path}" value="${esc(val)}"></label>`;
 
-/* ---------- DATA PANEL ---------- */
 let selPt = {wl:0, mp:0, comm:0};
 function listEditor(key, label){
   const items = D[key] || [];
@@ -1122,19 +1123,6 @@ function listEditor(key, label){
       <label class="f" style="margin:0"><span>Color</span><select data-p="sc.${key}">${COLORS.map(([n,v]) => `<option value="${v}" ${(it.c||'#000000')===v?'selected':''}>${n}</option>`).join('')}</select></label>
       <button class="tg ${it.h?'on':''}" data-ph="${key}" title="Heading (number nahi)">H</button>
     </div>`;
-}
-function listEditorOld(key, label){
-  let h = `<div class="sub">${label}</div>`;
-  D[key].forEach((it,i) => {
-    h += `<div class="item">
-      <span class="no">${key==='comm' && it.h ? 'H' : (key==='comm' ? D.comm.slice(0,i+1).filter(x => !x.h).length : i+1)}.</span>
-      <input data-p="d.${key}.${i}.t" value="${esc(it.t)}" placeholder="Point ${i+1} likho" spellcheck="true" lang="en">
-            <select data-p="st.${key}.${i}" class="stsel">${STYLES.map(([v,n]) => `<option value="${v}" ${styleOf(it)===v?'selected':''}>${n}</option>`).join('')}</select>
-      <button class="del" data-del="${key}:${i}" title="Line hatao">✕</button>${key==='comm' ? `<div class="lchk" id="lchk-${i}" style="grid-column:1/-1">${liveHtml(it.t, i)}</div>` : ''}
-    </div>`;
-  });
-  h += `<div class="bar-btns"><button class="btn sm" data-add="${key}">+ Line add karo</button></div>`;
-  return h;
 }
 function buildData(){
   let h = `<h3>Shift details</h3>
@@ -1168,7 +1156,6 @@ function buildData(){
   };
 }
 
-/* ---------- DESIGN PANEL ---------- */
 function encodeDesign(){ return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(G)))); }
 function applyCode(txt){
   let t = (txt || '').trim();
@@ -1281,7 +1268,6 @@ $('#resetDesign').onclick = () => {
   }
 };
 
-/* ---------- REPORT ---------- */
 const addDot = s => { const t = (s || '').trim(); return /[.!?:;।]$/.test(t) ? t : t + '.'; };
 const listHtml = (items, numbered=true, period=false) => {
   const vis = items.filter(x => (x.t || '').trim());
@@ -1318,7 +1304,6 @@ function render(){
   document.querySelectorAll('textarea[data-p^="d.bulk"]').forEach(fitArea);
   const cc = $('#commCell');
   if(cc){
-    // preview me hi likhne/sudharne par data sync hota hai (spelling underline ke saath)
     cc.addEventListener('input', () => {
       const old = D.comm.filter(x => (x.t||'').trim());
       const blocks = cc.children.length ? Array.from(cc.children) : [cc];
@@ -1343,7 +1328,6 @@ function fit(){
 }
 addEventListener('resize', fit);
 
-/* ---------- EVENTS ---------- */
 function onEdit(e){
   const p = e.target.dataset && e.target.dataset.p; if(!p) return;
   const root = p.startsWith('g.') ? G : D;
@@ -1410,7 +1394,6 @@ document.addEventListener('click', e => {
   markDirty(); buildData(); render();
 });
 
-/* ---------- EXPORT ---------- */
 function canvasOK(W,H){
   if(W>32767 || H>32767 || W*H>268435456) return false;
   try{
@@ -1477,14 +1460,13 @@ document.fonts && document.fonts.ready.then(fit);
 <script>
 /* ---------- HOME + VIEWER (tools isi file me embedded hain) ---------- */
 const TOOLS = {
-  process:   {title:'📊 Process Tag — Production Report', src:'src-process'},
+  process:   {title:'📊 Process Tag — Production Report (axis auto 0→target)', src:'src-process'},
   handover:  {title:'🔁 Shift Handover Communication',    src:'src-handover'}
 };
 const frame = document.getElementById('frame');
 const viewer = document.getElementById('viewer');
 
 function toolHtml(id){
-  // text/plain block me closing tag ko escape kiya gaya hai, use wapas badal rahe hain
   return document.getElementById(id).textContent.replace(/<\\\/script/g, '</script');
 }
 function openTool(key){
